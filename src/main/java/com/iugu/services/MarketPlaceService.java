@@ -20,7 +20,6 @@ public class MarketPlaceService {
 
 	private final String CREATE_SUB_ACCOUNT_URL = Iugu.url("/marketplace/create_account");
 	private final String BANK_VERIFICATION = Iugu.url("/bank_verification");
-	
 	private final String CREATE_SUB_ACCOUNT_VALIDATION_URL = Iugu.url("/accounts/%s/request_verification");
 	private final String FIND_URL = Iugu.url("/accounts/%s");
 	private final String CONFIGURE_URL = Iugu.url("/accounts/configuration");

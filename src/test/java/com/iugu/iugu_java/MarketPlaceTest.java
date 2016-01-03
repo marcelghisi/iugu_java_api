@@ -65,7 +65,7 @@ public class MarketPlaceTest
 
 		//#######Testa a criação de uma sub conta de MArketPlace
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 1","1"));
+		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 1",1));
 		
 		System.out.println("TESTANDO CREATE SUBACCOUNT");
 		System.out.print(" Message: " + responseSubAccount.getMessage() + ";");
@@ -85,7 +85,7 @@ public class MarketPlaceTest
     	//String masterAccointId = "96461997-b6a0-48fb-808b-4f16ad88c718";
     	
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 4","1"));
+		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 4",1));
 		
 		String accountId = null;
 		String userToken = null;
@@ -116,7 +116,7 @@ public class MarketPlaceTest
     {
 
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 2","1"));
+		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 2",1));
 		
 		String accountId = null;
 		
@@ -153,7 +153,7 @@ public class MarketPlaceTest
     {
 
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 3","1"));
+		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 3",1));
 		
 		String accountId = null;
 		
@@ -186,11 +186,11 @@ public class MarketPlaceTest
     /**
      * Rigourous Test :-)
      */
-    public void testConfigureSubAccount()
+    public void testConfigureSoftDescriptionSubAccount()
     {
 
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 4","1"));
+		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 4",1));
 		assertTrue( responseSubAccount != null );
 		System.out.println(responseSubAccount.getId());
 		
@@ -216,7 +216,7 @@ public class MarketPlaceTest
 //		
 //		SubAccountValidationResponse responseSubAccountValidation = new MarketPlaceService().createSubAccountValidation(idSubAccount, subAccountValidation);
 		
-		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(10, null, null, null, null, null, null, null);
+		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
 		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(true, null, null);
 		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration("ATTENDME PAY", null, null,null,null,null);
 		
@@ -229,6 +229,8 @@ public class MarketPlaceTest
 		System.out.print(" Message: " + responseInformation.getMessage() + ";");
 		System.out.print(" Success: " + responseInformation.getSuccess()+ ";");
 		System.out.print(" Code: " + responseInformation.getStatusCode()+ ";");
+		assertTrue(responseInformation.getSuccess());
+		assertEquals("ATTENDME PAY", responseInformation.getConfiguration().getCreditCardConfiguration().getSoftDescriptor());
     }
     
     /**
@@ -238,7 +240,7 @@ public class MarketPlaceTest
     {
 
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 7","1"));
+		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 7",1));
 		
 		String userToken = null;
 		
@@ -268,7 +270,7 @@ public class MarketPlaceTest
     {
 
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 6","1"));
+		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 6",1));
 		//assertTrue( responseSubAccount != null );
 		//System.out.println(responseSubAccount.getId());
 		

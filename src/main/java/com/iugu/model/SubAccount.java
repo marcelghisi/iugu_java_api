@@ -11,7 +11,7 @@ public class SubAccount implements Serializable {
 	 */
 	private static final long serialVersionUID = 4705750175852628545L;
 
-	public SubAccount(String name,String marketPlaceCommissionPercent) {
+	public SubAccount(String name,Integer marketPlaceCommissionPercent) {
 		this.name = name;
 		this.comissionPercent = marketPlaceCommissionPercent;
 	}
@@ -25,7 +25,7 @@ public class SubAccount implements Serializable {
 	 * Percentual de comissão pago para o marketplace
 	 */
 	@JsonProperty("commission_percent")
-	private String comissionPercent;
+	private Integer comissionPercent;
 
 	public String getName() {
 		return name;
@@ -35,12 +35,14 @@ public class SubAccount implements Serializable {
 		this.name = name;
 	}
 
-	public String getComissionPercent() {
+	public Integer getComissionPercent() {
 		return comissionPercent;
 	}
 
-	public void setComissionPercent(String comissionPercent) {
+	public void setComissionPercent(Integer comissionPercent) {
 		this.comissionPercent = comissionPercent;
 	}
+
+
 
 }
