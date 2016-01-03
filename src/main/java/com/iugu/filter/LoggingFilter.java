@@ -26,7 +26,7 @@ public class LoggingFilter implements ClientRequestFilter {
     	   System.out.printf("--- End Headers:\n");
     	   Object body = requestContext.getEntity();
     	   System.out.printf("%s\n--- End Body:\n", body);
-    	   
+    	   System.out.println("-----------------------------------------------");    	   
 
     }
 }
