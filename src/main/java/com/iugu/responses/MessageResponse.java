@@ -15,9 +15,6 @@ public class MessageResponse {
 	private Integer statusCode;
 	
 	@JsonProperty("errors")
-	private String errorsInString;
-
-	@JsonProperty("errors")
 	private Map<String,String> errorsInMap;
 
 
@@ -36,14 +33,6 @@ public class MessageResponse {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public String getErrorsInString() {
-		return errorsInString;
-	}
-
-	public void setErrorsInString(String errorsInString) {
-		this.errorsInString = errorsInString;
 	}
 
 	public Map<String, String> getErrorsInMap() {

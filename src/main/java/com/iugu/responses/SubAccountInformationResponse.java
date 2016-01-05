@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.iugu.model.Configuration;
@@ -79,32 +80,31 @@ public class SubAccountInformationResponse extends MessageResponse{
 	@JsonProperty("auto_withdraw")
 	private Boolean autoWithdraw;
 	
-	//TODO Perguntar Centes?
-	private Integer balance;
+	private String balance;
 	
 	@JsonProperty("protected_balance")
-	private Integer protectedBalance;	
+	private String protectedBalance;	
 
 	@JsonProperty("payable_balance")
-	private Integer payableBalance;
+	private String payableBalance;
 	
 	@JsonProperty("commission_balance")
-	private Integer commissionBalance;
+	private String commissionBalance;
 	
 	@JsonProperty("volume_last_month")
-	private Integer volumeLastMonth;
+	private String volumeLastMonth;
 	
 	@JsonProperty("volume_this_month")
-	private Integer volumeThisMonth;
+	private String volumeThisMonth;
 	
 	@JsonProperty("taxes_paid_last_month")
-	private Integer taxesPaidLastMonth;
+	private String taxesPaidLastMonth;
 	
 	@JsonProperty("taxes_paid_this_month")
-	private Integer taxesPaidThisMonth;
+	private String taxesPaidThisMonth;
 	
 	@JsonProperty("volume_this_month")
-	private Integer volume_this_month;
+	private String volume_this_month;
 	
 	@JsonProperty("custom_logo_url")
 	private String customLogoUrl;
@@ -112,7 +112,7 @@ public class SubAccountInformationResponse extends MessageResponse{
 	@JsonProperty("custom_logo_small_url")
 	private String customLogoSmallUrl;
 	
-    private Map<String, String> informations;
+    private Map<String, Object> informations;
     
     private Configuration configuration;
 
@@ -263,75 +263,76 @@ public class SubAccountInformationResponse extends MessageResponse{
 		this.autoWithdraw = autoWithdraw;
 	}
 
-	public Integer getBalance() {
+	
+	public String getBalance() {
 		return balance;
 	}
 
-	public void setBalance(Integer balance) {
+	public void setBalance(String balance) {
 		this.balance = balance;
 	}
 
-	public Integer getProtectedBalance() {
+	public String getProtectedBalance() {
 		return protectedBalance;
 	}
 
-	public void setProtectedBalance(Integer protectedBalance) {
+	public void setProtectedBalance(String protectedBalance) {
 		this.protectedBalance = protectedBalance;
 	}
 
-	public Integer getPayableBalance() {
+	public String getPayableBalance() {
 		return payableBalance;
 	}
 
-	public void setPayableBalance(Integer payableBalance) {
+	public void setPayableBalance(String payableBalance) {
 		this.payableBalance = payableBalance;
 	}
 
-	public Integer getCommissionBalance() {
+	public String getCommissionBalance() {
 		return commissionBalance;
 	}
 
-	public void setCommissionBalance(Integer commissionBalance) {
+	public void setCommissionBalance(String commissionBalance) {
 		this.commissionBalance = commissionBalance;
 	}
 
-	public Integer getVolumeLastMonth() {
+	public String getVolumeLastMonth() {
 		return volumeLastMonth;
 	}
 
-	public void setVolumeLastMonth(Integer volumeLastMonth) {
+	public void setVolumeLastMonth(String volumeLastMonth) {
 		this.volumeLastMonth = volumeLastMonth;
 	}
 
-	public Integer getVolumeThisMonth() {
+	public String getVolumeThisMonth() {
 		return volumeThisMonth;
 	}
 
-	public void setVolumeThisMonth(Integer volumeThisMonth) {
+	public void setVolumeThisMonth(String volumeThisMonth) {
 		this.volumeThisMonth = volumeThisMonth;
 	}
 
-	public Integer getTaxesPaidLastMonth() {
+	public String getTaxesPaidLastMonth() {
 		return taxesPaidLastMonth;
 	}
 
-	public void setTaxesPaidLastMonth(Integer taxesPaidLastMonth) {
+	public void setTaxesPaidLastMonth(String taxesPaidLastMonth) {
 		this.taxesPaidLastMonth = taxesPaidLastMonth;
 	}
 
-	public Integer getTaxesPaidThisMonth() {
+	public String getTaxesPaidThisMonth() {
 		return taxesPaidThisMonth;
 	}
 
-	public void setTaxesPaidThisMonth(Integer taxesPaidThisMonth) {
+	public void setTaxesPaidThisMonth(String taxesPaidThisMonth) {
 		this.taxesPaidThisMonth = taxesPaidThisMonth;
 	}
 
-	public Integer getVolume_this_month() {
+	public String getVolume_this_month() {
 		return volume_this_month;
 	}
 
-	public void setVolume_this_month(Integer volume_this_month) {
+	public void setVolume_this_month(String volume_this_month) {
 		this.volume_this_month = volume_this_month;
 	}
 
@@ -351,11 +352,12 @@ public class SubAccountInformationResponse extends MessageResponse{
 		this.customLogoSmallUrl = customLogoSmallUrl;
 	}
 
-	public Map<String, String> getInformations() {
+
+	public Map<String, Object> getInformations() {
 		return informations;
 	}
 
-	public void setInformations(Map<String, String> informations) {
+	public void setInformations(Map<String, Object> informations) {
 		this.informations = informations;
 	}
 
