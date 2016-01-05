@@ -5,13 +5,14 @@ import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.type.TypeReference;
 
 import com.iugu.model.Configuration;
 import com.iugu.model.SubAccountValidationData;
 import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
+import com.iugu.serializers.PropertyMapDeserializer;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SubAccountInformationResponse extends MessageResponse{
@@ -112,6 +113,9 @@ public class SubAccountInformationResponse extends MessageResponse{
 	@JsonProperty("custom_logo_small_url")
 	private String customLogoSmallUrl;
 	
+//    @JsonSerialize(using=PropertyMapSerializer.class) 
+//    @JsonDeserialize(using=PropertyMapDeserializer.class) 
+    public Map<String, String> informations; 
 	//@JsonAnyGetter
     //private TypeReference<Map<String, Object>> informations;
     

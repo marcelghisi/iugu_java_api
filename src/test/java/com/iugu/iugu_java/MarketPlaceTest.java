@@ -63,37 +63,36 @@ public class MarketPlaceTest
     public void testCreateSubAccount()
     {
     	
-//    			Account 2 = 3
-//    			ACCOUNT_ID: A80303DF00BE40459DD0109B0E1DB392
-//    			LIVE TOKEN: dc71f57df6196fe36192f9da95317c23
-//    			TEST TOKEN: 65f47c4b4be4feaf32608db9c3ec3d38
-//    			USER TOKEN: 849da38aec9bba86b2c2152728b9cd67
+//		Account 2 = 3
+//		ACCOUNT_ID: A80303DF00BE40459DD0109B0E1DB392
+//		LIVE TOKEN: dc71f57df6196fe36192f9da95317c23
+//		TEST TOKEN: 65f47c4b4be4feaf32608db9c3ec3d38
+//		USER TOKEN: 849da38aec9bba86b2c2152728b9cd67
 //
-//    			Account 4
-//    			ACCOUNT_ID: D03B6070CF7548258D3D68D32174F244
-//    			LIVE TOKEN: 0da297b642e50e848c29cf0318b5cefc
-//    			TEST TOKEN: b5e4d8a3cab3f6f6139a4f803cb4cfc7
-//    			USER TOKEN: b5e4d8a3cab3f6f6139a4f803cb4cfc7
-
-		//#######Testa a criação de uma sub conta de MArketPlace
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 4",1));
-		
-		assertTrue( responseSubAccount.getId() != null);
-		
-		System.out.println("TESTANDO CREATE SUBACCOUNT");
-		System.out.println(" ACCOUNT ID: " + responseSubAccount.getId() + ";");
-		System.out.println(" LIVE TOKEN: " + responseSubAccount.getLiveApiToken()+ ";");
-		System.out.println(" TEST TOKEN: " + responseSubAccount.getTestApiToken()+ ";");
-		System.out.println(" USER TOKEN: " + responseSubAccount.getTestApiToken()+ ";");
-
-		
-		System.out.println("TESTANDO VALIDATE CNPJ");
-		System.out.print(" Message: " + responseSubAccount.getMessage() + ";");
-		System.out.print(" Success: " + responseSubAccount.getSuccess()+ ";");
-		System.out.print(" Code: " + responseSubAccount.getStatusCode()+ ";");
-		
-		System.out.println("END CERATION SUB ACCOUNT");
+//		Account 4
+//		ACCOUNT_ID: D03B6070CF7548258D3D68D32174F244
+//		LIVE TOKEN: 0da297b642e50e848c29cf0318b5cefc
+//		TEST TOKEN: b5e4d8a3cab3f6f6139a4f803cb4cfc7
+//		USER TOKEN: b5e4d8a3cab3f6f6139a4f803cb4cfc7
+//
+//		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+//		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 4",1));
+//		
+//		assertTrue( responseSubAccount.getId() != null);
+//		
+//		System.out.println("TESTANDO CREATE SUBACCOUNT");
+//		System.out.println(" ACCOUNT ID: " + responseSubAccount.getId() + ";");
+//		System.out.println(" LIVE TOKEN: " + responseSubAccount.getLiveApiToken()+ ";");
+//		System.out.println(" TEST TOKEN: " + responseSubAccount.getTestApiToken()+ ";");
+//		System.out.println(" USER TOKEN: " + responseSubAccount.getTestApiToken()+ ";");
+//
+//		
+//		System.out.println("TESTANDO VALIDATE CNPJ");
+//		System.out.print(" Message: " + responseSubAccount.getMessage() + ";");
+//		System.out.print(" Success: " + responseSubAccount.getSuccess()+ ";");
+//		System.out.print(" Code: " + responseSubAccount.getStatusCode()+ ";");
+//		
+//		System.out.println("END CERATION SUB ACCOUNT");
 		
     }
     
@@ -127,13 +126,13 @@ public class MarketPlaceTest
     public void testValidatePJSubAccount()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 2",1));
+		Iugu.init("849da38aec9bba86b2c2152728b9cd67");
+		SubAccountInformationResponse responseInformation = new MarketPlaceService().find("A80303DF00BE40459DD0109B0E1DB392");
 		
 		String accountId = null;
 		
 		try {
-			accountId = responseSubAccount.getId().toString();
+			accountId = responseInformation.getId().toString();
 		} catch (Exception e) {
 			accountId = "96461997-b6a0-48fb-808b-4f16ad88c718";//Master AccountId
 		}
@@ -155,7 +154,7 @@ public class MarketPlaceTest
 		System.out.print(" Success: " + responseSubAccountValidation.getSuccess()+ ";");
 		System.out.print(" Code: " + responseSubAccountValidation.getStatusCode()+ ";");
 		
-		assertTrue( responseSubAccount.getSuccess());
+		assertTrue( responseSubAccountValidation.getSuccess());
     }
     
     /**
