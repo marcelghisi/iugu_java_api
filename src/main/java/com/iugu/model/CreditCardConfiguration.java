@@ -2,8 +2,10 @@ package com.iugu.model;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CreditCardConfiguration implements Serializable {
 
 	
@@ -12,6 +14,9 @@ public class CreditCardConfiguration implements Serializable {
 	 */
 	private static final long serialVersionUID = 5997460074767744638L;
 
+	public CreditCardConfiguration() {
+	}
+	
 	public CreditCardConfiguration(String softDescriptor, Boolean installments, Boolean installmentsPassInterest,Integer maxInstallments, Integer maxInstallmentsWithoutInterest,Boolean twoStepTransaction) {
 		this.softDescriptor = softDescriptor;
 		this.installments = installments;

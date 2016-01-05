@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.type.TypeReference;
 
 import com.iugu.model.Configuration;
 import com.iugu.model.SubAccountValidationData;
@@ -112,9 +112,11 @@ public class SubAccountInformationResponse extends MessageResponse{
 	@JsonProperty("custom_logo_small_url")
 	private String customLogoSmallUrl;
 	
-    private Map<String, Object> informations;
+	//@JsonAnyGetter
+    //private TypeReference<Map<String, Object>> informations;
     
     private Configuration configuration;
+    
 
 	public String getId() {
 		return id;
@@ -350,15 +352,6 @@ public class SubAccountInformationResponse extends MessageResponse{
 
 	public void setCustomLogoSmallUrl(String customLogoSmallUrl) {
 		this.customLogoSmallUrl = customLogoSmallUrl;
-	}
-
-
-	public Map<String, Object> getInformations() {
-		return informations;
-	}
-
-	public void setInformations(Map<String, Object> informations) {
-		this.informations = informations;
 	}
 
 	public Configuration getConfiguration() {

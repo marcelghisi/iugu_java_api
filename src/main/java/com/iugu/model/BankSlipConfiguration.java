@@ -2,8 +2,10 @@ package com.iugu.model;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BankSlipConfiguration implements Serializable {
 
 	
@@ -12,6 +14,9 @@ public class BankSlipConfiguration implements Serializable {
 	 */
 	private static final long serialVersionUID = -1889955253520457088L;
 
+	public BankSlipConfiguration() {
+	}
+	
 	public BankSlipConfiguration(Boolean active, Integer extraDue,Integer reprintExtraDue) {
 		this.active = active;
 		this.extraDue = extraDue;
