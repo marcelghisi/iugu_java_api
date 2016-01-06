@@ -116,6 +116,8 @@ public class MarketPlaceTest
 		System.out.print(" Message: " + responseInformation.getMessage() + ";");
 		System.out.print(" Success: " + responseInformation.getSuccess()+ ";");
 		System.out.print(" Code: " + responseInformation.getStatusCode()+ ";");
+		System.out.print(" Informations comission: " + responseInformation.getInformations().get("commission_percent")+ ";");
+		
 		
 		assertTrue( responseInformation.getId() != null);
     }

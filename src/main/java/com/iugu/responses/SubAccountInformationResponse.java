@@ -13,6 +13,7 @@ import com.iugu.model.SubAccountValidationData;
 import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
 import com.iugu.serializers.PropertyMapDeserializer;
+import com.iugu.serializers.PropertyMapSerializer;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SubAccountInformationResponse extends MessageResponse{
@@ -113,11 +114,11 @@ public class SubAccountInformationResponse extends MessageResponse{
 	@JsonProperty("custom_logo_small_url")
 	private String customLogoSmallUrl;
 	
-//    @JsonSerialize(using=PropertyMapSerializer.class) 
-//    @JsonDeserialize(using=PropertyMapDeserializer.class) 
+
+    //@JsonSerialize(using=PropertyMapSerializer.class) 
+	@JsonProperty("informations")
+
     public Map<String, String> informations; 
-	//@JsonAnyGetter
-    //private TypeReference<Map<String, Object>> informations;
     
     private Configuration configuration;
     
@@ -356,6 +357,16 @@ public class SubAccountInformationResponse extends MessageResponse{
 
 	public void setCustomLogoSmallUrl(String customLogoSmallUrl) {
 		this.customLogoSmallUrl = customLogoSmallUrl;
+	}
+
+	
+	public Map<String, String> getInformations() {
+		return informations;
+	}
+
+    @JsonDeserialize(using=PropertyMapDeserializer.class) 
+	public void setInformations(Map<String, String> informations) {
+		this.informations = informations;
 	}
 
 	public Configuration getConfiguration() {
