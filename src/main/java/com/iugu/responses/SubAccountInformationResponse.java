@@ -13,7 +13,6 @@ import com.iugu.model.SubAccountValidationData;
 import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
 import com.iugu.serializers.PropertyMapDeserializer;
-import com.iugu.serializers.PropertyMapSerializer;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SubAccountInformationResponse extends MessageResponse{
@@ -117,7 +116,6 @@ public class SubAccountInformationResponse extends MessageResponse{
 
     //@JsonSerialize(using=PropertyMapSerializer.class) 
 	@JsonProperty("informations")
-
     public Map<String, String> informations; 
     
     private Configuration configuration;

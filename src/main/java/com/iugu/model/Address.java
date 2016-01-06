@@ -19,16 +19,15 @@ public class Address {
 	//country	País
 	private String country;
 	
-	//zip_code	CEP
-	@JsonProperty("zip_code")
-	private String zipCode;
+	private String cep;
 	
-	public Address(String street, String number, String city, String state, String country) {
+	public Address(String street, String number, String city, String state, String country,String cep) {
 		this.street = street;
 		this.number = number;
 		this.city = city;
 		this.state = state;
 		this.country = country;
+		this.cep = cep;
 	}
 
 	public String getStreet() {
@@ -71,13 +70,15 @@ public class Address {
 		this.country = country;
 	}
 
-	public String getZipCode() {
-		return zipCode;
+	public String getCep() {
+		return cep;
 	}
 
-	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
+	public void setCep(String cep) {
+		this.cep = cep;
 	}
+
+
 
 
 

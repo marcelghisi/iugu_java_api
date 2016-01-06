@@ -141,14 +141,16 @@ public class MarketPlaceTest
 
 		MainSetthingsData mainSetthingsData = new MainSetthingsData("Serviços de Eletricista",SubAccountPriceRange.ENTRE_100_500,Boolean.FALSE,Boolean.TRUE);
 		LegalPersonData pJ = new LegalPersonData("03125011000171", "KMCA Tecnologia em Sistemas", "Marcel Ghisi", "02479484971", "11967661709");
-		Address address = new Address("Rua Miguel Teles Junior", "129", "Sao Paulo", "SP", "BR");
+		Address address = new Address("Rua Miguel Teles Junior", "129", "Sao Paulo", "SP", "BR","01540-040");
 		BankInformation bankInfo = new BankInformation(Bank.ITAU, AccountType.Corrente, "0036", "07722-0");
 		
 		SubAccountValidationData data = new SubAccountValidationData(mainSetthingsData,bankInfo,address,pJ);
-		SubAccountValidationFiles files = new SubAccountValidationFiles(CPF_VOVO_HELIO_BASE64,null,PROVE_ACTIVITY_BASE64);
+		//SubAccountValidationFiles files = new SubAccountValidationFiles(CPF_VOVO_HELIO_BASE64,null,PROVE_ACTIVITY_BASE64);
+		SubAccountValidationFiles files = new SubAccountValidationFiles("AAA","BBBBB","CCCC");
 		
-		SubAccountValidation subAccountValidation = new SubAccountValidation(data, files, Boolean.FALSE);
+		SubAccountValidation subAccountValidation = new SubAccountValidation(data, null, Boolean.FALSE);
 		
+		//Iugu.init("849da38aec9bba86b2c2152728b9cd67");
 		SubAccountValidationResponse responseSubAccountValidation = new MarketPlaceService().createSubAccountValidation(accountId, subAccountValidation);
 		
 		System.out.println("TESTANDO VALIDATE CNPJ");
@@ -165,35 +167,37 @@ public class MarketPlaceTest
     public void testValidatePFSubAccount()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 3",1));
-		
-		String accountId = null;
-		
-		try {
-			accountId = responseSubAccount.getId().toString();
-		} catch (Exception e) {
-			accountId = "96461997-b6a0-48fb-808b-4f16ad88c718";//Master AccountId
-		}
+//		Iugu.init("849da38aec9bba86b2c2152728b9cd67");
+//		SubAccountInformationResponse responseInformation = new MarketPlaceService().find("A80303DF00BE40459DD0109B0E1DB392");
+//		
+//		String accountId = null;
+//		
+//		try {
+//			accountId = responseInformation.getId().toString();
+//		} catch (Exception e) {
+//			accountId = "96461997-b6a0-48fb-808b-4f16ad88c718";//Master AccountId
+//		}
 
 		MainSetthingsData mainSetthingsData = new MainSetthingsData("Serviços de Eletricista",SubAccountPriceRange.ENTRE_100_500,Boolean.FALSE,Boolean.TRUE);
-		PersonData pF = new PersonData("02479484971","MARCEL JOSE DA SILVA GHISI","1133995090");
-		Address address = new Address("Rua Miguel Teles Junior", "129", "Sao Paulo", "SP", "BR");
+		PersonData pF = new PersonData("123.123.123-12","MARCEL JOSE DA SILVA GHISI","11-3399-5090");
+		Address address = new Address("Rua Miguel Teles Junior", "129", "Sao Paulo", "SP", "BR","01540-040");
 		BankInformation bankInfo = new BankInformation(Bank.ITAU, AccountType.Corrente, "0036", "07722-0");
 		
 		SubAccountValidationData data = new SubAccountValidationData(mainSetthingsData,bankInfo,address,pF);
-		SubAccountValidationFiles files = new SubAccountValidationFiles(CPF_VOVO_HELIO_BASE64,null,PROVE_ACTIVITY_BASE64);
+		//SubAccountValidationFiles files = new SubAccountValidationFiles(CPF_VOVO_HELIO_BASE64,null,PROVE_ACTIVITY_BASE64);
+		SubAccountValidationFiles files = new SubAccountValidationFiles();
 		
 		SubAccountValidation subAccountValidation = new SubAccountValidation(data, files, Boolean.FALSE);
 		
-		SubAccountValidationResponse responseSubAccountValidation = new MarketPlaceService().createSubAccountValidation(accountId, subAccountValidation);
+		Iugu.init("849da38aec9bba86b2c2152728b9cd67");
+		SubAccountValidationResponse responseSubAccountValidation = new MarketPlaceService().createSubAccountValidation("A80303DF00BE40459DD0109B0E1DB392", subAccountValidation);
 		
 		System.out.println("TESTANDO VALIDATE CPF ACCOUNT");
 		System.out.print(" Message: " + responseSubAccountValidation.getMessage() + ";");
 		System.out.print(" Success: " + responseSubAccountValidation.getSuccess()+ ";");
 		System.out.print(" Code: " + responseSubAccountValidation.getStatusCode()+ ";");
 		
-		assertTrue( responseSubAccount.getSuccess());
+		assertTrue( responseSubAccountValidation.getSuccess());
     }
     
     /**

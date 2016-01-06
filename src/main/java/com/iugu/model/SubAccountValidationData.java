@@ -1,29 +1,34 @@
 package com.iugu.model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SubAccountValidationData {
 
-
+	//Construtor Pessoa Jurídica
+	public SubAccountValidationData() {
+	}
+	
 	//Construtor Pessoa Jurídica
 	public SubAccountValidationData(MainSetthingsData mainSettingsData,BankInformation bankInformation,Address address,LegalPersonData pessoaJuridica) {
 		
 		this.businessType = mainSettingsData.getBusinessDescription();
-		this.priceRange = mainSettingsData.getPriceRange();
-		this.physicalProducts = mainSettingsData.getPhysicalProducts();
+		this.priceRange = mainSettingsData.getPriceRange().getValue();
+		this.physicalProducts = mainSettingsData.getPhysicalProducts().toString();
 		this.automaticTransfer = mainSettingsData.getAutomaticTransfer();
 		
-		this.accountType = bankInformation.getAccountType();
-		this.bank = bankInformation.getBank();
+		this.accountType = bankInformation.getAccountType().getValue();
+		this.bank = bankInformation.getBank().getValue();
 		this.bankAgencyNumber = bankInformation.getAgencyNumber();
 		this.bankAccountNumber = bankInformation.getAccountNumber();
 		
 		this.address = address.getStreet();
-		this.cep = address.getZipCode();
+		this.cep = address.getCep();
 		this.city = address.getCity();
 		this.state = address.getState();
 		
-		this.personType = pessoaJuridica.getPersonType();
+		this.personType = pessoaJuridica.getPersonType().getValue();
 		this.cnpj = pessoaJuridica.getCnpj();
 		this.companyName = pessoaJuridica.getCompanyName();
 		this.cpfResponsavel = pessoaJuridica.getCpfDoResponsavel();
@@ -36,21 +41,21 @@ public class SubAccountValidationData {
 		
 		
 		this.businessType = mainSettingsData.getBusinessDescription();
-		this.priceRange = mainSettingsData.getPriceRange();
-		this.physicalProducts = mainSettingsData.getPhysicalProducts();
+		this.priceRange = mainSettingsData.getPriceRange().getValue();
+		this.physicalProducts = mainSettingsData.getPhysicalProducts().toString();
 		this.automaticTransfer = mainSettingsData.getAutomaticTransfer();
 		
-		this.accountType = bankInformation.getAccountType();
-		this.bank = bankInformation.getBank();
+		this.accountType = bankInformation.getAccountType().getValue();
+		this.bank = bankInformation.getBank().getValue();
 		this.bankAgencyNumber = bankInformation.getAgencyNumber();
 		this.bankAccountNumber = bankInformation.getAccountNumber();
 		
 		this.address = address.getStreet();
-		this.cep = address.getZipCode();
+		this.cep = address.getCep();
 		this.city = address.getCity();
 		this.state = address.getState();
 		
-		this.personType = pessoaFisica.getPersonType();
+		this.personType = pessoaFisica.getPersonType().getValue();
 		this.cpf = pessoaFisica.getCpf();
 		this.name = pessoaFisica.getName();
 		this.telephone = pessoaFisica.getPhone();
@@ -59,11 +64,11 @@ public class SubAccountValidationData {
 	//Range de preços que a conta utilizará nas tranzações
 	//Ex: Valor máximo da venda ('Até R$ 100,00', 'Entre R$ 100,00 e R$ 500,00', 'Mais que R$ 500,00')
 	@JsonProperty("price_range")
-	private SubAccountPriceRange priceRange;
+	private String priceRange;
 
 	
 	@JsonProperty("physical_products")
-	private Boolean physicalProducts;
+	private String physicalProducts;
 
 	//Descrição do negócio da conta
 	@JsonProperty("business_type")
@@ -71,7 +76,7 @@ public class SubAccountValidationData {
 	
 	//Descrição do negócio da conta
 	@JsonProperty("person_type")
-	private PersonType personType;
+	private String personType;
 	
 	//Saque automático (Recomendamos que envie 'true')
 	@JsonProperty("automatic_transfer")
@@ -103,39 +108,41 @@ public class SubAccountValidationData {
 	
 	private String telephone;
 	
-	private Bank bank;
+	private String bank;
 	
 	@JsonProperty("bank_ag")
 	private String bankAgencyNumber;
 	
 	@JsonProperty("account_type")
-	private AccountType accountType;
+	private String accountType;
 	
 	@JsonProperty("bank_cc")
 	private String bankAccountNumber;
 	
-	@JsonProperty("document_id")
-	private String rgId;
-	
-	@JsonProperty("document_cpf")
-	private String documentCpfId;
-	
-	@JsonProperty("document_activity")
-	private String documentActivityId;
+//	@JsonProperty("document_id")
+//	private String rgId;
+//	
+//	@JsonProperty("document_cpf")
+//	private String documentCpfId;
+//	
+//	@JsonProperty("document_activity")
+//	private String documentActivityId;
 
-	public SubAccountPriceRange getPriceRange() {
+	
+
+	public String getPriceRange() {
 		return priceRange;
 	}
 
-	public void setPriceRange(SubAccountPriceRange priceRange) {
+	public void setPriceRange(String priceRange) {
 		this.priceRange = priceRange;
 	}
 
-	public Boolean getPhysicalProducts() {
+	public String getPhysicalProducts() {
 		return physicalProducts;
 	}
 
-	public void setPhysicalProducts(Boolean physicalProducts) {
+	public void setPhysicalProducts(String physicalProducts) {
 		this.physicalProducts = physicalProducts;
 	}
 
@@ -147,11 +154,13 @@ public class SubAccountValidationData {
 		this.businessType = businessType;
 	}
 
-	public PersonType getPersonType() {
+	
+
+	public String getPersonType() {
 		return personType;
 	}
 
-	public void setPersonType(PersonType personType) {
+	public void setPersonType(String personType) {
 		this.personType = personType;
 	}
 
@@ -260,11 +269,11 @@ public class SubAccountValidationData {
 
 
 
-	public Bank getBank() {
+	public String getBank() {
 		return bank;
 	}
 
-	public void setBank(Bank bank) {
+	public void setBank(String bank) {
 		this.bank = bank;
 	}
 
@@ -277,11 +286,11 @@ public class SubAccountValidationData {
 	}
 
 
-	public AccountType getAccountType() {
+	public String getAccountType() {
 		return accountType;
 	}
 
-	public void setAccountType(AccountType accountType) {
+	public void setAccountType(String accountType) {
 		this.accountType = accountType;
 	}
 
@@ -292,30 +301,30 @@ public class SubAccountValidationData {
 	public void setBankAccountNumber(String bankAccountNumber) {
 		this.bankAccountNumber = bankAccountNumber;
 	}
-
-	public String getRgId() {
-		return rgId;
-	}
-
-	public void setRgId(String rgId) {
-		this.rgId = rgId;
-	}
-
-	public String getDocumentCpfId() {
-		return documentCpfId;
-	}
-
-	public void setDocumentCpfId(String documentCpfId) {
-		this.documentCpfId = documentCpfId;
-	}
-
-	public String getDocumentActivityId() {
-		return documentActivityId;
-	}
-
-	public void setDocumentActivityId(String documentActivityId) {
-		this.documentActivityId = documentActivityId;
-	}
+//
+//	public String getRgId() {
+//		return rgId;
+//	}
+//
+//	public void setRgId(String rgId) {
+//		this.rgId = rgId;
+//	}
+//
+//	public String getDocumentCpfId() {
+//		return documentCpfId;
+//	}
+//
+//	public void setDocumentCpfId(String documentCpfId) {
+//		this.documentCpfId = documentCpfId;
+//	}
+//
+//	public String getDocumentActivityId() {
+//		return documentActivityId;
+//	}
+//
+//	public void setDocumentActivityId(String documentActivityId) {
+//		this.documentActivityId = documentActivityId;
+//	}
 
 	
 }

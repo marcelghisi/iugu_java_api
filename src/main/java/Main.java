@@ -37,7 +37,7 @@ public class Main {
 		List<Item> items = new ArrayList<Item>(0);
 		items.add(item);
 		
-		Address address = new Address("Rua Miguel Teles Junior", "129", "Sao Paulo", "SP", "BR");
+		Address address = new Address("Rua Miguel Teles Junior", "129", "Sao Paulo", "SP", "BR","01540-040");
 		
 		Payer payer = new Payer("12312312312","MARCEL JOSE DA SILVA GHISI","11","33995090","teste@teste.com",address);
 		

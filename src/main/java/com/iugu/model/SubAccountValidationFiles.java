@@ -1,10 +1,14 @@
 package com.iugu.model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jboss.resteasy.util.Base64;
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SubAccountValidationFiles {
 
+	public SubAccountValidationFiles() {
+
+	}
 	public SubAccountValidationFiles(byte[] rgDocumentForBase64Encode,byte[] cpfDocumentForBase64Encode,byte[] proveActivityDocumentForBase64Encode) {
 		this.id = Base64.encodeBytes(rgDocumentForBase64Encode);
 		this.cpf = Base64.encodeBytes(cpfDocumentForBase64Encode);

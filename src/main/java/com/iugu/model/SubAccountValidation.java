@@ -2,8 +2,10 @@ package com.iugu.model;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SubAccountValidation implements Serializable {
 
 	private static final long serialVersionUID = 5702980872056593546L;
