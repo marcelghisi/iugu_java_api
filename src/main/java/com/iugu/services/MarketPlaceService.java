@@ -5,6 +5,7 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.google.gson.Gson;
 import com.iugu.Iugu;
 import com.iugu.model.BankUpdate;
 import com.iugu.model.SubAccount;
@@ -33,7 +34,16 @@ public class MarketPlaceService {
 				.post(Entity.entity(account, MediaType.APPLICATION_JSON));
 		
 		if(response.getStatus() == 200) {
-			return response.readEntity(SubAccountResponse.class);
+			
+			final String responseEntity = response.readEntity(String.class);
+
+			System.out.println(responseEntity);
+
+			Gson gson = new Gson();
+
+			SubAccountResponse responseReturn = gson.fromJson(responseEntity, SubAccountResponse.class);
+			
+			return responseReturn;
 		}
 		SubAccountResponse messageResponse = new SubAccountResponse();
 		messageResponse.setSuccess(Boolean.FALSE);
@@ -53,8 +63,28 @@ public class MarketPlaceService {
 				.post(Entity.entity(validation, MediaType.APPLICATION_JSON));
 		
 		if(response.getStatus() == 200) {
-			return response.readEntity(SubAccountValidationResponse.class);
+			
+			final String responseEntity = response.readEntity(String.class);
+
+			System.out.println(responseEntity);
+
+			Gson gson = new Gson();
+
+			SubAccountValidationResponse responseReturn = gson.fromJson(responseEntity, SubAccountValidationResponse.class);
+			
+			return responseReturn;
+			//return response.readEntity(SubAccountValidationResponse.class);
+		} else if (response.getStatus() >= 400 && response.getStatus() < 500){
+			String responseEntity = response.readEntity(String.class);
+			System.out.println(responseEntity);
+			Gson gson = new Gson();
+
+			SubAccountValidationResponse responseReturn = gson.fromJson(responseEntity, SubAccountValidationResponse.class);
+			
+			responseReturn.setSuccess(Boolean.FALSE);
+			return responseReturn;
 		}
+		
 		SubAccountValidationResponse messageResponse = new SubAccountValidationResponse();
 		messageResponse.setSuccess(Boolean.FALSE);
 		messageResponse.setStatusCode(response.getStatus());
@@ -69,7 +99,15 @@ public class MarketPlaceService {
 		Response response = Iugu.getClient().target(String.format(FIND_URL, subAccountId)).request().get();
 
 		if (response.getStatus() == 200) {
-			return response.readEntity(SubAccountInformationResponse.class);
+			final String responseEntity = response.readEntity(String.class);
+
+			System.out.println(responseEntity);
+
+			Gson gson = new Gson();
+
+			SubAccountInformationResponse responseReturn = gson.fromJson(responseEntity, SubAccountInformationResponse.class);
+			
+			return responseReturn;
 		}
 
 		SubAccountInformationResponse messageResponse = new SubAccountInformationResponse();

@@ -3,7 +3,9 @@ package com.iugu.responses;
 import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+
+import com.iugu.serializers.PropertyMapDeserializer;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MessageResponse {
@@ -14,8 +16,7 @@ public class MessageResponse {
 	
 	private Integer statusCode;
 	
-	@JsonProperty("errors")
-	private Map<String,String> errorsInMap;
+	private Map<String,Object> errors;
 
 
 
@@ -35,12 +36,14 @@ public class MessageResponse {
 		this.message = message;
 	}
 
-	public Map<String, String> getErrorsInMap() {
-		return errorsInMap;
+	@JsonDeserialize(using=PropertyMapDeserializer.class) 
+	public void setErrors(Map<String, Object> errors) {
+		this.errors = errors;
 	}
 
-	public void setErrorsInMap(Map<String, String> errorsInMap) {
-		this.errorsInMap = errorsInMap;
+
+	public Map<String, Object> getErrors() {
+		return errors;
 	}
 
 	public Integer getStatusCode() {

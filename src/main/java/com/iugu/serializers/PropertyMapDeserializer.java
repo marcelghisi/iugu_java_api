@@ -17,7 +17,6 @@ public class PropertyMapDeserializer extends JsonDeserializer<Map<String,String>
 	public Map<String, String> deserialize(JsonParser parser,
 			org.codehaus.jackson.map.DeserializationContext context)
 			throws IOException, JsonProcessingException {
-		// TODO Auto-generated method stub
 		 Map<String, String>  retMap = 
              new HashMap<String, String>();
 

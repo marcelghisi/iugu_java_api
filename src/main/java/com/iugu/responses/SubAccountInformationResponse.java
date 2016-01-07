@@ -1,6 +1,7 @@
 package com.iugu.responses;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -113,10 +114,7 @@ public class SubAccountInformationResponse extends MessageResponse{
 	@JsonProperty("custom_logo_small_url")
 	private String customLogoSmallUrl;
 	
-
-    //@JsonSerialize(using=PropertyMapSerializer.class) 
-	@JsonProperty("informations")
-    public Map<String, String> informations; 
+    public List<Map<String, String>> informations; 
     
     private Configuration configuration;
     
@@ -358,14 +356,17 @@ public class SubAccountInformationResponse extends MessageResponse{
 	}
 
 	
-	public Map<String, String> getInformations() {
+	
+	public List<Map<String, String>> getInformations() {
 		return informations;
 	}
 
     @JsonDeserialize(using=PropertyMapDeserializer.class) 
-	public void setInformations(Map<String, String> informations) {
+	public void setInformations(List<Map<String, String>> informations) {
 		this.informations = informations;
 	}
+
+
 
 	public Configuration getConfiguration() {
 		return configuration;
