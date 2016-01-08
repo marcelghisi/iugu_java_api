@@ -1,6 +1,10 @@
 package com.iugu.model;
 
+import javax.management.DescriptorKey;
+
 import org.codehaus.jackson.annotate.JsonProperty;
+
+import com.google.gson.annotations.SerializedName;
 
 public class CustomVariable {
 
@@ -14,6 +18,7 @@ public class CustomVariable {
 	private String value;
 	
 	@JsonProperty("_destroy")
+	@SerializedName("_destroy")
 	private Boolean destroy;
 
 	public String getName() {

@@ -3,6 +3,8 @@ package com.iugu.model;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.jboss.resteasy.util.Base64;
 
+import com.google.gson.annotations.SerializedName;
+
 
 public class BankUpdate {
 
@@ -35,12 +37,14 @@ public class BankUpdate {
 	
 	// Tipo da conta
 	@JsonProperty("account_type")
+	@SerializedName("account_type")
 	private AccountType accountType;
 	
 	//Base64
 	private String document;	
 	
 	@JsonProperty("automatic_validation")
+	@SerializedName("automatic_validation")
 	private Boolean automaticValidation;
 
 	public String getAgency() {

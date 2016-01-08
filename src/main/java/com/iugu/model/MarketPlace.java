@@ -2,11 +2,14 @@ package com.iugu.model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 public class MarketPlace {
 
 	private String name;
 
 	@JsonProperty("comission_percent")
+	@SerializedName("comission_percent")
 	private double commissionPercent;
 
 	public String getName() {

@@ -4,6 +4,11 @@ import java.io.Serializable;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.google.gson.annotations.SerializedName;
+import com.iugu.serializers.DateSerializer;
+import com.iugu.serializers.JsonFormat;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CreditCardConfiguration implements Serializable {
@@ -31,26 +36,30 @@ public class CreditCardConfiguration implements Serializable {
 	 
 	//Descricao que aparece na fatura do cliente
 	@JsonProperty("soft_descriptor")
+	@SerializedName("soft_descriptor")
 	private String softDescriptor;
 	
 	//Parcelamento Ativo
-	@JsonProperty("installments")
 	private Boolean installments;
 	 
 	//Repasse de Juros de Parcelamento ativo? true ou false
 	@JsonProperty("installments_pass_interest")
+	@SerializedName("installments_pass_interest")
 	private Boolean installmentsPassInterest;
 	
 	//Maxino de parcelas
 	@JsonProperty("max_installments")
+	@SerializedName("max_installments")
 	private Integer maxInstallments;
 	
 	//Número de parcelas sem cobrança de juros ao cliente (Nr entre 1 a 12)
 	@JsonProperty("max_installments_without_interest")
+	@SerializedName("max_installments_without_interest")
 	private Integer maxInstallmentsWithoutInterest;
 	
 	// 
 	@JsonProperty("two_step_transaction")
+	@SerializedName("two_step_transaction")
 	private Boolean twoStepTransaction;
 
 	public Boolean getActive() {

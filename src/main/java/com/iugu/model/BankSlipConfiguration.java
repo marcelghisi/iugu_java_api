@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BankSlipConfiguration implements Serializable {
 
@@ -26,9 +28,11 @@ public class BankSlipConfiguration implements Serializable {
 	private Boolean active ;
 	 
 	@JsonProperty("extra_due")
+	@SerializedName("extra_due")
 	private Integer extraDue;
 	
 	@JsonProperty("reprint_extra_due")
+	@SerializedName("reprint_extra_due")
 	private Integer reprintExtraDue;
 
 	public Boolean getActive() {

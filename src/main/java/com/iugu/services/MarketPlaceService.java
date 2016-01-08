@@ -62,7 +62,7 @@ public class MarketPlaceService {
 				.request()
 				.post(Entity.entity(validation, MediaType.APPLICATION_JSON));
 		
-		if(response.getStatus() == 200) {
+		if(response.getStatus() == 200 || response.getStatus() == 422) {
 			
 			final String responseEntity = response.readEntity(String.class);
 
@@ -72,17 +72,11 @@ public class MarketPlaceService {
 
 			SubAccountValidationResponse responseReturn = gson.fromJson(responseEntity, SubAccountValidationResponse.class);
 			
+			if (response.getStatus() == 422){
+				responseReturn.setSuccess(Boolean.FALSE);
+			}
 			return responseReturn;
 			//return response.readEntity(SubAccountValidationResponse.class);
-		} else if (response.getStatus() >= 400 && response.getStatus() < 500){
-			String responseEntity = response.readEntity(String.class);
-			System.out.println(responseEntity);
-			Gson gson = new Gson();
-
-			SubAccountValidationResponse responseReturn = gson.fromJson(responseEntity, SubAccountValidationResponse.class);
-			
-			responseReturn.setSuccess(Boolean.FALSE);
-			return responseReturn;
 		}
 		
 		SubAccountValidationResponse messageResponse = new SubAccountValidationResponse();
@@ -126,8 +120,21 @@ public class MarketPlaceService {
 				.request()
 				.post(Entity.entity(account, MediaType.APPLICATION_JSON));
 		
-		if(response.getStatus() == 200) {
-			return response.readEntity(SubAccountInformationResponse.class);
+		if(response.getStatus() == 200 || response.getStatus() == 422) {
+			
+			final String responseEntity = response.readEntity(String.class);
+
+			System.out.println(responseEntity);
+
+			Gson gson = new Gson();
+
+			SubAccountInformationResponse responseReturn = gson.fromJson(responseEntity, SubAccountInformationResponse.class);
+			
+			if (response.getStatus() == 422){
+				responseReturn.setSuccess(Boolean.FALSE);
+			}
+			return responseReturn;
+			//return response.readEntity(SubAccountValidationResponse.class);
 		}
 		
 		SubAccountInformationResponse messageResponse = new SubAccountInformationResponse();

@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 public class DirectCharge {
 
 
@@ -21,18 +23,21 @@ public class DirectCharge {
 	//Em caso de Marketplace, é possível enviar um customer_payment_method_id de um Cliente criado pela conta mestre
 	//TODO Perguntar Se eu guardar os tokens comigo eu uso se seu guardar os tokens com a iugu uso lá?
 	@JsonProperty("customer_payment_method_id")
+	@SerializedName("customer_payment_method_id")
 	private String customerPaymentMethodId;
 	
 	//customer_id (opcional)	ID do Cliente. Utilizado para vincular a Fatura a um Cliente
 	//Vincular o cliente a fatura que sera gerada. [[[[client company nosso]]]]
 	//Pagamento direto de um atendimento
 	@JsonProperty("customer_id")
+	@SerializedName("customer_id")
 	private String customerId;
 	
 	//invoice_id (opcional)	ID da Fatura a ser utilizada para pagamento
 	//Vincular a fatura ja gerada que será paga.
 	//Utilizar no caso de controle de faturas
 	@JsonProperty("invoice_id")
+	@SerializedName("invoice_id")
 	private String invoiceId;
 	
 	//email (não é preenchido caso seja enviado um invoice_id)	E-mail do Cliente
@@ -49,6 +54,7 @@ public class DirectCharge {
 	//discount_cents (opcional)	Valor dos Descontos em centavos. Funciona apenas para Cobranças Diretas criadas com Itens.
 	//TODO Perguntar Para boleto também gera 12 parcelas
 	@JsonProperty("discount_cents")
+	@SerializedName("discount_cents")
 	private Integer discountCents;
 	
 	//items[] (não é preenchido caso seja enviado um invoice_id)	Itens da Fatura direta que será gerada

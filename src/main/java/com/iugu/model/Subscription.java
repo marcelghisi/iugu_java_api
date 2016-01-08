@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Subscription {
 
 	public Subscription(String customerId) {
@@ -13,6 +15,7 @@ public class Subscription {
 	}
 
 	@JsonProperty("customer_id")
+	@SerializedName("customer_id")
 	private String customerId;
 
 	public String getCustomerId() {
@@ -20,32 +23,41 @@ public class Subscription {
 	}
 
 	@JsonProperty("plan_identifier")
+	@SerializedName("plan_identifier")
 	public String planIdentifier;
 
 	public Date expiresAt;
 
 	@JsonProperty("only_on_charge_sucess")
+	@SerializedName("only_on_charge_sucess")
 	public String onlyOnChargeSucess;
 
 	@JsonProperty("payable_with")
+	@SerializedName("payable_with")
 	public PayableWith payableWith;
 
 	@JsonProperty("credits_based")
+	@SerializedName("credits_based")
 	public boolean creditsBased;
 
 	@JsonProperty("price_cents")
+	@SerializedName("price_cents")
 	public int priceCents;
 
 	@JsonProperty("credits_cycle")
+	@SerializedName("credits_cycle")
 	public int creditsCycle;
 
 	@JsonProperty("credits_min")
+	@SerializedName("credits_min")
 	public int creditsMin;
 
 	@JsonProperty("custom_variables")
+	@SerializedName("custom_variables")
 	public List<CustomVariable> customVariables;
 
 	@JsonProperty("subitems")
+	@SerializedName("subitems")
 	public List<SubItem> subItems;
 
 	public String getPlanIdentifier() {

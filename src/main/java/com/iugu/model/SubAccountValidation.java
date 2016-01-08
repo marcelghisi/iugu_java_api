@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SubAccountValidation implements Serializable {
 
@@ -27,6 +29,7 @@ public class SubAccountValidation implements Serializable {
 	private SubAccountValidationFiles files;
 	
 	@JsonProperty("automatic_validation")
+	@SerializedName("automatic_validation")
 	private Boolean automaticValidation;
 
 	public SubAccountValidationData getData() {

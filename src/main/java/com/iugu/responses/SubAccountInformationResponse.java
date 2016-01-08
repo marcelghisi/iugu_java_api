@@ -9,115 +9,130 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.google.gson.annotations.SerializedName;
 import com.iugu.model.Configuration;
 import com.iugu.model.SubAccountValidationData;
 import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
 import com.iugu.serializers.PropertyMapDeserializer;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class SubAccountInformationResponse extends MessageResponse{
+@JsonIgnoreProperties(ignoreUnknown = false)
+public class SubAccountInformationResponse extends MessageResponse {
 
-	//Codigo da verificacao
+	// Codigo da verificacao
 	private String id;
-	
+
 	private String name;
-		
+
 	@JsonProperty("created_at")
 	@JsonFormat("dd/MM/yyyy")
 	@JsonSerialize(using = DateSerializer.class)
+	@SerializedName("created_at")
 	private Date createdAt;
-	
+
 	@JsonProperty("updated_at")
 	@JsonFormat("dd/MM/yyyy")
 	@JsonSerialize(using = DateSerializer.class)
+	@SerializedName("updated_at")
 	private Date updatedAt;
-	
-	@JsonProperty("can_receive")
+
+	@JsonProperty("can_receive?")
+	@SerializedName("can_receive?")
 	private Boolean canReceive;
-	
-	/*
-	/	    "can_receive?": false,
-    "is_verified?": false,
-	*/
-	//
-	@JsonProperty("is_verified")
+
+	@JsonProperty("is_verified?")
+	@SerializedName("created_at?")
 	private Boolean isVerified;
-	
-	
+
 	@JsonProperty("last_verification_request_status")
+	@SerializedName("last_verification_request_status")
 	private String lastVerificationRequestStatus;
 
 	@JsonProperty("last_verification_request_data")
+	@SerializedName("last_verification_request_data")
 	private SubAccountValidationData lastVerificationRequestData;
-	
+
 	@JsonProperty("last_verification_request_feedback")
+	@SerializedName("last_verification_request_feedback")
 	private String lastVerificationRequestFeedback;
 
 	@JsonProperty("change_plan_type")
+	@SerializedName("change_plan_type")
 	private Integer changePlanType;
-	
+
 	@JsonProperty("subscriptions_trial_period")
+	@SerializedName("subscriptions_trial_period")
 	private Integer subscriptionsTrialPeriod;
-	
+
 	@JsonProperty("disable_emails")
+	@SerializedName("disable_emails")
 	private Boolean disableEmails;
-	
-	//Ultimo saque
+
+	// Ultimo saque
 	@JsonProperty("last_withdraw")
-	private Integer lastWithdraw;//TODO Perguntar Cents?
+	@SerializedName("last_withdraw")
+	private Integer lastWithdraw;// TODO Perguntar Cents?
 
 	@JsonProperty("total_subscriptions")
+	@SerializedName("total_subscriptions")
 	private Integer totalSubscriptions;
-	
+
 	@JsonProperty("reply_to")
+	@SerializedName("reply_to")
 	private String replyTo;
-	
+
 	@JsonProperty("webapp_on_test_mode")
+	@SerializedName("webapp_on_test_mode")
 	private Boolean webappOnTestMode;
-	
+
 	private Boolean marketplace;
-	
-	//Saque automatico
+
+	// Saque automatico
 	@JsonProperty("auto_withdraw")
+	@SerializedName("auto_withdraw")
 	private Boolean autoWithdraw;
-	
+
 	private String balance;
-	
+
 	@JsonProperty("protected_balance")
-	private String protectedBalance;	
+	@SerializedName("protected_balance")
+	private String protectedBalance;
 
 	@JsonProperty("payable_balance")
+	@SerializedName("payable_balance")
 	private String payableBalance;
-	
+
 	@JsonProperty("commission_balance")
+	@SerializedName("commission_balance")
 	private String commissionBalance;
-	
+
 	@JsonProperty("volume_last_month")
+	@SerializedName("volume_last_month")
 	private String volumeLastMonth;
-	
+
 	@JsonProperty("volume_this_month")
+	@SerializedName("volume_this_month")
 	private String volumeThisMonth;
-	
+
 	@JsonProperty("taxes_paid_last_month")
+	@SerializedName("taxes_paid_last_month")
 	private String taxesPaidLastMonth;
-	
+
 	@JsonProperty("taxes_paid_this_month")
+	@SerializedName("taxes_paid_this_month")
 	private String taxesPaidThisMonth;
-	
-	@JsonProperty("volume_this_month")
-	private String volume_this_month;
-	
+
 	@JsonProperty("custom_logo_url")
+	@SerializedName("custom_logo_url")
 	private String customLogoUrl;
-	
+
 	@JsonProperty("custom_logo_small_url")
+	@SerializedName("custom_logo_small_url")
 	private String customLogoSmallUrl;
-	
-    public List<Map<String, String>> informations; 
-    
-    private Configuration configuration;
-    
+
+	public List<Map<String, String>> informations;
+
+	private Configuration configuration;
 
 	public String getId() {
 		return id;
@@ -171,8 +186,7 @@ public class SubAccountInformationResponse extends MessageResponse{
 		return lastVerificationRequestStatus;
 	}
 
-	public void setLastVerificationRequestStatus(
-			String lastVerificationRequestStatus) {
+	public void setLastVerificationRequestStatus(String lastVerificationRequestStatus) {
 		this.lastVerificationRequestStatus = lastVerificationRequestStatus;
 	}
 
@@ -180,8 +194,7 @@ public class SubAccountInformationResponse extends MessageResponse{
 		return lastVerificationRequestData;
 	}
 
-	public void setLastVerificationRequestData(
-			SubAccountValidationData lastVerificationRequestData) {
+	public void setLastVerificationRequestData(SubAccountValidationData lastVerificationRequestData) {
 		this.lastVerificationRequestData = lastVerificationRequestData;
 	}
 
@@ -189,8 +202,7 @@ public class SubAccountInformationResponse extends MessageResponse{
 		return lastVerificationRequestFeedback;
 	}
 
-	public void setLastVerificationRequestFeedback(
-			String lastVerificationRequestFeedback) {
+	public void setLastVerificationRequestFeedback(String lastVerificationRequestFeedback) {
 		this.lastVerificationRequestFeedback = lastVerificationRequestFeedback;
 	}
 
@@ -266,7 +278,6 @@ public class SubAccountInformationResponse extends MessageResponse{
 		this.autoWithdraw = autoWithdraw;
 	}
 
-	
 	public String getBalance() {
 		return balance;
 	}
@@ -331,13 +342,6 @@ public class SubAccountInformationResponse extends MessageResponse{
 		this.taxesPaidThisMonth = taxesPaidThisMonth;
 	}
 
-	public String getVolume_this_month() {
-		return volume_this_month;
-	}
-
-	public void setVolume_this_month(String volume_this_month) {
-		this.volume_this_month = volume_this_month;
-	}
 
 	public String getCustomLogoUrl() {
 		return customLogoUrl;
@@ -355,18 +359,14 @@ public class SubAccountInformationResponse extends MessageResponse{
 		this.customLogoSmallUrl = customLogoSmallUrl;
 	}
 
-	
-	
 	public List<Map<String, String>> getInformations() {
 		return informations;
 	}
 
-    @JsonDeserialize(using=PropertyMapDeserializer.class) 
+	@JsonDeserialize(using = PropertyMapDeserializer.class)
 	public void setInformations(List<Map<String, String>> informations) {
 		this.informations = informations;
 	}
-
-
 
 	public Configuration getConfiguration() {
 		return configuration;
@@ -375,6 +375,5 @@ public class SubAccountInformationResponse extends MessageResponse{
 	public void setConfiguration(Configuration configuration) {
 		this.configuration = configuration;
 	}
-	
-	
+
 }

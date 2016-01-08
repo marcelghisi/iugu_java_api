@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Configuration implements Serializable {
 	
@@ -17,12 +19,15 @@ public class Configuration implements Serializable {
 	 * Percentual de comissão pago para o marketplace
 	 */
 	@JsonProperty("commission_percent")
+	@SerializedName("commission_percent")
 	private Integer comissionPercent;
 	
 	@JsonProperty("bank_slip")
+	@SerializedName("bank_slip")
 	private BankSlipConfiguration bankSlipConfiguration;
 	
 	@JsonProperty("credit_card")
+	@SerializedName("credit_card")
 	private CreditCardConfiguration creditCardConfiguration;
 
 	public Integer getComissionPercent() {

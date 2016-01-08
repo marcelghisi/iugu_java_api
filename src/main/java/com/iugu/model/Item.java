@@ -3,6 +3,8 @@ package com.iugu.model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Item {
 
 	private String description;
@@ -10,6 +12,7 @@ public class Item {
 	private Integer quantity;
 	
 	@JsonProperty("price_cents")
+	@SerializedName("price_cents")
 	private Integer priceCents;
 	
 	public Item(String description, Integer quantity, Integer priceCents) {

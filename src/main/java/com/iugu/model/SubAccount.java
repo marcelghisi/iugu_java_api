@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 public class SubAccount implements Serializable {
 
 	/**
@@ -25,6 +27,7 @@ public class SubAccount implements Serializable {
 	 * Percentual de comissão pago para o marketplace
 	 */
 	@JsonProperty("commission_percent")
+	@SerializedName("commission_percent")
 	private Integer comissionPercent;
 
 	public String getName() {

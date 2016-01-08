@@ -3,6 +3,8 @@ package com.iugu.model;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SubAccountValidationData {
 
@@ -15,7 +17,7 @@ public class SubAccountValidationData {
 		
 		this.businessType = mainSettingsData.getBusinessDescription();
 		this.priceRange = mainSettingsData.getPriceRange().getValue();
-		this.physicalProducts = mainSettingsData.getPhysicalProducts().toString();
+		this.physicalProducts = mainSettingsData.getPhysicalProducts();
 		this.automaticTransfer = mainSettingsData.getAutomaticTransfer();
 		
 		this.accountType = bankInformation.getAccountType().getValue();
@@ -42,7 +44,7 @@ public class SubAccountValidationData {
 		
 		this.businessType = mainSettingsData.getBusinessDescription();
 		this.priceRange = mainSettingsData.getPriceRange().getValue();
-		this.physicalProducts = mainSettingsData.getPhysicalProducts().toString();
+		this.physicalProducts = mainSettingsData.getPhysicalProducts();
 		this.automaticTransfer = mainSettingsData.getAutomaticTransfer();
 		
 		this.accountType = bankInformation.getAccountType().getValue();
@@ -64,22 +66,27 @@ public class SubAccountValidationData {
 	//Range de preços que a conta utilizará nas tranzações
 	//Ex: Valor máximo da venda ('Até R$ 100,00', 'Entre R$ 100,00 e R$ 500,00', 'Mais que R$ 500,00')
 	@JsonProperty("price_range")
+	@SerializedName("price_range")
 	private String priceRange;
 
 	
 	@JsonProperty("physical_products")
-	private String physicalProducts;
+	@SerializedName("physical_products")
+	private Boolean physicalProducts;
 
 	//Descrição do negócio da conta
 	@JsonProperty("business_type")
+	@SerializedName("business_type")
 	private String businessType;
 	
 	//Descrição do negócio da conta
 	@JsonProperty("person_type")
+	@SerializedName("person_type")
 	private String personType;
 	
 	//Saque automático (Recomendamos que envie 'true')
 	@JsonProperty("automatic_transfer")
+	@SerializedName("automatic_transfer")
 	private Boolean automaticTransfer;
 	
 	private String cpf;
@@ -90,12 +97,15 @@ public class SubAccountValidationData {
 	private String cnpj;
 	
 	@JsonProperty("company_name")
+	@SerializedName("company_name")
 	private String companyName;
 	
 	@JsonProperty("resp_cpf")
+	@SerializedName("resp_cpf")
 	private String cpfResponsavel;
 	
 	@JsonProperty("resp_name")
+	@SerializedName("resp_name")
 	private String nameResponsavel;
 
 	private String address;
@@ -111,12 +121,15 @@ public class SubAccountValidationData {
 	private String bank;
 	
 	@JsonProperty("bank_ag")
+	@SerializedName("bank_ag")
 	private String bankAgencyNumber;
 	
 	@JsonProperty("account_type")
+	@SerializedName("account_type")
 	private String accountType;
 	
 	@JsonProperty("bank_cc")
+	@SerializedName("bank_cc")
 	private String bankAccountNumber;
 	
 //	@JsonProperty("document_id")
@@ -138,11 +151,13 @@ public class SubAccountValidationData {
 		this.priceRange = priceRange;
 	}
 
-	public String getPhysicalProducts() {
+	
+
+	public Boolean getPhysicalProducts() {
 		return physicalProducts;
 	}
 
-	public void setPhysicalProducts(String physicalProducts) {
+	public void setPhysicalProducts(Boolean physicalProducts) {
 		this.physicalProducts = physicalProducts;
 	}
 

@@ -9,6 +9,7 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.google.gson.annotations.SerializedName;
 import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
 
@@ -27,6 +28,7 @@ public class Invoice implements Serializable {
 	@JsonProperty("due_date")
 	@JsonFormat("dd/MM/yyyy")
 	@JsonSerialize(using = DateSerializer.class)
+	@SerializedName("due_date")
 	private Date dueDate;
 
 	/**
@@ -38,6 +40,7 @@ public class Invoice implements Serializable {
 	 * Emails de cópia
 	 */
 	@JsonProperty("cc_emails")
+	@SerializedName("cc_emails")
 	private String ccEmails;
 
 	/**
@@ -45,6 +48,7 @@ public class Invoice implements Serializable {
 	 * pela página de Fatura da Iugu
 	 */
 	@JsonProperty("return_url")
+	@SerializedName("return_url")
 	private String returnUrl;
 
 	/**
@@ -52,12 +56,14 @@ public class Invoice implements Serializable {
 	 * estiver expirada
 	 */
 	@JsonProperty("expired_url")
+	@SerializedName("expired_url")
 	private String expiredUrl;
 
 	/**
 	 * ID do cliente
 	 */
 	@JsonProperty("customer_id")
+	@SerializedName("customer_id")
 	private String customerId;
 
 	/**
@@ -65,12 +71,14 @@ public class Invoice implements Serializable {
 	 * (Gatilhos) são chamados
 	 */
 	@JsonProperty("notification_url")
+	@SerializedName("notification_url")
 	private String notificationUrl;
 
 	/**
 	 * Valor dos Impostos em centavos
 	 */
 	@JsonProperty("tax_cents")
+	@SerializedName("tax_cents")
 	private Integer taxCents;
 
 	/**
@@ -83,6 +91,7 @@ public class Invoice implements Serializable {
 	 * vencimento
 	 */
 	@JsonProperty("late_payment_fine")
+	@SerializedName("late_payment_fine")
 	private Double latePaymentFine;
 
 	/**
@@ -90,15 +99,18 @@ public class Invoice implements Serializable {
 	 * pro rata.
 	 */
 	@JsonProperty("per_day_interest")
+	@SerializedName("per_day_interest")
 	private Double perDayInterest;
 
 	/**
 	 * Valor dos Descontos em centavos
 	 */
 	@JsonProperty("discount_cents")
+	@SerializedName("discount_cents")
 	private Integer discountCents;
 
 	@JsonProperty("payable_with")
+	@SerializedName("payable_with")
 	private PayableWith payableWith;
 
 	public Invoice(String email, Date dueDate, Item... items) {

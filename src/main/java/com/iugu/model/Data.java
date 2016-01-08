@@ -2,6 +2,8 @@ package com.iugu.model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Data {
 
 	public Data(String number, String verificationValue, String firstName, String lastName, String month, String year) {
@@ -17,14 +19,17 @@ public class Data {
 
 	
 	@JsonProperty("verification_value")
+	@SerializedName("verification_value")
 	String verificationValue;
 
 	
 	@JsonProperty("first_name")
+	@SerializedName("first_name")
 	String firstName;
 
 	
 	@JsonProperty("last_name")
+	@SerializedName("last_name")
 	String lastName;
 
 	

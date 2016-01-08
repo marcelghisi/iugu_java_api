@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Customer implements Serializable {
 
 	private static final long serialVersionUID = 3266886175287194L;
@@ -27,6 +29,7 @@ public class Customer implements Serializable {
 	 * cnpj/cpf do cliente
 	 */
 	@JsonProperty("cpf_cnpj")
+	@SerializedName("cpf_cnpj")
 	private String cpfCnpj;
 
 	/**
@@ -34,6 +37,7 @@ public class Customer implements Serializable {
 	 * vírgula
 	 */
 	@JsonProperty("cc_emails")
+	@SerializedName("cc_emails")
 	private String ccEmails;
 
 	/**
@@ -45,6 +49,7 @@ public class Customer implements Serializable {
 	 * Variáveis personalizadas do cliente
 	 */
 	@JsonProperty("custom_variables")
+	@SerializedName("custom_variables")
 	private List<CustomVariable> customVariables;
 
 	public String getEmail() {

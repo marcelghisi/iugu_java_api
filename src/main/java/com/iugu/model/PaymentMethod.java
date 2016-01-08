@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PaymentMethod {
 
 	public PaymentMethod(String customerId, String description, List<Data> data) {
@@ -13,6 +15,7 @@ public class PaymentMethod {
 	}
 
 	@JsonProperty("customer_id")
+	@SerializedName("customer_id")
 	private String customerId;
 
 	private String description;
@@ -20,11 +23,13 @@ public class PaymentMethod {
 	private List<Data> data;
 
 	@JsonProperty("item_type")
+	@SerializedName("item_type")
 	private ItemType itemType;
 
 	private String token;
 
 	@JsonProperty("set_as_default")
+	@SerializedName("set_as_default")
 	private String setAsDefault;
 
 	public ItemType getItemType() {

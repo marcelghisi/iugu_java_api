@@ -2,11 +2,14 @@ package com.iugu.model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PaymentToken {
 
 
 	//ID de sua Conta na Iugu (O ID de sua conta pode ser encontrado clicando aqui)
 	@JsonProperty("account_id")
+	@SerializedName("account_id")
 	private String id;
 
 	//method	Método de Pagamento (atualmente somente credit_card)

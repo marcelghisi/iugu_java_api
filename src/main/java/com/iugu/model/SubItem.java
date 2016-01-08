@@ -2,6 +2,8 @@ package com.iugu.model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 public class SubItem {
 
 	private String description;
@@ -9,6 +11,7 @@ public class SubItem {
 	private Integer quantity;
 
 	@JsonProperty("price_cents")
+	@SerializedName("price_cents")
 	private Integer priceCents;
 
 	private boolean recurrent;

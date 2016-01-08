@@ -2,11 +2,14 @@ package com.iugu.model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Payer {
 
 	// CPF ou CNPJ do Cliente
 	
 	@JsonProperty("cpf_cnpj")
+	@SerializedName("cpf_cnpj")
 	private String cpfCNPJ;
 	
 	// name	Nome (utilizado como sacado no boleto)
@@ -14,18 +17,17 @@ public class Payer {
 
 	//phone_prefix	Prefixo do Telefone (Ex: 11 para São Paulo)
 	@JsonProperty("phone_prefix")
+	@SerializedName("phone_prefix")
 	private String phonePrefix;
 	
 	//phone	Telefone
 	private String phone;
 	
 	//email	E-mail do Cliente
-	@JsonProperty("email")
 	private String email;
 	
 	
 	//address{}	Endereço do Cliente (utilizado no boleto)
-	@JsonProperty("email")
 	private Address address;
 
 	public Payer(String cpfCNPJ, String name, String phonePrefix, String phone, String email,
