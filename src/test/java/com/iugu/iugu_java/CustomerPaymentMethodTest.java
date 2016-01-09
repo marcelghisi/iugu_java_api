@@ -12,7 +12,7 @@ import junit.framework.TestSuite;
 /**
  * Unit test for simple App.
  */
-public class CustomerTest 
+public class CustomerPaymentMethodTest 
     extends TestCase
 {
 	/**
@@ -20,7 +20,7 @@ public class CustomerTest
      *
      * @param testName name of the test case
      */
-    public CustomerTest( String testName )
+    public CustomerPaymentMethodTest( String testName )
     {
         super( testName );
     }
@@ -30,7 +30,7 @@ public class CustomerTest
      */
     public static Test suite()
     {
-        return new TestSuite( CustomerTest.class );
+        return new TestSuite( CustomerPaymentMethodTest.class );
     }
 
     /**
