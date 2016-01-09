@@ -20,6 +20,11 @@ public class Customer implements Serializable {
 	/**
 	 * E-Mail do cliente
 	 */
+	private String id;
+	
+	/**
+	 * E-Mail do cliente
+	 */
 	private String email;
 
 	/**
@@ -53,6 +58,15 @@ public class Customer implements Serializable {
 	@JsonProperty("custom_variables")
 	@SerializedName("custom_variables")
 	private List<CustomVariable> customVariables;
+
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getEmail() {
 		return email;
