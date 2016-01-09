@@ -8,6 +8,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.google.gson.annotations.SerializedName;
 import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
 
@@ -19,55 +20,71 @@ public class InvoiceResponse implements Serializable {
 	private String id;
 	
 	@JsonProperty("due_date")
-	@JsonFormat("yyyy-MM-dd") @JsonSerialize(using = DateSerializer.class)
+	@JsonFormat("yyyy-MM-dd") 
+	@JsonSerialize(using = DateSerializer.class)
+	@SerializedName("due_date")
 	private String dueDate;
 	
 	private String currency;
 	
 	@JsonProperty("discount_cents")
+	@SerializedName("discount_cents")
 	private Integer discountCents;
 
 	private String email;
 	
 	@JsonProperty("items_total_cents")
+	@SerializedName("items_total_cents")
 	private Integer itemsTotalCents;
 	
 	@JsonProperty("notification_url")
+	@SerializedName("notification_url")
 	private String notificationUrl;
 	
 	@JsonProperty("return_url")
+	@SerializedName("return_url")
 	private String returnUrl;
 	
 	private String status;
 	
 	@JsonProperty("tax_cents")
+	@SerializedName("tax_cents")
 	private Integer taxCents;
 	
 	@JsonProperty("updated_at")
-	@JsonFormat("yyyy-MM-dd'T'HH:mm:ssZ") @JsonSerialize(using = DateSerializer.class)
+	@JsonFormat("yyyy-MM-dd'T'HH:mm:ssZ") 
+	@JsonSerialize(using = DateSerializer.class)
+	@SerializedName("updated_at")
 	private Date updatedAt;
 	
 	@JsonProperty("total_cents")
+	@SerializedName("total_cents")
 	private Integer totalCents;
 	
 	@JsonProperty("paid_at")
+	@SerializedName("paid_at")
 	private Date paidAt;
 	
 	@JsonProperty("secure_id")
+	@SerializedName("secure_id")
 	private String secureId;
 	
 	@JsonProperty("secure_url")
+	@SerializedName("secure_url")
 	private String secureUrl;
 	
 	@JsonProperty("customer_id")
+	@SerializedName("customer_id")
 	private String customerId;
 	
 	@JsonProperty("user_id")
+	@SerializedName("user_id")
 	private Long userId;
 	
 	private String total;
 	
 	@JsonProperty("taxes_paid")
+	@SerializedName("taxes_paid")
 	private String taxesPaid;
 	
 	private String interest;
@@ -79,6 +96,7 @@ public class InvoiceResponse implements Serializable {
 	private Boolean installments;
 	
 	@JsonProperty("bank_slip")
+	@SerializedName("bank_slip")
 	private BankSlipResponse bankSlip;
 	
 	private List<ItemResponse> items;

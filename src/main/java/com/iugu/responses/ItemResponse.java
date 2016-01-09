@@ -6,6 +6,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.google.gson.annotations.SerializedName;
 import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
 
@@ -19,14 +20,19 @@ public class ItemResponse {
 	private Integer quantity;
 	
 	@JsonProperty("price_cents")
+	@SerializedName("price_cents")
 	private Integer priceCents;
 	
 	@JsonProperty("created_at")
-	@JsonFormat("yyyy-MM-dd'T'HH:mm:ssZ") @JsonSerialize(using = DateSerializer.class)
+	@JsonFormat("yyyy-MM-dd'T'HH:mm:ssZ") 
+	@JsonSerialize(using = DateSerializer.class)
+	@SerializedName("created_at")
 	private Date createdAt;
 	
 	@JsonProperty("updated_at")
-	@JsonFormat("yyyy-MM-dd'T'HH:mm:ssZ") @JsonSerialize(using = DateSerializer.class)
+	@JsonFormat("yyyy-MM-dd'T'HH:mm:ssZ") 
+	@JsonSerialize(using = DateSerializer.class)
+	@SerializedName("updated_at")
 	private Date updatedAt;
 	
 	private String price;

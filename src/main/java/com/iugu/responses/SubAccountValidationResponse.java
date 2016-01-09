@@ -6,6 +6,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.google.gson.annotations.SerializedName;
 import com.iugu.model.SubAccountValidationData;
 import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
@@ -17,6 +18,7 @@ public class SubAccountValidationResponse extends MessageResponse{
 	private String id;
 	
 	@JsonProperty("account_id")
+	@SerializedName("account_id")
 	private String accountId;
 	
 	/**
@@ -25,6 +27,7 @@ public class SubAccountValidationResponse extends MessageResponse{
 	@JsonProperty("created_at")
 	@JsonFormat("dd/MM/yyyy")
 	@JsonSerialize(using = DateSerializer.class)
+	@SerializedName("created_at")
 	private Date createdAt;
 	
 	private SubAccountValidationData data;

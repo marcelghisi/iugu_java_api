@@ -3,21 +3,27 @@ package com.iugu.responses;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SubAccountResponse extends MessageResponse{
 
 	@JsonProperty("account_id")
+	@SerializedName("account_id")
 	private String id;
 	
 	private String name;
 	
 	@JsonProperty("live_api_token")
+	@SerializedName("live_api_token")
 	private String liveApiToken;
 	
 	@JsonProperty("test_api_token")
+	@SerializedName("test_api_token")
 	private String testApiToken;
 	
 	@JsonProperty("user_token")
+	@SerializedName("user_token")
 	private String userToken;
 	
 

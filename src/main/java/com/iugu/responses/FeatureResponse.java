@@ -3,6 +3,8 @@ package com.iugu.responses;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FeatureResponse {
 
@@ -15,6 +17,7 @@ public class FeatureResponse {
 	private String name;
 	
 	@JsonProperty("plan_id")
+	@SerializedName("plan_id")
 	private String planId;
 	
 	private Integer position;

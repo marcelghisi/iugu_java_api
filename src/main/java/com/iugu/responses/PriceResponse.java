@@ -3,6 +3,8 @@ package com.iugu.responses;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PriceResponse {
 
@@ -11,9 +13,11 @@ public class PriceResponse {
 	private String currency;
 	
 	@JsonProperty("plan_id")
+	@SerializedName("plan_id")
 	private String planId;
 	
 	@JsonProperty("value_cents")
+	@SerializedName("value_cents")
 	private Integer valueCents;
 
 	public String getId() {

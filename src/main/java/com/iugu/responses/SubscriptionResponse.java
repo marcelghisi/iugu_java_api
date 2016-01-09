@@ -7,6 +7,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.google.gson.annotations.SerializedName;
 import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
 
@@ -18,53 +19,68 @@ public class SubscriptionResponse {
 	private Boolean suspended;
 	
 	@JsonProperty("plan_identifier")
+	@SerializedName("plan_identifier")
 	private String planIdentifier;
 	
 	@JsonProperty("price_cents")
+	@SerializedName("price_cents")
 	private Integer priceCents;
 	
 	private String currency;
 	
 	//TODO Features
 	@JsonProperty("expires_at")
-	@JsonFormat("yyyy-MM-dd'T'HH:mm:ssZ") @JsonSerialize(using = DateSerializer.class)
+	@JsonFormat("yyyy-MM-dd'T'HH:mm:ssZ") 
+	@JsonSerialize(using = DateSerializer.class)
+	@SerializedName("expires_at")
 	private Date expiresAt;
 	
 	@JsonProperty("customer_name")
+	@SerializedName("customer_name")
 	private String customerName;
 	
 	@JsonProperty("customer_email")
+	@SerializedName("customer_email")
 	private String customerEmail;
 	
 	@JsonProperty("cycled_at")
-	@JsonFormat("yyyy-MM-dd'T'HH:mm:ssZ") @JsonSerialize(using = DateSerializer.class)
+	@JsonFormat("yyyy-MM-dd'T'HH:mm:ssZ") 
+	@JsonSerialize(using = DateSerializer.class)
+	@SerializedName("cycled_at")
 	private Date cycledAt;
 	
 	@JsonProperty("credits_min")
+	@SerializedName("credits_min")
 	private Integer creditsMin;
 	
 	//TODO Credits Cycle
 	
 	@JsonProperty("customer_id")
+	@SerializedName("customer_id")
 	private String customerId;
 	
 	@JsonProperty("plan_name")
+	@SerializedName("plan_name")
 	private String planName;
 	
 	@JsonProperty("customer_ref")
+	@SerializedName("customer_ref")
 	private String customerRef;
 	
 	@JsonProperty("plan_ref")
+	@SerializedName("plan_ref")
 	private String planRef;
 	
 	private Boolean active;
 	
 	@JsonProperty("in_trial")
+	@SerializedName("in_trial")
 	private Boolean inTrial;
 	
 	private Integer credits;
 	
 	@JsonProperty("credits_based")
+	@SerializedName("credits_based")
 	private Boolean creditsBased;
 	
 	//TODO Recent Invoices
@@ -74,6 +90,7 @@ public class SubscriptionResponse {
 	private List<LogResponse> logs;
 	
 	@JsonProperty("custom_variables")
+	@SerializedName("custom_variables")
 	private List<CustomVariableResponse> customVariables;
 
 	public String getId() {

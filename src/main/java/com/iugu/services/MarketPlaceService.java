@@ -146,6 +146,38 @@ public class MarketPlaceService {
 		return messageResponse;
 	}
 	
+	public MessageResponse updateBankInformation(BankUpdate bankData) {
+		Response response = Iugu.getClient()
+				.target(BANK_VERIFICATION)
+				.request()
+				.post(Entity.entity(bankData, MediaType.APPLICATION_JSON));
+		
+		if(response.getStatus() == 200 || response.getStatus() == 422) {
+			
+			final String responseEntity = response.readEntity(String.class);
+
+			System.out.println(responseEntity);
+
+			Gson gson = new Gson();
+
+			SubAccountInformationResponse responseReturn = gson.fromJson(responseEntity, SubAccountInformationResponse.class);
+			
+			if (response.getStatus() == 422){
+				responseReturn.setSuccess(Boolean.FALSE);
+			}
+			return responseReturn;
+			//return response.readEntity(SubAccountValidationResponse.class);
+		}
+		MessageResponse messageResponse = new MessageResponse();
+		messageResponse.setSuccess(Boolean.FALSE);
+		messageResponse.setStatusCode(response.getStatus());
+		messageResponse.setMessage(response.getStatusInfo().toString());
+
+		response.close();
+		
+		return messageResponse;
+	}
+	
 	public RequestWithDrawResponse createWithDrawRequest(String subAccountId,Integer centsValue) {
 
 		Form form = new Form();
@@ -167,34 +199,7 @@ public class MarketPlaceService {
 		return messageResponse;
 	}
 	
-	public MessageResponse updateBankInformation(BankUpdate bankData) {
-		Response response = Iugu.getClient()
-				.target(BANK_VERIFICATION)
-				.request()
-				.post(Entity.entity(bankData, MediaType.APPLICATION_JSON));
-		
-		
-//		System.out.println(Entity.entity(bankData, MediaType.APPLICATION_JSON).getEncoding().toString());
-		
-// 	   String respContent = "";
-//	   
-// 	   if (response.hasEntity())
-// 	    respContent = response.readEntity(String.class);
-// 	  
-// 	   System.out.println("Response--> " + respContent);
- 	   
-		if(response.getStatus() == 200) {
-			return response.readEntity(MessageResponse.class);
-		}
-		MessageResponse messageResponse = new MessageResponse();
-		messageResponse.setSuccess(Boolean.FALSE);
-		messageResponse.setStatusCode(response.getStatus());
-		messageResponse.setMessage(response.getStatusInfo().toString());
 
-		response.close();
-		
-		return messageResponse;
-	}
 	
 
 }

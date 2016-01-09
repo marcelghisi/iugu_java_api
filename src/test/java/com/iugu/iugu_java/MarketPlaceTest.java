@@ -106,13 +106,6 @@ public class MarketPlaceTest
 		System.out.println("TESTANDO FIND SUBACCOUNT");
 		System.out.print(" ID: " + responseInformation.getId() + ";");
 		System.out.print(" Name: " + responseInformation.getName()+ ";");
-		//System.out.print(" isVerified: " + responseInformation.getIsVerified()+ ";");
-		
-		System.out.println("TESTANDO FIND SUB ACCOUNT");
-		System.out.print(" Message: " + responseInformation.getMessage() + ";");
-		System.out.print(" Success: " + responseInformation.getSuccess()+ ";");
-		System.out.print(" Code: " + responseInformation.getStatusCode()+ ";");
-		//System.out.print(" Informations comission: " + responseInformation.getInformations().get("commission_percent")+ ";");
 		
 		//Response
 		//{"id":"BFE13F587384440BB8A05E63BC74B961","name":"Marcel Ghisi","created_at":"2016-01-07T19:16:10-02:00","updated_at":"2016-01-07T19:16:12-02:00","can_receive?":false,"is_verified?":false,"last_verification_request_status":null,"last_verification_request_data":null,"last_verification_request_feedback":null,"change_plan_type":1,"subscriptions_trial_period":0,"subscriptions_billing_days":null,"disable_emails":false,"last_withdraw":null,"reply_to":null,"webapp_on_test_mode":false,"marketplace":false,"default_return_url":null,"credit_card_verified":null,"fines":null,"late_payment_fine":null,"per_day_interest":null,"auto_withdraw":false,"payment_email_notification":false,"auto_advance":false,"auto_advance_type":null,"auto_advance_option":null,"balance":"R$ 0,00","protected_balance":"R$ 0,00","payable_balance":"R$ 0,00","receivable_balance":"R$ 0,00","commission_balance":"R$ 0,00","volume_last_month":"R$ 0,00","volume_this_month":"R$ 0,00","total_subscriptions":0,"total_active_subscriptions":0,"taxes_paid_last_month":"R$ 0,00","taxes_paid_this_month":"R$ 0,00","custom_logo_url":null,"custom_logo_small_url":null,"informations":[{"key":"commission_percent","value":"1.0"}],"configuration":{"auto_withdraw":false,"payment_email_notification":false,"auto_advance":null,"auto_advance_type":null,"auto_advance_option":null,"commission_percent":1.0,"fines":null,"late_payment_fine":null,"per_day_interest":null,"bank_slip":{"active":true,"extra_due":"0","reprint_extra_due":"0"},"credit_card":{"active":false,"soft_descriptor":"","installments":false,"installments_pass_interest":false,"max_installments":"0","max_installments_without_interest":"0","two_step_transaction":false}}}
@@ -203,6 +196,29 @@ public class MarketPlaceTest
     }
     
     /**
+     * Rigourous Test :-)
+     */
+    public void testConfigureSoftDescriptionCnpjSubAccount()
+    {
+
+    	//{"account_id":"9945CFA951234A85870B7C98E5283836","name":"Noeli Ghisi","live_api_token":"251df262110fc3d74ea3262c20093bbe","test_api_token":"744939511d57522c618466cc5966b72a","user_token":"06fa4a7767762feb3c0b82ebd3143944"}
+    	
+		Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+
+		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
+		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(true, null, null);
+		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration("ATTENDME PJ", null, null,null,null,null);
+		
+		SubAccountConfiguration subAccountConfiguration = new SubAccountConfiguration(mainSettingsConfiguration, bankSlipConfiguration, creditCardConfiguration);
+		
+		SubAccountInformationResponse responseInformationResp = new MarketPlaceService().configureSubAccount(subAccountConfiguration);
+		
+		System.out.println("TESTANDO CONFIGURE SUB ACCOUNT");
+
+		assertEquals("ATTENDME PJ", responseInformationResp.getConfiguration().getCreditCardConfiguration().getSoftDescriptor());
+    }
+    
+    /**
      * Rigourous Test : testCreatePJTesteSubAccount
      */
     public void testCreatePFTesteSubAccount()
@@ -229,6 +245,27 @@ public class MarketPlaceTest
 		
 		System.out.println("END CERATION SUB ACCOUNT");
 		
+    }
+    
+    /**
+     * Rigourous Test :-)
+     */
+    public void testFindSubAccountPF()
+    {
+
+    	//{"account_id":"BFE13F587384440BB8A05E63BC74B961","name":"Marcel Ghisi","live_api_token":"56e9b3a30990a8c97260d475bca4f11f","test_api_token":"4485d3d52775dbccccc4b64eb5ccf996","user_token":"e6a1bc0e23f73fa6187c77b889a5d836"}
+		
+		Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
+		SubAccountInformationResponse responseInformation = new MarketPlaceService().find("9945CFA951234A85870B7C98E5283836");
+		
+		System.out.println("TESTANDO FIND SUBACCOUNT");
+		System.out.print(" ID: " + responseInformation.getId() + ";");
+		System.out.print(" Name: " + responseInformation.getName()+ ";");
+		
+		//Response
+		//{"id":"BFE13F587384440BB8A05E63BC74B961","name":"Marcel Ghisi","created_at":"2016-01-07T19:16:10-02:00","updated_at":"2016-01-07T19:16:12-02:00","can_receive?":false,"is_verified?":false,"last_verification_request_status":null,"last_verification_request_data":null,"last_verification_request_feedback":null,"change_plan_type":1,"subscriptions_trial_period":0,"subscriptions_billing_days":null,"disable_emails":false,"last_withdraw":null,"reply_to":null,"webapp_on_test_mode":false,"marketplace":false,"default_return_url":null,"credit_card_verified":null,"fines":null,"late_payment_fine":null,"per_day_interest":null,"auto_withdraw":false,"payment_email_notification":false,"auto_advance":false,"auto_advance_type":null,"auto_advance_option":null,"balance":"R$ 0,00","protected_balance":"R$ 0,00","payable_balance":"R$ 0,00","receivable_balance":"R$ 0,00","commission_balance":"R$ 0,00","volume_last_month":"R$ 0,00","volume_this_month":"R$ 0,00","total_subscriptions":0,"total_active_subscriptions":0,"taxes_paid_last_month":"R$ 0,00","taxes_paid_this_month":"R$ 0,00","custom_logo_url":null,"custom_logo_small_url":null,"informations":[{"key":"commission_percent","value":"1.0"}],"configuration":{"auto_withdraw":false,"payment_email_notification":false,"auto_advance":null,"auto_advance_type":null,"auto_advance_option":null,"commission_percent":1.0,"fines":null,"late_payment_fine":null,"per_day_interest":null,"bank_slip":{"active":true,"extra_due":"0","reprint_extra_due":"0"},"credit_card":{"active":false,"soft_descriptor":"","installments":false,"installments_pass_interest":false,"max_installments":"0","max_installments_without_interest":"0","two_step_transaction":false}}}
+		
+		assertTrue( responseInformation.getId() != null);
     }
     
     /**
@@ -296,17 +333,29 @@ public class MarketPlaceTest
     /**
      * Rigourous Test :-)
      */
+    public void testVerifyIsPendingVerificationForCPF()
+    {
+    	//{"account_id":"BFE13F587384440BB8A05E63BC74B961","name":"Marcel Ghisi","live_api_token":"56e9b3a30990a8c97260d475bca4f11f","test_api_token":"4485d3d52775dbccccc4b64eb5ccf996","user_token":"e6a1bc0e23f73fa6187c77b889a5d836"}
+		
+		Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
+		SubAccountInformationResponse responseInformation = new MarketPlaceService().find("9945CFA951234A85870B7C98E5283836");
+		
+		assertTrue( responseInformation.getLastVerificationRequestStatus().contains("pending"));
+    }
+    
+    /**
+     * Rigourous Test :-)
+     */
     public void testConfigureSoftDescriptionSubAccount()
     {
 
     	//{"account_id":"9945CFA951234A85870B7C98E5283836","name":"Noeli Ghisi","live_api_token":"251df262110fc3d74ea3262c20093bbe","test_api_token":"744939511d57522c618466cc5966b72a","user_token":"06fa4a7767762feb3c0b82ebd3143944"}
     	
 		Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
-		SubAccountInformationResponse responseInformation = new MarketPlaceService().find("9945CFA951234A85870B7C98E5283836");
 
 		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
 		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(true, null, null);
-		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration("ATTENDME PAY", null, null,null,null,null);
+		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration("ATTENDME PF", null, null,null,null,null);
 		
 		SubAccountConfiguration subAccountConfiguration = new SubAccountConfiguration(mainSettingsConfiguration, bankSlipConfiguration, creditCardConfiguration);
 		
@@ -314,38 +363,22 @@ public class MarketPlaceTest
 		
 		System.out.println("TESTANDO CONFIGURE SUB ACCOUNT");
 
-		assertEquals("ATTENDME PAY", responseInformationResp.getConfiguration().getCreditCardConfiguration().getSoftDescriptor());
-		assertTrue(responseInformation.getSuccess());
+		assertEquals("ATTENDME PF", responseInformationResp.getConfiguration().getCreditCardConfiguration().getSoftDescriptor());
     }
     
     /**
      * Rigourous Test :-)
      */
-    public void testUpdateBankData()
+    public void testUpdateBankDataDocumentBlankPF()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Conta 7",1));
-		
-		String userToken = null;
-		
-		try {
-			userToken = responseSubAccount.getUserToken().toString();
-		} catch (Exception e) {
-			userToken = "21ab6ca14384901acaea1793b91cdc98";//Master AccountId
-		}
+		Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
 		
 		BankUpdate bankUpdate = new BankUpdate(BankNumber.CAIXA, AccountType.Corrente, "0246","12358",CPF_VOVO_HELIO_BASE64,Boolean.TRUE);
 		
-		Iugu.init(userToken);
-		MessageResponse responseInformation = new MarketPlaceService().updateBankInformation(bankUpdate);
+		MessageResponse responseInformationBank = new MarketPlaceService().updateBankInformation(bankUpdate);
 		
-		System.out.println("TESTANDO UPDATE BANK DATA");
-		System.out.print(" Message: " + responseInformation.getMessage() + ";");
-		System.out.print(" Success: " + responseInformation.getSuccess()+ ";");
-		System.out.print(" Code: " + responseInformation.getStatusCode()+ ";");
-		
-		assertTrue(responseInformation.getSuccess());
+		assertTrue(responseInformationBank.getErrors() != null);
     }
     
     /**

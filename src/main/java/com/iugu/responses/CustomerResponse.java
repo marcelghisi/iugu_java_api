@@ -5,6 +5,8 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CustomerResponse {
 	
@@ -17,6 +19,7 @@ public class CustomerResponse {
 	private String notes;
 	
 	@JsonProperty("custom_variables")
+	@SerializedName("custom_variables")
 	private List<CustomVariableResponse> customVariables;
 
 	public String getId() {

@@ -3,6 +3,8 @@ package com.iugu.responses;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SubItemResponse {
 
@@ -13,6 +15,7 @@ public class SubItemResponse {
 	private Integer quantity;
 	
 	@JsonProperty("price_cents")
+	@SerializedName("price_cents")
 	private Integer priceCents;
 	
 	private String price;

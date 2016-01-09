@@ -5,6 +5,8 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlanResponse {
 
@@ -17,6 +19,7 @@ public class PlanResponse {
 	private String interval;
 	
 	@JsonProperty("interval_type")
+	@SerializedName("interval_type")
 	private String intervalType;
 	
 	private List<PriceResponse> prices;

@@ -3,13 +3,17 @@ package com.iugu.responses;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.google.gson.annotations.SerializedName;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BankSlipResponse {
 
 	@JsonProperty("digitable_line")
+	@SerializedName("digitable_line")
 	private String digitableLine;
 	
 	@JsonProperty("barcode_data")
+	@SerializedName("barcode_data")
 	private String barcodeData;
 	
 	private String barcode;
