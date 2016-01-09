@@ -11,8 +11,10 @@ public class Customer implements Serializable {
 
 	private static final long serialVersionUID = 3266886175287194L;
 
-	public Customer(String name) {
+	public Customer(String name,String email,String cpf) {
 		this.name = name;
+		this.email = email;
+		this.cpfCnpj = cpf;
 	}
 
 	/**

@@ -3,7 +3,7 @@ package com.iugu.responses;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PaymentTokenResponse {
+public class PaymentTokenResponse  extends MessageResponse{
 
 	private String id;
 	

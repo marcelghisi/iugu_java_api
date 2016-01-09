@@ -1,5 +1,9 @@
 package com.iugu.services;
 
+import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
@@ -33,16 +37,31 @@ public class MarketPlaceService {
 				.request()
 				.post(Entity.entity(account, MediaType.APPLICATION_JSON));
 		
-		if(response.getStatus() == 200) {
+		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
 			
 			final String responseEntity = response.readEntity(String.class);
 
 			System.out.println(responseEntity);
 
+			if (responseEntity.startsWith("{\"errors\":\"")){
+				SubAccountResponse messageResponse = new SubAccountResponse();
+				Map<String,String> mapa = new HashMap<String,String>(0);
+				mapa.put("errors", responseEntity);
+				messageResponse.setSuccess(Boolean.FALSE);
+				messageResponse.setStatusCode(response.getStatus());
+				messageResponse.setMessage(response.getStatusInfo().toString());
+				return messageResponse;
+			}
+			
 			Gson gson = new Gson();
 
 			SubAccountResponse responseReturn = gson.fromJson(responseEntity, SubAccountResponse.class);
 			
+			if (response.getStatus() == 422){
+				responseReturn.setSuccess(Boolean.FALSE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.TRUE);
+			}
 			return responseReturn;
 		}
 		SubAccountResponse messageResponse = new SubAccountResponse();
@@ -62,21 +81,32 @@ public class MarketPlaceService {
 				.request()
 				.post(Entity.entity(validation, MediaType.APPLICATION_JSON));
 		
-		if(response.getStatus() == 200 || response.getStatus() == 422) {
+		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
 			
 			final String responseEntity = response.readEntity(String.class);
 
 			System.out.println(responseEntity);
 
+			if (responseEntity.startsWith("{\"errors\":\"")){
+				SubAccountValidationResponse messageResponse = new SubAccountValidationResponse();
+				Map<String,String> mapa = new HashMap<String,String>(0);
+				mapa.put("errors", responseEntity);
+				messageResponse.setSuccess(Boolean.FALSE);
+				messageResponse.setStatusCode(response.getStatus());
+				messageResponse.setMessage(response.getStatusInfo().toString());
+				return messageResponse;
+			}
+			
 			Gson gson = new Gson();
 
 			SubAccountValidationResponse responseReturn = gson.fromJson(responseEntity, SubAccountValidationResponse.class);
 			
 			if (response.getStatus() == 422){
 				responseReturn.setSuccess(Boolean.FALSE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.TRUE);
 			}
 			return responseReturn;
-			//return response.readEntity(SubAccountValidationResponse.class);
 		}
 		
 		SubAccountValidationResponse messageResponse = new SubAccountValidationResponse();
@@ -92,15 +122,31 @@ public class MarketPlaceService {
 		
 		Response response = Iugu.getClient().target(String.format(FIND_URL, subAccountId)).request().get();
 
-		if (response.getStatus() == 200) {
+		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
+			
 			final String responseEntity = response.readEntity(String.class);
 
 			System.out.println(responseEntity);
 
+			if (responseEntity.startsWith("{\"errors\":\"")){
+				SubAccountInformationResponse messageResponse = new SubAccountInformationResponse();
+				Map<String,String> mapa = new HashMap<String,String>(0);
+				mapa.put("errors", responseEntity);
+				messageResponse.setSuccess(Boolean.FALSE);
+				messageResponse.setStatusCode(response.getStatus());
+				messageResponse.setMessage(response.getStatusInfo().toString());
+				return messageResponse;
+			}
+			
 			Gson gson = new Gson();
 
 			SubAccountInformationResponse responseReturn = gson.fromJson(responseEntity, SubAccountInformationResponse.class);
 			
+			if (response.getStatus() == 422){
+				responseReturn.setSuccess(Boolean.FALSE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.TRUE);
+			}
 			return responseReturn;
 		}
 
@@ -120,21 +166,32 @@ public class MarketPlaceService {
 				.request()
 				.post(Entity.entity(account, MediaType.APPLICATION_JSON));
 		
-		if(response.getStatus() == 200 || response.getStatus() == 422) {
+		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
 			
 			final String responseEntity = response.readEntity(String.class);
 
 			System.out.println(responseEntity);
 
+			if (responseEntity.startsWith("{\"errors\":\"")){
+				SubAccountInformationResponse messageResponse = new SubAccountInformationResponse();
+				Map<String,String> mapa = new HashMap<String,String>(0);
+				mapa.put("errors", responseEntity);
+				messageResponse.setSuccess(Boolean.FALSE);
+				messageResponse.setStatusCode(response.getStatus());
+				messageResponse.setMessage(response.getStatusInfo().toString());
+				return messageResponse;
+			}
+			
 			Gson gson = new Gson();
 
 			SubAccountInformationResponse responseReturn = gson.fromJson(responseEntity, SubAccountInformationResponse.class);
 			
 			if (response.getStatus() == 422){
 				responseReturn.setSuccess(Boolean.FALSE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.TRUE);
 			}
 			return responseReturn;
-			//return response.readEntity(SubAccountValidationResponse.class);
 		}
 		
 		SubAccountInformationResponse messageResponse = new SubAccountInformationResponse();
@@ -152,22 +209,34 @@ public class MarketPlaceService {
 				.request()
 				.post(Entity.entity(bankData, MediaType.APPLICATION_JSON));
 		
-		if(response.getStatus() == 200 || response.getStatus() == 422) {
+		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
 			
 			final String responseEntity = response.readEntity(String.class);
 
 			System.out.println(responseEntity);
 
+			if (responseEntity.startsWith("{\"errors\":\"")){
+				SubAccountInformationResponse messageResponse = new SubAccountInformationResponse();
+				Map<String,String> mapa = new HashMap<String,String>(0);
+				mapa.put("errors", responseEntity);
+				messageResponse.setSuccess(Boolean.FALSE);
+				messageResponse.setStatusCode(response.getStatus());
+				messageResponse.setMessage(response.getStatusInfo().toString());
+				return messageResponse;
+			}
+			
 			Gson gson = new Gson();
 
 			SubAccountInformationResponse responseReturn = gson.fromJson(responseEntity, SubAccountInformationResponse.class);
 			
 			if (response.getStatus() == 422){
 				responseReturn.setSuccess(Boolean.FALSE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.TRUE);
 			}
 			return responseReturn;
-			//return response.readEntity(SubAccountValidationResponse.class);
 		}
+		
 		MessageResponse messageResponse = new MessageResponse();
 		messageResponse.setSuccess(Boolean.FALSE);
 		messageResponse.setStatusCode(response.getStatus());
@@ -178,16 +247,43 @@ public class MarketPlaceService {
 		return messageResponse;
 	}
 	
-	public RequestWithDrawResponse createWithDrawRequest(String subAccountId,Integer centsValue) {
+	public RequestWithDrawResponse createWithDrawRequest(String subAccountId,Double withDrawValue) {
 
+		DecimalFormat df = new DecimalFormat("#.0");
+		
 		Form form = new Form();
-		form.param("amount", centsValue.toString());
+		form.param("amount", df.format(withDrawValue.doubleValue()));
 
 		Response response = Iugu.getClient().target(String.format(REQUEST_WITHDRAW, subAccountId)).request()
 				.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
-		if (response.getStatus() == 200) {
-			return response.readEntity(RequestWithDrawResponse.class);
+		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
+			
+			final String responseEntity = response.readEntity(String.class);
+
+			System.out.println(responseEntity);
+
+			if (responseEntity.startsWith("{\"errors\":\"")){
+				RequestWithDrawResponse messageResponse = new RequestWithDrawResponse();
+				Map<String,String> mapa = new HashMap<String,String>(0);
+				mapa.put("errors", responseEntity);
+				messageResponse.setSuccess(Boolean.FALSE);
+				messageResponse.setStatusCode(response.getStatus());
+				messageResponse.setMessage(response.getStatusInfo().toString());
+				return messageResponse;
+			}
+			
+			Gson gson = new Gson();
+
+			RequestWithDrawResponse responseReturn = gson.fromJson(responseEntity, RequestWithDrawResponse.class);
+			
+			if (response.getStatus() == 422){
+				responseReturn.setSuccess(Boolean.FALSE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.TRUE);
+			}
+			response.close();
+			return responseReturn;
 		}
 		
 		RequestWithDrawResponse messageResponse = new RequestWithDrawResponse();
@@ -195,7 +291,6 @@ public class MarketPlaceService {
 		messageResponse.setStatusCode(response.getStatus());
 		messageResponse.setMessage(response.getStatusInfo().toString());
 
-		response.close();
 		return messageResponse;
 	}
 	

@@ -22,15 +22,25 @@ public class CreditCardConfiguration implements Serializable {
 	public CreditCardConfiguration() {
 	}
 	
-	public CreditCardConfiguration(String softDescriptor, Boolean installments, Boolean installmentsPassInterest,Integer maxInstallments, Integer maxInstallmentsWithoutInterest,Boolean twoStepTransaction) {
+	public CreditCardConfiguration(Boolean active,String softDescriptor, Boolean installments, Boolean installmentsPassInterest,Integer maxInstallments, Integer maxInstallmentsWithoutInterest,Boolean twoStepTransaction) {
+		this.active = active;
 		this.softDescriptor = softDescriptor;
+		//Parcelamento ativo
 		this.installments = installments;
+		//Repassar juros do parcelamento?
 		this.installmentsPassInterest = installmentsPassInterest;
+		//Maximo de parcelas aceitas
 		this.maxInstallments = maxInstallments;
+		//Numero de parcelas sem cobranca de juros
 		this.maxInstallmentsWithoutInterest = maxInstallmentsWithoutInterest;
+		//Habilita fluxo de pagamento em 2 etapas
+		//Bloqueia o valor no cartao e coloca o status da fatura em analise
+		//Utilizar o metodo captura em analise no maximo em 4 dias para receber definitivamente a grana antes do cancelamento
 		this.twoStepTransaction = twoStepTransaction;
 	}
 	
+	//Cartao Ativo 
+	@SerializedName("active")
 	private Boolean active;
 
 	 

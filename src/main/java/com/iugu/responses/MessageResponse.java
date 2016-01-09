@@ -1,11 +1,9 @@
 package com.iugu.responses;
 
+import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-
-import com.iugu.serializers.PropertyMapDeserializer;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MessageResponse {
@@ -36,7 +34,7 @@ public class MessageResponse {
 		this.message = message;
 	}
 
-	@JsonDeserialize(using=PropertyMapDeserializer.class) 
+	//@JsonDeserialize(using=PropertyMapDeserializer.class) 
 	public void setErrors(Map<String, Object> errors) {
 		this.errors = errors;
 	}

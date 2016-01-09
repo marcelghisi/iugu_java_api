@@ -21,7 +21,9 @@ public class BankSlipConfiguration implements Serializable {
 	
 	public BankSlipConfiguration(Boolean active, Integer extraDue,Integer reprintExtraDue) {
 		this.active = active;
+		//Dias de vencimento extra no boleto ex: 2
 		this.extraDue = extraDue;
+		//Dias de vencimento extra na segunda via do boleto ex: 2
 		this.reprintExtraDue = reprintExtraDue;
 	}
 	

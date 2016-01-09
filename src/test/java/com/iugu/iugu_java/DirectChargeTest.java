@@ -68,7 +68,7 @@ public class DirectChargeTest
     	
     	Data data = new Data("4242424242424242","123","Joao","Silva","12","2013");
     	PaymentTokenResponse response = new PaymentService().createToken(
-    			new PaymentToken("96461997-b6a0-48fb-808b-4f16ad88c718", PayableWith.CREDIT_CARD, true,data));
+    			new PaymentToken("A80303DF00BE40459DD0109B0E1DB392", PayableWith.CREDIT_CARD, true,data));
     	
     	assertTrue(response != null);
     	

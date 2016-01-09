@@ -7,7 +7,7 @@ public class RequestWithDrawResponse extends MessageResponse{
 
 	private String id;
 	
-	private Integer amount;
+	private Double amount;
 
 	public String getId() {
 		return id;
@@ -17,11 +17,11 @@ public class RequestWithDrawResponse extends MessageResponse{
 		this.id = id;
 	}
 
-	public Integer getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Integer amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 	

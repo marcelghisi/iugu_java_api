@@ -15,11 +15,17 @@ public class MainSettingsConfiguration implements Serializable {
 	public MainSettingsConfiguration(Integer commissionPercent, Boolean autoWithdraw,Boolean fines,Boolean perDayInterest,Integer latePaymentFine,Boolean autoAdvance,AutoAdvanceType autoAdvanceType,Integer autoAdvanceOption) {
 		this.commissionPercent = commissionPercent;
 		this.autoWithdraw = autoWithdraw;
+		//Cobrar Multas TRUE FALSE
 		this.fines = fines;
+		//Cobrar Juros de Mora? TRUE FALSE
 		this.perDayInterest = perDayInterest;
+		//Valor da multa em Percentual inteiro
 		this.latePaymentFine = latePaymentFine;
+		//Antecipação automatica Precisa habilitar para usar
 		this.autoAdvance = autoAdvance;
+		//Periodicidade da antecipacao automatica
 		this.autoAdvanceType = autoAdvanceType;
+		//Dependendo da periodicidade o aplicase o melhor dia para pagamento
 		this.autoAdvanceOption = autoAdvanceOption;	
 	}
 	
