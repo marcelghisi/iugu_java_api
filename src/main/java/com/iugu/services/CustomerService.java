@@ -1,6 +1,9 @@
 package com.iugu.services;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.client.Entity;
@@ -8,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.iugu.Iugu;
 import com.iugu.model.Customer;
 import com.iugu.model.PaymentMethodRequest;
@@ -21,6 +25,10 @@ public class CustomerService {
 	private final String CHANGE_URL = Iugu.url("/customers/%s");
 	private final String REMOVE_URL = Iugu.url("/customers/%s");
 	private final String ADD_PAYMENT_METHOD_URL = Iugu.url("/customers/%s/payment_methods");
+	private final String FIND_PAYMENT_METHOD_URL = Iugu.url("/customers/%s/payment_methods/%s");
+	private final String CHANGE_PAYMENT_METHOD_URL = Iugu.url("/customers/%s/payment_methods/%s");
+	private final String REMOVE_PAYMENT_METHOD_URL = Iugu.url("/customers/%s/payment_methods/%s");
+	private final String LIST_PAYMENT_METHOD_URL  = Iugu.url("/customers/%s/payment_methods");
 	
 	public CustomerResponse create(Customer customer) {
 		Response response = Iugu.getClient()
@@ -234,5 +242,161 @@ public class CustomerService {
 
 		response.close();
 		return messageResponse;
+	}
+	
+	public PaymentMethodResponse findPaymentMethod(String customerId,String paymentMethodId) {
+		Response response = Iugu.getClient()
+				.target(String.format(FIND_PAYMENT_METHOD_URL, customerId,paymentMethodId))
+				.request()
+				.get();
+		
+		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
+			
+			final String responseEntity = response.readEntity(String.class);
+
+			System.out.println(responseEntity);
+
+			if (responseEntity.startsWith("{\"errors\":\"")){
+				PaymentMethodResponse messageResponse = new PaymentMethodResponse();
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
+				mapa.put("errors", responseEntity);
+				messageResponse.setSuccess(Boolean.FALSE);
+				messageResponse.setStatusCode(response.getStatus());
+				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
+				return messageResponse;
+			}
+			
+			Gson gson = new Gson();
+
+			PaymentMethodResponse responseReturn = gson.fromJson(responseEntity, PaymentMethodResponse.class);
+			
+			if (response.getStatus() == 422){
+				responseReturn.setSuccess(Boolean.FALSE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.TRUE);
+			}
+			return responseReturn;
+		}
+
+		PaymentMethodResponse messageResponse = new PaymentMethodResponse();
+		messageResponse.setSuccess(Boolean.FALSE);
+		messageResponse.setStatusCode(response.getStatus());
+		messageResponse.setMessage(response.getStatusInfo().toString());
+
+		response.close();
+		return messageResponse;
+	}
+	
+	public PaymentMethodResponse changePaymentMethod(String id, String paymentMethodId,String newDescription) {
+		
+		PaymentMethodRequest request = new PaymentMethodRequest(null, null, newDescription, null);
+		
+		Response response = Iugu.getClient()
+				.target(String.format(CHANGE_PAYMENT_METHOD_URL, id,paymentMethodId))
+				.request()
+				.put(Entity.entity(request, MediaType.APPLICATION_JSON));
+		
+		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
+			
+			final String responseEntity = response.readEntity(String.class);
+
+			System.out.println(responseEntity);
+
+			if (responseEntity.startsWith("{\"errors\":\"")){
+				PaymentMethodResponse messageResponse = new PaymentMethodResponse();
+				Map<String,String> mapa = new HashMap<String,String>(0);
+				mapa.put("errors", responseEntity);
+				messageResponse.setSuccess(Boolean.FALSE);
+				messageResponse.setStatusCode(response.getStatus());
+				messageResponse.setMessage(response.getStatusInfo().toString());
+				return messageResponse;
+			}
+			
+			Gson gson = new Gson();
+
+			PaymentMethodResponse responseReturn = gson.fromJson(responseEntity, PaymentMethodResponse.class);
+			
+			if (response.getStatus() == 422){
+				responseReturn.setSuccess(Boolean.FALSE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.TRUE);
+			}
+			return responseReturn;
+		}
+
+		PaymentMethodResponse messageResponse = new PaymentMethodResponse();
+		messageResponse.setSuccess(Boolean.FALSE);
+		messageResponse.setStatusCode(response.getStatus());
+		messageResponse.setMessage(response.getStatusInfo().toString());
+
+		response.close();
+		return messageResponse;
+	}
+	
+	public PaymentMethodResponse removePaymentMethod(String customerId,String paymentId) {
+		Response response = Iugu.getClient().target(String.format(REMOVE_PAYMENT_METHOD_URL, customerId,paymentId))
+		 .request()
+		 .delete();
+		
+		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
+			
+			final String responseEntity = response.readEntity(String.class);
+
+			System.out.println(responseEntity);
+
+			if (responseEntity.startsWith("{\"errors\":\"")){
+				PaymentMethodResponse messageResponse = new PaymentMethodResponse();
+				Map<String,String> mapa = new HashMap<String,String>(0);
+				mapa.put("errors", responseEntity);
+				messageResponse.setSuccess(Boolean.FALSE);
+				messageResponse.setStatusCode(response.getStatus());
+				messageResponse.setMessage(response.getStatusInfo().toString());
+				return messageResponse;
+			}
+			
+			Gson gson = new Gson();
+
+			PaymentMethodResponse responseReturn = gson.fromJson(responseEntity, PaymentMethodResponse.class);
+			
+			if (response.getStatus() == 422){
+				responseReturn.setSuccess(Boolean.FALSE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.TRUE);
+			}
+			return responseReturn;
+		}
+
+		PaymentMethodResponse messageResponse = new PaymentMethodResponse();
+		messageResponse.setSuccess(Boolean.FALSE);
+		messageResponse.setStatusCode(response.getStatus());
+		messageResponse.setMessage(response.getStatusInfo().toString());
+
+		response.close();
+		return messageResponse;
+	}
+	
+	public List<PaymentMethodResponse> listPaymentMethod(String customerId) {
+		Response response = Iugu.getClient()
+				.target(String.format(LIST_PAYMENT_METHOD_URL, customerId))
+				.request()
+				.get();
+		
+		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
+			
+			final String responseEntity = response.readEntity(String.class);
+
+			System.out.println(responseEntity);
+
+			Gson gson = new Gson();
+
+			Type listType = new TypeToken<ArrayList<PaymentMethodResponse>>() {}.getType();
+
+            List<PaymentMethodResponse> responseList = gson.fromJson(responseEntity, listType);
+			
+			return responseList;
+		}
+
+		return null;
 	}
 }

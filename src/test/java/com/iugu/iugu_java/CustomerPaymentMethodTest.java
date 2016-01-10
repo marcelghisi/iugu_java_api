@@ -1,5 +1,7 @@
 package com.iugu.iugu_java;
 
+import java.util.List;
+
 import com.iugu.Iugu;
 import com.iugu.model.Customer;
 import com.iugu.model.Data;
@@ -72,7 +74,7 @@ public class CustomerPaymentMethodTest
 		CustomerResponse responseCustomer = new CustomerService().find("E5A929BD4A364698ABA72568FAD15FE1");
 
 		Data data = new Data("4111111111111111","123","Joao","Silva","12","2013");
-		PaymentMethodRequest pData = new PaymentMethodRequest(ItemType.CREDIT_CARD, responseCustomer.getId(), "Cartão Extra", data, Boolean.FALSE);
+		PaymentMethodRequest pData = new PaymentMethodRequest(ItemType.CREDIT_CARD, responseCustomer.getId(), "Cartão Submarino", data, Boolean.FALSE);
 		
 		PaymentMethodResponse responsePayM = new CustomerService().createPaymentMethod(pData);
 		
@@ -85,58 +87,74 @@ public class CustomerPaymentMethodTest
     /**
      * Rigourous Test : testCreatePJTesteSubAccount
      */
-    public void testFindMasterCustomer()
+    public void testFindCustomerPayment()
     {
 
-    	//{"id":"C9D0758BB74641CABCF4436E15A98C7E","email":"marcel.ghisi@gmail.com","name":"MARCEL JOSE DA SILVA GHISI","notes":null,"created_at":"2016-01-09T17:58:05-02:00","updated_at":"2016-01-09T17:58:05-02:00","cc_emails":null,"cpf_cnpj":"02479484971","default_payment_method_id":null,"proxy_payments_from_customer_id":null,"custom_variables":[]}
+    	String customerId = "E5A929BD4A364698ABA72568FAD15FE1";
+    	String paymentId = "467B0630B4034A4896DC08D6FCC8B5A9";
     	
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		
-		Customer customer = new Customer("MARCEL JOSE DA SILVA GHISI","marcel.ghisi@gmail.com","02479484971");
 
-		CustomerResponse responseCustomer = new CustomerService().find("C9D0758BB74641CABCF4436E15A98C7E");
+		PaymentMethodResponse responseCustomer = new CustomerService().findPaymentMethod(customerId, paymentId);
 		
 		assertTrue( responseCustomer.getId() != null);
-		assertEquals(customer.getEmail(),responseCustomer.getEmail());
 		
     }
     
     /**
      * Rigourous Test : testCreatePJTesteSubAccount
      */
-    public void testChangeMasterCustomer()
+    public void testFindChangePayment()
     {
 
-    	//{"id":"C9D0758BB74641CABCF4436E15A98C7E","email":"marcel.ghisi@gmail.com","name":"MARCEL JOSE DA SILVA GHISI","notes":null,"created_at":"2016-01-09T17:58:05-02:00","updated_at":"2016-01-09T17:58:05-02:00","cc_emails":null,"cpf_cnpj":"02479484971","default_payment_method_id":null,"proxy_payments_from_customer_id":null,"custom_variables":[]}
+    	String customerId = "E5A929BD4A364698ABA72568FAD15FE1";
+    	String paymentId = "467B0630B4034A4896DC08D6FCC8B5A9";
     	
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		
-		Customer customer = new Customer("MARCEL GHISI","marcel.ghisi@gmail.com","02479484971");
 
-		CustomerResponse responseCustomer = new CustomerService().change("C9D0758BB74641CABCF4436E15A98C7E",customer);
+		PaymentMethodResponse responseCustomer = new CustomerService().findPaymentMethod(customerId, paymentId);
 		
-		assertTrue( responseCustomer.getId() != null);
-		assertEquals(customer.getName(),responseCustomer.getName());
+		
+		PaymentMethodResponse responseChange = new CustomerService().changePaymentMethod("E5A929BD4A364698ABA72568FAD15FE1",responseCustomer.getId(),"Cartao Neteller");
+		
+		assertTrue( responseChange.getId() != null);
 		
     }
     
     /**
      * Rigourous Test : testCreatePJTesteSubAccount
      */
-    public void testRemoveMasterCustomer()
+    public void testRemoveCustomerPaymentMethod()
     {
 
-    	//{"id":"C9D0758BB74641CABCF4436E15A98C7E","email":"marcel.ghisi@gmail.com","name":"MARCEL JOSE DA SILVA GHISI","notes":null,"created_at":"2016-01-09T17:58:05-02:00","updated_at":"2016-01-09T17:58:05-02:00","cc_emails":null,"cpf_cnpj":"02479484971","default_payment_method_id":null,"proxy_payments_from_customer_id":null,"custom_variables":[]}
+    	String customerId = "E5A929BD4A364698ABA72568FAD15FE1";
+    	String paymentId = "601A3300ED6E4324862A8D0B200A78A1";
     	
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+
+
+		PaymentMethodResponse responseCustomerP = new CustomerService().removePaymentMethod(customerId,paymentId);
 		
-		CustomerResponse responseCustomer = new CustomerService().remove("4038F6126FE74DDBB265CC5334560AC8");
+		assertTrue( responseCustomerP.getId() != null);
 		
-		assertTrue( responseCustomer.getId() != null);
+		PaymentMethodResponse responseFindCustomerP = new CustomerService().findPaymentMethod(customerId, paymentId);
 		
-		CustomerResponse responseFind = new CustomerService().find("4038F6126FE74DDBB265CC5334560AC8");
+		assertTrue(responseFindCustomerP.getErrors().get("errors").toString().contains("Customer payment method Not Found"));
+    }
+    
+    /**
+     * Rigourous Test : testCreatePJTesteSubAccount
+     */
+    public void testListCustomerPaymentMethod()
+    {
+    	String customerId = "E5A929BD4A364698ABA72568FAD15FE1";
+    	
+		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+
+		List<PaymentMethodResponse> responseCustomerList = new CustomerService().listPaymentMethod(customerId);
 		
-		assertTrue(responseFind.getErrors().get("errors").toString().contains("Customer Not Found"));
+		assertTrue( responseCustomerList.size() > 0);
+		
     }
 
 
