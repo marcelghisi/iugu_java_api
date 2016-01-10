@@ -16,6 +16,12 @@ import com.iugu.serializers.JsonFormat;
 public class Invoice implements Serializable {
 
 	private static final long serialVersionUID = 1719931730355279382L;
+	
+	public Invoice(String email, Date dueDate, Item... items) {
+		this.email = email;
+		this.dueDate = dueDate;
+		this.items.addAll(Arrays.asList(items)); // FIXME Tratar null pointer
+	}
 
 	/**
 	 * E-Mail do cliente
@@ -113,11 +119,7 @@ public class Invoice implements Serializable {
 	@SerializedName("payable_with")
 	private PayableWith payableWith;
 
-	public Invoice(String email, Date dueDate, Item... items) {
-		this.email = email;
-		this.dueDate = dueDate;
-		this.items.addAll(Arrays.asList(items)); // FIXME Tratar null pointer
-	}
+
 
 	public String getEmail() {
 		return email;

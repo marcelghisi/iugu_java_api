@@ -66,9 +66,11 @@ public class DirectChargeTest
     public void testDirectChargeForTokenSimpleConstructor()
     {
     	
+		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		
     	Data data = new Data("4242424242424242","123","Joao","Silva","12","2013");
     	PaymentTokenResponse response = new PaymentService().createToken(
-    			new PaymentToken("A80303DF00BE40459DD0109B0E1DB392", PayableWith.CREDIT_CARD, true,data));
+    			new PaymentToken("96461997-b6a0-48fb-808b-4f16ad88c718", PayableWith.CREDIT_CARD, false,data));
     	
     	assertTrue(response != null);
     	
@@ -78,12 +80,12 @@ public class DirectChargeTest
     	List<Item> items = new ArrayList<Item>(0);
     	items.add(item);
     	
-    	//Address address = new Address("Rua Miguel Teles Junior", "129", "Sao Paulo", "SP", "BR");
+    	//Address address = new Address("Rua Miguel Teles Junior", "129", "Sao Paulo", "SP", "BR"); A80303DF00BE40459DD0109B0E1DB392
     	
     	//Payer payer = new Payer("12312312312","MARCEL JOSE DA SILVA GHISI","11","33995090","teste@teste.com",address);
     	
     	ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(
-    			new DirectCharge(token,"teste@teste.com",items));//payer));
+    			new DirectCharge(token,"marcel.ghisi@gmail.com",items));//payer));
     	assertTrue(responseDirectCharge  != null);
     	System.out.println(responseDirectCharge.getMessage());
     }

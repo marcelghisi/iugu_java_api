@@ -9,6 +9,19 @@ import com.google.gson.annotations.SerializedName;
 
 public class DirectCharge {
 
+	
+	public DirectCharge(String token, String email,List<Item> items) {
+		this.token = token;
+		this.email = email;
+		this.items = items;
+	}
+	
+	public DirectCharge(String token, String email,List<Item> items,Payer payer) {
+		this.token = token;
+		this.email = email;
+		this.items = items;
+		this.payer = payer;
+	}
 
 	//method (não é preenchido se enviar token)	Método de Pagamento (Atualmente só suporta bank_slip, que é o boleto)
 	private String method;
@@ -67,20 +80,6 @@ public class DirectCharge {
 	//payer{} (necessário caso sua conta necessite de anti fraude ou para informações do boleto)
 	private Payer payer;
 	
-
-	public DirectCharge(String token, String email,List<Item> items) {
-		this.token = token;
-		this.email = email;
-		this.items = items;
-	}
-	
-	public DirectCharge(String token, String email,List<Item> items,Payer payer) {
-		this.token = token;
-		this.email = email;
-		this.items = items;
-		this.payer = payer;
-	}
-
 	public String getMethod() {
 		return method;
 	}
