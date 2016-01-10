@@ -43,6 +43,7 @@ public class MarketPlaceService {
 
 			System.out.println(responseEntity);
 
+			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				SubAccountResponse messageResponse = new SubAccountResponse();
 				Map<String,String> mapa = new HashMap<String,String>(0);
@@ -57,10 +58,11 @@ public class MarketPlaceService {
 
 			SubAccountResponse responseReturn = gson.fromJson(responseEntity, SubAccountResponse.class);
 			
-			if (response.getStatus() == 422){
-				responseReturn.setSuccess(Boolean.FALSE);
-			} else if(response.getStatus() == 200){
+			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
+			if (response.getStatus() == 200){
 				responseReturn.setSuccess(Boolean.TRUE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.FALSE);
 			}
 			return responseReturn;
 		}
@@ -87,6 +89,7 @@ public class MarketPlaceService {
 
 			System.out.println(responseEntity);
 
+			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				SubAccountValidationResponse messageResponse = new SubAccountValidationResponse();
 				Map<String,String> mapa = new HashMap<String,String>(0);
@@ -101,10 +104,11 @@ public class MarketPlaceService {
 
 			SubAccountValidationResponse responseReturn = gson.fromJson(responseEntity, SubAccountValidationResponse.class);
 			
-			if (response.getStatus() == 422){
-				responseReturn.setSuccess(Boolean.FALSE);
-			} else if(response.getStatus() == 200){
+			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
+			if (response.getStatus() == 200){
 				responseReturn.setSuccess(Boolean.TRUE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.FALSE);
 			}
 			return responseReturn;
 		}
@@ -128,6 +132,7 @@ public class MarketPlaceService {
 
 			System.out.println(responseEntity);
 
+			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				SubAccountInformationResponse messageResponse = new SubAccountInformationResponse();
 				Map<String,String> mapa = new HashMap<String,String>(0);
@@ -142,10 +147,11 @@ public class MarketPlaceService {
 
 			SubAccountInformationResponse responseReturn = gson.fromJson(responseEntity, SubAccountInformationResponse.class);
 			
-			if (response.getStatus() == 422){
-				responseReturn.setSuccess(Boolean.FALSE);
-			} else if(response.getStatus() == 200){
+			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
+			if (response.getStatus() == 200){
 				responseReturn.setSuccess(Boolean.TRUE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.FALSE);
 			}
 			return responseReturn;
 		}
@@ -172,6 +178,7 @@ public class MarketPlaceService {
 
 			System.out.println(responseEntity);
 
+			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				SubAccountInformationResponse messageResponse = new SubAccountInformationResponse();
 				Map<String,String> mapa = new HashMap<String,String>(0);
@@ -186,10 +193,11 @@ public class MarketPlaceService {
 
 			SubAccountInformationResponse responseReturn = gson.fromJson(responseEntity, SubAccountInformationResponse.class);
 			
-			if (response.getStatus() == 422){
-				responseReturn.setSuccess(Boolean.FALSE);
-			} else if(response.getStatus() == 200){
+			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
+			if (response.getStatus() == 200){
 				responseReturn.setSuccess(Boolean.TRUE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.FALSE);
 			}
 			return responseReturn;
 		}
@@ -215,6 +223,7 @@ public class MarketPlaceService {
 
 			System.out.println(responseEntity);
 
+			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				SubAccountInformationResponse messageResponse = new SubAccountInformationResponse();
 				Map<String,String> mapa = new HashMap<String,String>(0);
@@ -229,10 +238,11 @@ public class MarketPlaceService {
 
 			SubAccountInformationResponse responseReturn = gson.fromJson(responseEntity, SubAccountInformationResponse.class);
 			
-			if (response.getStatus() == 422){
-				responseReturn.setSuccess(Boolean.FALSE);
-			} else if(response.getStatus() == 200){
+			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
+			if (response.getStatus() == 200){
 				responseReturn.setSuccess(Boolean.TRUE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.FALSE);
 			}
 			return responseReturn;
 		}
@@ -263,6 +273,7 @@ public class MarketPlaceService {
 
 			System.out.println(responseEntity);
 
+			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				RequestWithDrawResponse messageResponse = new RequestWithDrawResponse();
 				Map<String,String> mapa = new HashMap<String,String>(0);
@@ -277,10 +288,11 @@ public class MarketPlaceService {
 
 			RequestWithDrawResponse responseReturn = gson.fromJson(responseEntity, RequestWithDrawResponse.class);
 			
-			if (response.getStatus() == 422){
-				responseReturn.setSuccess(Boolean.FALSE);
-			} else if(response.getStatus() == 200){
+			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
+			if (response.getStatus() == 200){
 				responseReturn.setSuccess(Boolean.TRUE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.FALSE);
 			}
 			response.close();
 			return responseReturn;

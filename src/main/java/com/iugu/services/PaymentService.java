@@ -34,6 +34,7 @@ public class PaymentService {
 
 			System.out.println(responseEntity);
 
+			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				PaymentTokenResponse messageResponse = new PaymentTokenResponse();
 				Map<String,String> mapa = new HashMap<String,String>(0);
@@ -48,10 +49,11 @@ public class PaymentService {
 
 			PaymentTokenResponse responseReturn = gson.fromJson(responseEntity, PaymentTokenResponse.class);
 			
-			if (response.getStatus() == 422){
-				responseReturn.setSuccess(Boolean.FALSE);
-			} else if(response.getStatus() == 200){
+			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
+			if (response.getStatus() == 200){
 				responseReturn.setSuccess(Boolean.TRUE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.FALSE);
 			}
 			response.close();
 			return responseReturn;
@@ -77,6 +79,7 @@ public class PaymentService {
 
 			System.out.println(responseEntity);
 
+			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				ChargeResponse messageResponse = new ChargeResponse();
 				Map<String,String> mapa = new HashMap<String,String>(0);
@@ -91,10 +94,11 @@ public class PaymentService {
 
 			ChargeResponse responseReturn = gson.fromJson(responseEntity, ChargeResponse.class);
 			
-			if (response.getStatus() == 422){
-				responseReturn.setSuccess(Boolean.FALSE);
-			} else if(response.getStatus() == 200){
+			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
+			if (response.getStatus() == 200){
 				responseReturn.setSuccess(Boolean.TRUE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.FALSE);
 			}
 			response.close();
 			return responseReturn;
