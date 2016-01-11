@@ -8,7 +8,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PlanResponse {
+public class PlanResponse extends MessageResponse{
 
 	private String id;
 	

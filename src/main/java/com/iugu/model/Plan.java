@@ -12,7 +12,7 @@ public class Plan {
 
 	private String identifier;
 
-	private String interval;
+	private Integer interval;
 
 	@JsonProperty("interval_type")
 	@SerializedName("interval_type")
@@ -32,7 +32,7 @@ public class Plan {
 
 	private List<Feature> features;
 
-	public Plan(String name, String identifier, String interval, IntervalType intervalType, Currency currency,
+	public Plan(String name, String identifier, Integer interval, IntervalType intervalType, Currency currency,
 			int valueCents) {
 		this.name = name;
 		this.identifier = identifier;
@@ -50,7 +50,7 @@ public class Plan {
 		return identifier;
 	}
 
-	public String getInterval() {
+	public Integer getInterval() {
 		return interval;
 	}
 
