@@ -83,12 +83,10 @@ public class PlanTest
     	//{"id":"04371BD080C2440FA0C913228F1ADCCD","name":"ATTENDME P200","identifier":"plano_premium","interval":1,"interval_type":"months","created_at":"2016-01-10T15:32:49-02:00","updated_at":"2016-01-10T15:32:49-02:00","prices":[{"created_at":"2016-01-10T15:32:49-02:00","currency":"BRL","id":"8D2F866DD85542798B76FBE3C7C341FA","plan_id":"04371BD080C2440FA0C913228F1ADCCD","updated_at":"2016-01-10T15:32:49-02:00","value_cents":30000}],"features":[],"payable_with":null}
     	
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		
-		Customer customer = new Customer("MARCEL JOSE DA SILVA GHISI","marcel.ghisi@gmail.com","02479484971");
 
-		//PlanResponse responseCustomer = new PlanResponse().
+		PlanResponse responseCustomer = new PlanService().find("04371BD080C2440FA0C913228F1ADCCD");
 		
-		//assertTrue( responseCustomer.getId() != null);
+		assertTrue( responseCustomer.getId() != null);
 		//assertEquals(customer.getEmail(),responseCustomer.getEmail());
 		
     }
@@ -96,39 +94,55 @@ public class PlanTest
     /**
      * Rigourous Test : testCreatePJTesteSubAccount
      */
-    public void testChangeMasterCustomer()
+    public void testFindPlanIdentifier()
     {
 
-    	//{"id":"C9D0758BB74641CABCF4436E15A98C7E","email":"marcel.ghisi@gmail.com","name":"MARCEL JOSE DA SILVA GHISI","notes":null,"created_at":"2016-01-09T17:58:05-02:00","updated_at":"2016-01-09T17:58:05-02:00","cc_emails":null,"cpf_cnpj":"02479484971","default_payment_method_id":null,"proxy_payments_from_customer_id":null,"custom_variables":[]}
+    	//{"id":"04371BD080C2440FA0C913228F1ADCCD","name":"ATTENDME P200","identifier":"plano_premium","interval":1,"interval_type":"months","created_at":"2016-01-10T15:32:49-02:00","updated_at":"2016-01-10T15:32:49-02:00","prices":[{"created_at":"2016-01-10T15:32:49-02:00","currency":"BRL","id":"8D2F866DD85542798B76FBE3C7C341FA","plan_id":"04371BD080C2440FA0C913228F1ADCCD","updated_at":"2016-01-10T15:32:49-02:00","value_cents":30000}],"features":[],"payable_with":null}
     	
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		
-		Customer customer = new Customer("MARCEL GHISI","marcel.ghisi@gmail.com","02479484971");
 
-		CustomerResponse responseCustomer = new CustomerService().change("C9D0758BB74641CABCF4436E15A98C7E",customer);
+		PlanResponse responseCustomer = new PlanService().findByIdentifier("plano_basico");
 		
 		assertTrue( responseCustomer.getId() != null);
-		assertEquals(customer.getName(),responseCustomer.getName());
+		//assertEquals(customer.getEmail(),responseCustomer.getEmail());
 		
     }
     
     /**
      * Rigourous Test : testCreatePJTesteSubAccount
      */
-    public void testRemoveMasterCustomer()
+    public void testChangePlan()
     {
 
-    	//{"id":"C9D0758BB74641CABCF4436E15A98C7E","email":"marcel.ghisi@gmail.com","name":"MARCEL JOSE DA SILVA GHISI","notes":null,"created_at":"2016-01-09T17:58:05-02:00","updated_at":"2016-01-09T17:58:05-02:00","cc_emails":null,"cpf_cnpj":"02479484971","default_payment_method_id":null,"proxy_payments_from_customer_id":null,"custom_variables":[]}
+    	//{"id":"04371BD080C2440FA0C913228F1ADCCD","name":"ATTENDME P200","identifier":"plano_premium","interval":1,"interval_type":"months","created_at":"2016-01-10T15:32:49-02:00","updated_at":"2016-01-10T15:32:49-02:00","prices":[{"created_at":"2016-01-10T15:32:49-02:00","currency":"BRL","id":"8D2F866DD85542798B76FBE3C7C341FA","plan_id":"04371BD080C2440FA0C913228F1ADCCD","updated_at":"2016-01-10T15:32:49-02:00","value_cents":30000}],"features":[],"payable_with":null}
     	
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+
+		PlanResponse responseCustomer = new PlanService().findByIdentifier("plano_basico");
+
+		Plan plan = new Plan("ATTENDME P250", "plano_basico", 2, IntervalType.WEEKS,Currency.BRL,10000);
 		
-		CustomerResponse responseCustomer = new CustomerService().remove("4038F6126FE74DDBB265CC5334560AC8");
+		PlanResponse responseChange = new PlanService().change(responseCustomer.getId(),plan);
+		assertTrue( responseChange.getId() != null);
+		//assertEquals(customer.getEmail(),responseCustomer.getEmail());
 		
-		assertTrue( responseCustomer.getId() != null);
+    }
+    
+    /**
+     * Rigourous Test : testCreatePJTesteSubAccount
+     */
+    public void testRemovePlan()
+    {
+
+ 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
 		
-		CustomerResponse responseFind = new CustomerService().find("4038F6126FE74DDBB265CC5334560AC8");
+		PlanResponse responsePlan = new PlanService().remove("402695DC136A466ABD2F5E3F375C7958");
 		
-		assertTrue(responseFind.getErrors().get("errors").toString().contains("Customer Not Found"));
+		assertTrue( responsePlan.getId() != null);
+		
+		PlanResponse responseFind = new PlanService().find("402695DC136A466ABD2F5E3F375C7958");
+		
+		assertTrue(responseFind.getErrors().get("errors").toString().contains("Plan Not Found"));
     }
 
 

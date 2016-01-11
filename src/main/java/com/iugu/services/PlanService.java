@@ -40,11 +40,12 @@ public class PlanService {
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				PlanResponse messageResponse = new PlanResponse();
-				Map<String,String> mapa = new HashMap<String,String>(0);
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
 				mapa.put("errors", responseEntity);
 				messageResponse.setSuccess(Boolean.FALSE);
 				messageResponse.setStatusCode(response.getStatus());
 				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
 				return messageResponse;
 			}
 			
@@ -76,11 +77,44 @@ public class PlanService {
 				.request()
 				.get();
 		
-		if(response.getStatus() == 200) {
-			return response.readEntity(PlanResponse.class);
+		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
+			
+			final String responseEntity = response.readEntity(String.class);
+
+			System.out.println(responseEntity);
+
+			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
+			if (responseEntity.startsWith("{\"errors\":\"")){
+				PlanResponse messageResponse = new PlanResponse();
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
+				mapa.put("errors", responseEntity);
+				messageResponse.setSuccess(Boolean.FALSE);
+				messageResponse.setStatusCode(response.getStatus());
+				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
+				return messageResponse;
+			}
+			
+			Gson gson = new Gson();
+
+			PlanResponse responseReturn = gson.fromJson(responseEntity, PlanResponse.class);
+			
+			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
+			if (response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.TRUE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.FALSE);
+			}
+			response.close();
+			return responseReturn;
 		}
 
-		return null; //FIXME Tratar retornos de erro
+		PlanResponse messageResponse = new PlanResponse();
+		messageResponse.setSuccess(Boolean.FALSE);
+		messageResponse.setStatusCode(response.getStatus());
+		messageResponse.setMessage(response.getStatusInfo().toString());
+
+		return messageResponse;
 	}
 	
 	public PlanResponse findByIdentifier(String id) {
@@ -89,11 +123,44 @@ public class PlanService {
 				.request()
 				.get();
 		
-		if(response.getStatus() == 200) {
-			return response.readEntity(PlanResponse.class);
+		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
+			
+			final String responseEntity = response.readEntity(String.class);
+
+			System.out.println(responseEntity);
+
+			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
+			if (responseEntity.startsWith("{\"errors\":\"")){
+				PlanResponse messageResponse = new PlanResponse();
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
+				mapa.put("errors", responseEntity);
+				messageResponse.setSuccess(Boolean.FALSE);
+				messageResponse.setStatusCode(response.getStatus());
+				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
+				return messageResponse;
+			}
+			
+			Gson gson = new Gson();
+
+			PlanResponse responseReturn = gson.fromJson(responseEntity, PlanResponse.class);
+			
+			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
+			if (response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.TRUE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.FALSE);
+			}
+			response.close();
+			return responseReturn;
 		}
 
-		return null; //FIXME Tratar retornos de erro
+		PlanResponse messageResponse = new PlanResponse();
+		messageResponse.setSuccess(Boolean.FALSE);
+		messageResponse.setStatusCode(response.getStatus());
+		messageResponse.setMessage(response.getStatusInfo().toString());
+
+		return messageResponse;
 	}
 	
 	public PlanResponse change(String id, Plan plan) {
@@ -102,11 +169,44 @@ public class PlanService {
 				.request()
 				.put(Entity.entity(plan, MediaType.APPLICATION_JSON));
 		
-		if(response.getStatus() == 200) {
-			return response.readEntity(PlanResponse.class);
+		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
+			
+			final String responseEntity = response.readEntity(String.class);
+
+			System.out.println(responseEntity);
+
+			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
+			if (responseEntity.startsWith("{\"errors\":\"")){
+				PlanResponse messageResponse = new PlanResponse();
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
+				mapa.put("errors", responseEntity);
+				messageResponse.setSuccess(Boolean.FALSE);
+				messageResponse.setStatusCode(response.getStatus());
+				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
+				return messageResponse;
+			}
+			
+			Gson gson = new Gson();
+
+			PlanResponse responseReturn = gson.fromJson(responseEntity, PlanResponse.class);
+			
+			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
+			if (response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.TRUE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.FALSE);
+			}
+			response.close();
+			return responseReturn;
 		}
 
-		return null; //FIXME Tratar retornos de erro
+		PlanResponse messageResponse = new PlanResponse();
+		messageResponse.setSuccess(Boolean.FALSE);
+		messageResponse.setStatusCode(response.getStatus());
+		messageResponse.setMessage(response.getStatusInfo().toString());
+
+		return messageResponse;
 	}
 	
 	public PlanResponse remove(String id) {
@@ -114,11 +214,44 @@ public class PlanService {
 		 .request()
 		 .delete();
 		
-		if(response.getStatus() == 200) {
-			return response.readEntity(PlanResponse.class);
+		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
+			
+			final String responseEntity = response.readEntity(String.class);
+
+			System.out.println(responseEntity);
+
+			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
+			if (responseEntity.startsWith("{\"errors\":\"")){
+				PlanResponse messageResponse = new PlanResponse();
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
+				mapa.put("errors", responseEntity);
+				messageResponse.setSuccess(Boolean.FALSE);
+				messageResponse.setStatusCode(response.getStatus());
+				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
+				return messageResponse;
+			}
+			
+			Gson gson = new Gson();
+
+			PlanResponse responseReturn = gson.fromJson(responseEntity, PlanResponse.class);
+			
+			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
+			if (response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.TRUE);
+			} else if(response.getStatus() == 200){
+				responseReturn.setSuccess(Boolean.FALSE);
+			}
+			response.close();
+			return responseReturn;
 		}
 
-		return null; //FIXME Tratar retornos de erro
+		PlanResponse messageResponse = new PlanResponse();
+		messageResponse.setSuccess(Boolean.FALSE);
+		messageResponse.setStatusCode(response.getStatus());
+		messageResponse.setMessage(response.getStatusInfo().toString());
+
+		return messageResponse;
 	}
 	
 	//TODO Listar os planos

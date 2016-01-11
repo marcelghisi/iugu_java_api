@@ -46,11 +46,12 @@ public class MarketPlaceService {
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				SubAccountResponse messageResponse = new SubAccountResponse();
-				Map<String,String> mapa = new HashMap<String,String>(0);
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
 				mapa.put("errors", responseEntity);
 				messageResponse.setSuccess(Boolean.FALSE);
 				messageResponse.setStatusCode(response.getStatus());
 				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
 				return messageResponse;
 			}
 			
@@ -92,11 +93,12 @@ public class MarketPlaceService {
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				SubAccountValidationResponse messageResponse = new SubAccountValidationResponse();
-				Map<String,String> mapa = new HashMap<String,String>(0);
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
 				mapa.put("errors", responseEntity);
 				messageResponse.setSuccess(Boolean.FALSE);
 				messageResponse.setStatusCode(response.getStatus());
 				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
 				return messageResponse;
 			}
 			
@@ -135,11 +137,12 @@ public class MarketPlaceService {
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				SubAccountInformationResponse messageResponse = new SubAccountInformationResponse();
-				Map<String,String> mapa = new HashMap<String,String>(0);
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
 				mapa.put("errors", responseEntity);
 				messageResponse.setSuccess(Boolean.FALSE);
 				messageResponse.setStatusCode(response.getStatus());
 				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
 				return messageResponse;
 			}
 			
@@ -181,11 +184,12 @@ public class MarketPlaceService {
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				SubAccountInformationResponse messageResponse = new SubAccountInformationResponse();
-				Map<String,String> mapa = new HashMap<String,String>(0);
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
 				mapa.put("errors", responseEntity);
 				messageResponse.setSuccess(Boolean.FALSE);
 				messageResponse.setStatusCode(response.getStatus());
 				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
 				return messageResponse;
 			}
 			
@@ -226,11 +230,12 @@ public class MarketPlaceService {
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				SubAccountInformationResponse messageResponse = new SubAccountInformationResponse();
-				Map<String,String> mapa = new HashMap<String,String>(0);
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
 				mapa.put("errors", responseEntity);
 				messageResponse.setSuccess(Boolean.FALSE);
 				messageResponse.setStatusCode(response.getStatus());
 				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
 				return messageResponse;
 			}
 			
@@ -276,11 +281,12 @@ public class MarketPlaceService {
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				RequestWithDrawResponse messageResponse = new RequestWithDrawResponse();
-				Map<String,String> mapa = new HashMap<String,String>(0);
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
 				mapa.put("errors", responseEntity);
 				messageResponse.setSuccess(Boolean.FALSE);
 				messageResponse.setStatusCode(response.getStatus());
 				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
 				return messageResponse;
 			}
 			

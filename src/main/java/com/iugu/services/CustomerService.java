@@ -45,11 +45,12 @@ public class CustomerService {
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				CustomerResponse messageResponse = new CustomerResponse();
-				Map<String,String> mapa = new HashMap<String,String>(0);
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
 				mapa.put("errors", responseEntity);
 				messageResponse.setSuccess(Boolean.FALSE);
 				messageResponse.setStatusCode(response.getStatus());
 				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
 				return messageResponse;
 			}
 			
@@ -91,11 +92,12 @@ public class CustomerService {
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				CustomerResponse messageResponse = new CustomerResponse();
-				Map<String,String> mapa = new HashMap<String,String>(0);
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
 				mapa.put("errors", responseEntity);
 				messageResponse.setSuccess(Boolean.FALSE);
 				messageResponse.setStatusCode(response.getStatus());
 				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
 				return messageResponse;
 			}
 			
@@ -136,11 +138,12 @@ public class CustomerService {
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				CustomerResponse messageResponse = new CustomerResponse();
-				Map<String,String> mapa = new HashMap<String,String>(0);
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
 				mapa.put("errors", responseEntity);
 				messageResponse.setSuccess(Boolean.FALSE);
 				messageResponse.setStatusCode(response.getStatus());
 				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
 				return messageResponse;
 			}
 			
@@ -180,11 +183,12 @@ public class CustomerService {
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				CustomerResponse messageResponse = new CustomerResponse();
-				Map<String,String> mapa = new HashMap<String,String>(0);
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
 				mapa.put("errors", responseEntity);
 				messageResponse.setSuccess(Boolean.FALSE);
 				messageResponse.setStatusCode(response.getStatus());
 				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
 				return messageResponse;
 			}
 			
@@ -225,11 +229,12 @@ public class CustomerService {
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				PaymentMethodResponse messageResponse = new PaymentMethodResponse();
-				Map<String,String> mapa = new HashMap<String,String>(0);
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
 				mapa.put("errors", responseEntity);
 				messageResponse.setSuccess(Boolean.FALSE);
 				messageResponse.setStatusCode(response.getStatus());
 				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
 				return messageResponse;
 			}
 			
@@ -319,11 +324,12 @@ public class CustomerService {
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				PaymentMethodResponse messageResponse = new PaymentMethodResponse();
-				Map<String,String> mapa = new HashMap<String,String>(0);
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
 				mapa.put("errors", responseEntity);
 				messageResponse.setSuccess(Boolean.FALSE);
 				messageResponse.setStatusCode(response.getStatus());
 				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
 				return messageResponse;
 			}
 			
@@ -363,11 +369,12 @@ public class CustomerService {
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){
 				PaymentMethodResponse messageResponse = new PaymentMethodResponse();
-				Map<String,String> mapa = new HashMap<String,String>(0);
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
 				mapa.put("errors", responseEntity);
 				messageResponse.setSuccess(Boolean.FALSE);
 				messageResponse.setStatusCode(response.getStatus());
 				messageResponse.setMessage(response.getStatusInfo().toString());
+				messageResponse.setErrors(mapa);
 				return messageResponse;
 			}
 			
