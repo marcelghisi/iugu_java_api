@@ -11,7 +11,7 @@ import junit.framework.TestSuite;
 import com.iugu.Iugu;
 import com.iugu.model.Address;
 import com.iugu.model.Data;
-import com.iugu.model.DirectCharge;
+import com.iugu.model.MailDirectCharge;
 import com.iugu.model.Invoice;
 import com.iugu.model.Item;
 import com.iugu.model.PayableWith;
@@ -85,7 +85,7 @@ public class DirectChargeTest
     	//Payer payer = new Payer("12312312312","MARCEL JOSE DA SILVA GHISI","11","33995090","teste@teste.com",address);
     	
     	ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(
-    			new DirectCharge(token,"marcel.ghisi@gmail.com",items));//payer));
+    			new MailDirectCharge(token,"marcel.ghisi@gmail.com",items));//payer));
     	assertTrue(responseDirectCharge  != null);
     	System.out.println(responseDirectCharge.getMessage());
     }
@@ -127,7 +127,7 @@ public class DirectChargeTest
 		Payer payer = new Payer("12312312312","MARCEL JOSE DA SILVA GHISI","11","33995090","teste@teste.com",address);
 		
 		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(
-				new DirectCharge(token,"teste@teste.com",items,payer));
+				new MailDirectCharge(token,"teste@teste.com",items,payer));
 		assertTrue(responseDirectCharge  != null);
 		System.out.println(responseDirectCharge.getMessage());
     }

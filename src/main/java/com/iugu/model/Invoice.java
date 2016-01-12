@@ -22,6 +22,8 @@ public class Invoice implements Serializable {
 		this.dueDate = dueDate;
 		this.items.addAll(Arrays.asList(items)); // FIXME Tratar null pointer
 	}
+	
+	private String id;
 
 	/**
 	 * E-Mail do cliente
@@ -120,6 +122,15 @@ public class Invoice implements Serializable {
 	private PayableWith payableWith;
 
 
+	
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getEmail() {
 		return email;

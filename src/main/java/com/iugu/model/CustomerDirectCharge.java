@@ -7,31 +7,12 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DirectCharge {
+public class CustomerDirectCharge {
 
 	
-	public DirectCharge(String token, String email,List<Item> items) {
-		this.token = token;
-		this.email = email;
-		this.items = items;
-	}
-	
-	public DirectCharge(String token, String email,List<Item> items,Payer payer) {
-		this.token = token;
-		this.email = email;
-		this.items = items;
-		this.payer = payer;
-	}
-
 	//method (não é preenchido se enviar token)	Método de Pagamento (Atualmente só suporta bank_slip, que é o boleto)
 	private String method;
 	
-	// token (não é preenchido caso method seja bank_slip)	ID do Token. Em caso de Marketplace, é possível enviar um token criado pela conta mestre
-	// Enviar um Payment Token gerado pelo cliente quando cadastra o cartao dele ou pede sempre os dados fera o token e usa.
-	//1Primeira fase gera na hora e usa
-	//Segunda fase gera guarda e usa
-	private String token;
-
 	//customer_payment_method_id (não é preenchido caso method seja bank_slip ou utilize token)	ID da Forma de Pagamento do Cliente. 
 	//Em caso de Marketplace, é possível enviar um customer_payment_method_id de um Cliente criado pela conta mestre
 	//TODO Perguntar Se eu guardar os tokens comigo eu uso se seu guardar os tokens com a iugu uso lá?
@@ -86,14 +67,6 @@ public class DirectCharge {
 
 	public void setMethod(String method) {
 		this.method = method;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
 	}
 
 	public String getCustomerPaymentMethodId() {

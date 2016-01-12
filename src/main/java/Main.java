@@ -4,7 +4,7 @@ import java.util.List;
 import com.iugu.Iugu;
 import com.iugu.model.Address;
 import com.iugu.model.Data;
-import com.iugu.model.DirectCharge;
+import com.iugu.model.MailDirectCharge;
 import com.iugu.model.Item;
 import com.iugu.model.PayableWith;
 import com.iugu.model.Payer;
@@ -42,7 +42,7 @@ public class Main {
 		Payer payer = new Payer("12312312312","MARCEL JOSE DA SILVA GHISI","11","33995090","teste@teste.com",address);
 		
 		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(
-				new DirectCharge(token,"teste@teste.com",items,payer));
+				new MailDirectCharge(token,"teste@teste.com",items,payer));
 		System.out.println(responseDirectCharge.getMessage());
 		
 	}

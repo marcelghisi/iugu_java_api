@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 import com.iugu.Iugu;
-import com.iugu.model.DirectCharge;
+import com.iugu.model.MailDirectCharge;
 import com.iugu.model.PaymentToken;
 import com.iugu.model.SubAccountValidation;
 import com.iugu.responses.ChargeResponse;
@@ -67,7 +67,7 @@ public class PaymentService {
 		return messageResponse;
 	}
 	
-	public ChargeResponse createDirectCharge(DirectCharge payment) {
+	public ChargeResponse createDirectCharge(MailDirectCharge payment) {
 		Response response = Iugu.getClient()
 				.target(CREATE_DIRECT_CHARGE_URL)
 				.request()
