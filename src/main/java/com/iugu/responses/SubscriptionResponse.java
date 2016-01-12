@@ -12,7 +12,7 @@ import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SubscriptionResponse {
+public class SubscriptionResponse  extends MessageResponse{
 
 	private String id;
 	

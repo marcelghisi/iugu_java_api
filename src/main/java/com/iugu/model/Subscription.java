@@ -9,9 +9,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Subscription {
 
-	public Subscription(String customerId) {
+	public Subscription(String customerId,String planIdentifier) {
 		this.customerId = customerId;
-
+		this.planIdentifier = planIdentifier;
 	}
 
 	@JsonProperty("customer_id")

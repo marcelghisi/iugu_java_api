@@ -1,23 +1,26 @@
 package com.iugu.iugu_java;
 
-import java.util.List;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import com.iugu.Iugu;
 import com.iugu.model.Currency;
+import com.iugu.model.Customer;
 import com.iugu.model.IntervalType;
 import com.iugu.model.Plan;
+import com.iugu.model.Subscription;
+import com.iugu.responses.CustomerResponse;
 import com.iugu.responses.PlanResponse;
+import com.iugu.responses.SubscriptionResponse;
 import com.iugu.services.CustomerService;
 import com.iugu.services.PlanService;
+import com.iugu.services.SubscriptionService;
 
 /**
  * Unit test for simple App.
  */
-public class PlanTest 
+public class SubscriptionTest 
     extends TestCase
 {
 	/**
@@ -25,7 +28,7 @@ public class PlanTest
      *
      * @param testName name of the test case
      */
-    public PlanTest( String testName )
+    public SubscriptionTest( String testName )
     {
         super( testName );
     }
@@ -35,24 +38,25 @@ public class PlanTest
      */
     public static Test suite()
     {
-        return new TestSuite( PlanTest.class );
+        return new TestSuite( SubscriptionTest.class );
     }
 
     /**
      * Rigourous Test : testCreatePJTesteSubAccount
      */
-    public void testCreatePlan()
+    public void testCreateSubscription()
     {
 
     	//{"id":"3AE8AE3508554F36B0B547F858493DF0","name":"ATTENDME P100","identifier":"plano_basico","interval":1,"interval_type":"months","created_at":"2016-01-10T15:31:03-02:00","updated_at":"2016-01-10T15:31:03-02:00","prices":[{"created_at":"2016-01-10T15:31:03-02:00","currency":"BRL","id":"A8918B620D224C4CAAC6AC7E30E679DE","plan_id":"3AE8AE3508554F36B0B547F858493DF0","updated_at":"2016-01-10T15:31:03-02:00","value_cents":1000}],"features":[],"payable_with":null}
     	
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
 		
-		Plan plan = new Plan("ATTENDME P100", "plano_basico", 1, IntervalType.MONTHS,Currency.BRL,1000);
+		CustomerResponse responseCustomer = new CustomerService().find("E5A929BD4A364698ABA72568FAD15FE1");
+		Subscription subs = new Subscription(responseCustomer.getId(),"plano_basico");
 
-		PlanResponse planResponse = new PlanService().create(plan);
+		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
 		
-		assertTrue( planResponse.getId() != null);
+		assertTrue( subsResponse.getId() != null);
 		
     }
     
@@ -143,22 +147,6 @@ public class PlanTest
 		PlanResponse responseFind = new PlanService().find("402695DC136A466ABD2F5E3F375C7958");
 		
 		assertTrue(responseFind.getErrors().get("errors").toString().contains("Plan Not Found"));
-    }
-    
-    
-    /**
-     * Rigourous Test : testCreatePJTesteSubAccount
-     */
-    public void testListCustomerPaymentMethod()
-    {
-    	String customerId = "E5A929BD4A364698ABA72568FAD15FE1";
-    	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-
-		List<PlanResponse> responsePlanList = new PlanService().list();
-		
-		assertTrue( responsePlanList.size() > 0);
-		
     }
 
 
