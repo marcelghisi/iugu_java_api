@@ -1,13 +1,9 @@
 package com.iugu.services;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.google.gson.Gson;
 import com.iugu.Iugu;
 import com.iugu.model.Credit;
 import com.iugu.model.Subscription;
@@ -42,44 +38,9 @@ public class SubscriptionService extends BaseService{
 				.request()
 				.get();
 		
-		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
-			
-			final String responseEntity = response.readEntity(String.class);
-
-			System.out.println(responseEntity);
-
-			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
-			if (responseEntity.startsWith("{\"errors\":\"")){
-				SubscriptionResponse messageResponse = new SubscriptionResponse();
-				Map<String,Object> mapa = new HashMap<String,Object>(0);
-				mapa.put("errors", responseEntity);
-				messageResponse.setSuccess(Boolean.FALSE);
-				messageResponse.setStatusCode(response.getStatus());
-				messageResponse.setMessage(response.getStatusInfo().toString());
-				messageResponse.setErrors(mapa);
-				return messageResponse;
-			}
-			
-			Gson gson = new Gson();
-
-			SubscriptionResponse responseReturn = gson.fromJson(responseEntity, SubscriptionResponse.class);
-			
-			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
-			if (response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.TRUE);
-			} else if(response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.FALSE);
-			}
-			response.close();
-			return responseReturn;
-		}
+		SubscriptionResponse subscriptionResponse = (SubscriptionResponse) readResponse(response, SubscriptionResponse.class);
 		
-		SubscriptionResponse messageResponse = new SubscriptionResponse();
-		messageResponse.setSuccess(Boolean.FALSE);
-		messageResponse.setStatusCode(response.getStatus());
-		messageResponse.setMessage(response.getStatusInfo().toString());
-
-		return messageResponse;
+		return subscriptionResponse;
 	}
 	
 	public SubscriptionResponse change(String id, Subscription subscription) {
@@ -88,11 +49,9 @@ public class SubscriptionService extends BaseService{
 				.request()
 				.put(Entity.entity(subscription, MediaType.APPLICATION_JSON));
 		
-		if(response.getStatus() == 200) {
-			return response.readEntity(SubscriptionResponse.class);
-		}
-
-		return null; //FIXME Tratar retornos de erro
+		SubscriptionResponse subscriptionResponse = (SubscriptionResponse) readResponse(response, SubscriptionResponse.class);
+		
+		return subscriptionResponse;
 	}
 	
 	public SubscriptionResponse remove(String id) {
@@ -100,11 +59,9 @@ public class SubscriptionService extends BaseService{
 		 .request()
 		 .delete();
 		
-		if(response.getStatus() == 200) {
-			return response.readEntity(SubscriptionResponse.class);
-		}
-
-		return null; //FIXME Tratar retornos de erro
+		SubscriptionResponse subscriptionResponse = (SubscriptionResponse) readResponse(response, SubscriptionResponse.class);
+		
+		return subscriptionResponse;
 	}
 	
 	public SubscriptionResponse suspend(String id) {
@@ -112,11 +69,9 @@ public class SubscriptionService extends BaseService{
 		 .request()
 		 .post(null);
 		
-		if(response.getStatus() == 200) {
-			return response.readEntity(SubscriptionResponse.class);
-		}
-
-		return null; //FIXME Tratar retornos de erro
+		SubscriptionResponse subscriptionResponse = (SubscriptionResponse) readResponse(response, SubscriptionResponse.class);
+		
+		return subscriptionResponse;
 	}
 	
 	public SubscriptionResponse activate(String id) {
@@ -124,11 +79,9 @@ public class SubscriptionService extends BaseService{
 		 .request()
 		 .post(null);
 		
-		if(response.getStatus() == 200) {
-			return response.readEntity(SubscriptionResponse.class);
-		}
-
-		return null; //FIXME Tratar retornos de erro
+		SubscriptionResponse subscriptionResponse = (SubscriptionResponse) readResponse(response, SubscriptionResponse.class);
+		
+		return subscriptionResponse;
 	}
 	
 	public SubscriptionResponse changePlan(String id, String planIdentifier) {
@@ -136,11 +89,9 @@ public class SubscriptionService extends BaseService{
 		 .request()
 		 .post(null);
 		
-		if(response.getStatus() == 200) {
-			return response.readEntity(SubscriptionResponse.class);
-		}
-
-		return null; //FIXME Tratar retornos de erro
+		SubscriptionResponse subscriptionResponse = (SubscriptionResponse) readResponse(response, SubscriptionResponse.class);
+		
+		return subscriptionResponse;
 	}
 	
 	public SubscriptionResponse addCredits(String id, Credit credit) {
@@ -148,11 +99,9 @@ public class SubscriptionService extends BaseService{
 		 .request()
 		 .post(Entity.entity(credit, MediaType.APPLICATION_JSON));
 		
-		if(response.getStatus() == 200) {
-			return response.readEntity(SubscriptionResponse.class);
-		}
-
-		return null; //FIXME Tratar retornos de erro
+		SubscriptionResponse subscriptionResponse = (SubscriptionResponse) readResponse(response, SubscriptionResponse.class);
+		
+		return subscriptionResponse;
 	}
 	
 	public SubscriptionResponse removeCredits(String id, Credit credit) {
@@ -160,11 +109,9 @@ public class SubscriptionService extends BaseService{
 		 .request()
 		 .post(Entity.entity(credit, MediaType.APPLICATION_JSON));
 		
-		if(response.getStatus() == 200) {
-			return response.readEntity(SubscriptionResponse.class);
-		}
-
-		return null; //FIXME Tratar retornos de erro
+		SubscriptionResponse subscriptionResponse = (SubscriptionResponse) readResponse(response, SubscriptionResponse.class);
+		
+		return subscriptionResponse;
 	}
 	
 	//TODO Listar as assinaturas

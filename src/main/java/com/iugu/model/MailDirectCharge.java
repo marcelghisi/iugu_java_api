@@ -7,7 +7,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.google.gson.annotations.SerializedName;
 
-public class MailDirectCharge {
+public class MailDirectCharge extends DirectCharge{
 
 	//Constructor for possible scenarios using Token
 	

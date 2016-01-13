@@ -17,8 +17,9 @@ import com.iugu.model.Customer;
 import com.iugu.model.PaymentMethodRequest;
 import com.iugu.responses.CustomerResponse;
 import com.iugu.responses.PaymentMethodResponse;
+import com.iugu.responses.SubscriptionResponse;
 
-public class CustomerService {
+public class CustomerService extends BaseService{
 
 	private final String CREATE_URL = Iugu.url("/customers");
 	private final String FIND_URL = Iugu.url("/customers/%s");
@@ -36,45 +37,9 @@ public class CustomerService {
 				.request()
 				.post(Entity.entity(customer, MediaType.APPLICATION_JSON));
 		
-		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
-			
-			final String responseEntity = response.readEntity(String.class);
-
-			System.out.println(responseEntity);
-
-			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
-			if (responseEntity.startsWith("{\"errors\":\"")){
-				CustomerResponse messageResponse = new CustomerResponse();
-				Map<String,Object> mapa = new HashMap<String,Object>(0);
-				mapa.put("errors", responseEntity);
-				messageResponse.setSuccess(Boolean.FALSE);
-				messageResponse.setStatusCode(response.getStatus());
-				messageResponse.setMessage(response.getStatusInfo().toString());
-				messageResponse.setErrors(mapa);
-				return messageResponse;
-			}
-			
-			Gson gson = new Gson();
-
-			CustomerResponse responseReturn = gson.fromJson(responseEntity, CustomerResponse.class);
-			
-			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
-			if (response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.TRUE);
-			} else if(response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.FALSE);
-			}
-			return responseReturn;
-		}
-
+		CustomerResponse customerResponse = (CustomerResponse) readResponse(response, CustomerResponse.class);
 		
-		CustomerResponse messageResponse = new CustomerResponse();
-		messageResponse.setSuccess(Boolean.FALSE);
-		messageResponse.setStatusCode(response.getStatus());
-		messageResponse.setMessage(response.getStatusInfo().toString());
-
-		response.close();
-		return messageResponse;
+		return customerResponse;
 	}
 	
 	public CustomerResponse find(String id) {
@@ -83,44 +48,9 @@ public class CustomerService {
 				.request()
 				.get();
 		
-		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
-			
-			final String responseEntity = response.readEntity(String.class);
-
-			System.out.println(responseEntity);
-
-			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
-			if (responseEntity.startsWith("{\"errors\":\"")){
-				CustomerResponse messageResponse = new CustomerResponse();
-				Map<String,Object> mapa = new HashMap<String,Object>(0);
-				mapa.put("errors", responseEntity);
-				messageResponse.setSuccess(Boolean.FALSE);
-				messageResponse.setStatusCode(response.getStatus());
-				messageResponse.setMessage(response.getStatusInfo().toString());
-				messageResponse.setErrors(mapa);
-				return messageResponse;
-			}
-			
-			Gson gson = new Gson();
-
-			CustomerResponse responseReturn = gson.fromJson(responseEntity, CustomerResponse.class);
-			
-			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
-			if (response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.TRUE);
-			} else if(response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.FALSE);
-			}
-			return responseReturn;
-		}
-
-		CustomerResponse messageResponse = new CustomerResponse();
-		messageResponse.setSuccess(Boolean.FALSE);
-		messageResponse.setStatusCode(response.getStatus());
-		messageResponse.setMessage(response.getStatusInfo().toString());
-
-		response.close();
-		return messageResponse;
+		CustomerResponse customerResponse = (CustomerResponse) readResponse(response, CustomerResponse.class);
+		
+		return customerResponse;
 	}
 	
 	public CustomerResponse change(String id, Customer customer) {
@@ -129,44 +59,9 @@ public class CustomerService {
 				.request()
 				.put(Entity.entity(customer, MediaType.APPLICATION_JSON));
 		
-		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
-			
-			final String responseEntity = response.readEntity(String.class);
-
-			System.out.println(responseEntity);
-
-			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
-			if (responseEntity.startsWith("{\"errors\":\"")){
-				CustomerResponse messageResponse = new CustomerResponse();
-				Map<String,Object> mapa = new HashMap<String,Object>(0);
-				mapa.put("errors", responseEntity);
-				messageResponse.setSuccess(Boolean.FALSE);
-				messageResponse.setStatusCode(response.getStatus());
-				messageResponse.setMessage(response.getStatusInfo().toString());
-				messageResponse.setErrors(mapa);
-				return messageResponse;
-			}
-			
-			Gson gson = new Gson();
-
-			CustomerResponse responseReturn = gson.fromJson(responseEntity, CustomerResponse.class);
-			
-			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
-			if (response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.TRUE);
-			} else if(response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.FALSE);
-			}
-			return responseReturn;
-		}
-
-		CustomerResponse messageResponse = new CustomerResponse();
-		messageResponse.setSuccess(Boolean.FALSE);
-		messageResponse.setStatusCode(response.getStatus());
-		messageResponse.setMessage(response.getStatusInfo().toString());
-
-		response.close();
-		return messageResponse;
+		CustomerResponse customerResponse = (CustomerResponse) readResponse(response, CustomerResponse.class);
+		
+		return customerResponse;
 	}
 	
 	public CustomerResponse remove(String id) {
@@ -174,44 +69,9 @@ public class CustomerService {
 		 .request()
 		 .delete();
 		
-		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
-			
-			final String responseEntity = response.readEntity(String.class);
-
-			System.out.println(responseEntity);
-
-			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
-			if (responseEntity.startsWith("{\"errors\":\"")){
-				CustomerResponse messageResponse = new CustomerResponse();
-				Map<String,Object> mapa = new HashMap<String,Object>(0);
-				mapa.put("errors", responseEntity);
-				messageResponse.setSuccess(Boolean.FALSE);
-				messageResponse.setStatusCode(response.getStatus());
-				messageResponse.setMessage(response.getStatusInfo().toString());
-				messageResponse.setErrors(mapa);
-				return messageResponse;
-			}
-			
-			Gson gson = new Gson();
-
-			CustomerResponse responseReturn = gson.fromJson(responseEntity, CustomerResponse.class);
-			
-			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
-			if (response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.TRUE);
-			} else if(response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.FALSE);
-			}
-			return responseReturn;
-		}
-
-		CustomerResponse messageResponse = new CustomerResponse();
-		messageResponse.setSuccess(Boolean.FALSE);
-		messageResponse.setStatusCode(response.getStatus());
-		messageResponse.setMessage(response.getStatusInfo().toString());
-
-		response.close();
-		return messageResponse;
+		CustomerResponse customerResponse = (CustomerResponse) readResponse(response, CustomerResponse.class);
+		
+		return customerResponse;
 	}
 	
 	public PaymentMethodResponse createPaymentMethod(PaymentMethodRequest request) {
@@ -220,44 +80,9 @@ public class CustomerService {
 				.request()
 				.post(Entity.entity(request, MediaType.APPLICATION_JSON));
 		
-		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
-			
-			final String responseEntity = response.readEntity(String.class);
-
-			System.out.println(responseEntity);
-
-			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
-			if (responseEntity.startsWith("{\"errors\":\"")){
-				PaymentMethodResponse messageResponse = new PaymentMethodResponse();
-				Map<String,Object> mapa = new HashMap<String,Object>(0);
-				mapa.put("errors", responseEntity);
-				messageResponse.setSuccess(Boolean.FALSE);
-				messageResponse.setStatusCode(response.getStatus());
-				messageResponse.setMessage(response.getStatusInfo().toString());
-				messageResponse.setErrors(mapa);
-				return messageResponse;
-			}
-			
-			Gson gson = new Gson();
-
-			PaymentMethodResponse responseReturn = gson.fromJson(responseEntity, PaymentMethodResponse.class);
-			
-			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
-			if (response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.TRUE);
-			} else if(response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.FALSE);
-			}
-			return responseReturn;
-		}
-
-		PaymentMethodResponse messageResponse = new PaymentMethodResponse();
-		messageResponse.setSuccess(Boolean.FALSE);
-		messageResponse.setStatusCode(response.getStatus());
-		messageResponse.setMessage(response.getStatusInfo().toString());
-
-		response.close();
-		return messageResponse;
+		PaymentMethodResponse paymentResponse = (PaymentMethodResponse) readResponse(response, PaymentMethodResponse.class);
+		
+		return paymentResponse;
 	}
 	
 	public PaymentMethodResponse findPaymentMethod(String customerId,String paymentMethodId) {
@@ -266,44 +91,9 @@ public class CustomerService {
 				.request()
 				.get();
 		
-		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
-			
-			final String responseEntity = response.readEntity(String.class);
-
-			System.out.println(responseEntity);
-
-			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
-			if (responseEntity.startsWith("{\"errors\":\"")){
-				PaymentMethodResponse messageResponse = new PaymentMethodResponse();
-				Map<String,Object> mapa = new HashMap<String,Object>(0);
-				mapa.put("errors", responseEntity);
-				messageResponse.setSuccess(Boolean.FALSE);
-				messageResponse.setStatusCode(response.getStatus());
-				messageResponse.setMessage(response.getStatusInfo().toString());
-				messageResponse.setErrors(mapa);
-				return messageResponse;
-			}
-			
-			Gson gson = new Gson();
-
-			PaymentMethodResponse responseReturn = gson.fromJson(responseEntity, PaymentMethodResponse.class);
-			
-			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
-			if (response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.TRUE);
-			} else if(response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.FALSE);
-			}
-			return responseReturn;
-		}
-
-		PaymentMethodResponse messageResponse = new PaymentMethodResponse();
-		messageResponse.setSuccess(Boolean.FALSE);
-		messageResponse.setStatusCode(response.getStatus());
-		messageResponse.setMessage(response.getStatusInfo().toString());
-
-		response.close();
-		return messageResponse;
+		PaymentMethodResponse paymentResponse = (PaymentMethodResponse) readResponse(response, PaymentMethodResponse.class);
+		
+		return paymentResponse;
 	}
 	
 	public PaymentMethodResponse changePaymentMethod(String id, String paymentMethodId,String newDescription) {
@@ -315,44 +105,9 @@ public class CustomerService {
 				.request()
 				.put(Entity.entity(request, MediaType.APPLICATION_JSON));
 		
-		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
-			
-			final String responseEntity = response.readEntity(String.class);
-
-			System.out.println(responseEntity);
-
-			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
-			if (responseEntity.startsWith("{\"errors\":\"")){
-				PaymentMethodResponse messageResponse = new PaymentMethodResponse();
-				Map<String,Object> mapa = new HashMap<String,Object>(0);
-				mapa.put("errors", responseEntity);
-				messageResponse.setSuccess(Boolean.FALSE);
-				messageResponse.setStatusCode(response.getStatus());
-				messageResponse.setMessage(response.getStatusInfo().toString());
-				messageResponse.setErrors(mapa);
-				return messageResponse;
-			}
-			
-			Gson gson = new Gson();
-
-			PaymentMethodResponse responseReturn = gson.fromJson(responseEntity, PaymentMethodResponse.class);
-			
-			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
-			if (response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.TRUE);
-			} else if(response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.FALSE);
-			}
-			return responseReturn;
-		}
-
-		PaymentMethodResponse messageResponse = new PaymentMethodResponse();
-		messageResponse.setSuccess(Boolean.FALSE);
-		messageResponse.setStatusCode(response.getStatus());
-		messageResponse.setMessage(response.getStatusInfo().toString());
-
-		response.close();
-		return messageResponse;
+		PaymentMethodResponse paymentResponse = (PaymentMethodResponse) readResponse(response, PaymentMethodResponse.class);
+		
+		return paymentResponse;
 	}
 	
 	public PaymentMethodResponse removePaymentMethod(String customerId,String paymentId) {
@@ -360,44 +115,9 @@ public class CustomerService {
 		 .request()
 		 .delete();
 		
-		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
-			
-			final String responseEntity = response.readEntity(String.class);
-
-			System.out.println(responseEntity);
-
-			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
-			if (responseEntity.startsWith("{\"errors\":\"")){
-				PaymentMethodResponse messageResponse = new PaymentMethodResponse();
-				Map<String,Object> mapa = new HashMap<String,Object>(0);
-				mapa.put("errors", responseEntity);
-				messageResponse.setSuccess(Boolean.FALSE);
-				messageResponse.setStatusCode(response.getStatus());
-				messageResponse.setMessage(response.getStatusInfo().toString());
-				messageResponse.setErrors(mapa);
-				return messageResponse;
-			}
-			
-			Gson gson = new Gson();
-
-			PaymentMethodResponse responseReturn = gson.fromJson(responseEntity, PaymentMethodResponse.class);
-			
-			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
-			if (response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.TRUE);
-			} else if(response.getStatus() == 200){
-				responseReturn.setSuccess(Boolean.FALSE);
-			}
-			return responseReturn;
-		}
-
-		PaymentMethodResponse messageResponse = new PaymentMethodResponse();
-		messageResponse.setSuccess(Boolean.FALSE);
-		messageResponse.setStatusCode(response.getStatus());
-		messageResponse.setMessage(response.getStatusInfo().toString());
-
-		response.close();
-		return messageResponse;
+		PaymentMethodResponse paymentResponse = (PaymentMethodResponse) readResponse(response, PaymentMethodResponse.class);
+		
+		return paymentResponse;
 	}
 	
 	public List<PaymentMethodResponse> listPaymentMethod(String customerId) {

@@ -104,7 +104,7 @@ public class CustomerPaymentMethodTest
     /**
      * Rigourous Test : testCreatePJTesteSubAccount
      */
-    public void testFindChangePayment()
+    public void testChangePayment()
     {
 
     	String customerId = "E5A929BD4A364698ABA72568FAD15FE1";
@@ -114,7 +114,7 @@ public class CustomerPaymentMethodTest
 
 		PaymentMethodResponse responseCustomer = new CustomerService().findPaymentMethod(customerId, paymentId);
 		
-		
+		//82EFB8FB193049E69161D958749E470F
 		PaymentMethodResponse responseChange = new CustomerService().changePaymentMethod("E5A929BD4A364698ABA72568FAD15FE1",responseCustomer.getId(),"Cartao Neteller");
 		
 		assertTrue( responseChange.getId() != null);

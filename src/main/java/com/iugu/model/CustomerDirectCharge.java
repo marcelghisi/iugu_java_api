@@ -7,11 +7,28 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.google.gson.annotations.SerializedName;
 
-public class CustomerDirectCharge {
+public class CustomerDirectCharge extends DirectCharge{
 
 	
-	//method (não é preenchido se enviar token)	Método de Pagamento (Atualmente só suporta bank_slip, que é o boleto)
-	private String method;
+	//Constroi um objeto para pagamento direto usando um customer payment id
+	public CustomerDirectCharge(String customerPaymentMethodId,Customer customer,String email,List<Item> items,Payer payer,Integer months,Integer discountValueInCents) {
+		this.customerPaymentMethodId = customerPaymentMethodId;
+		this.customerId = customer.getId();
+		this.email = email;
+		this.items = items;
+		this.payer = payer;
+		this.months = months;
+		this.discountCents = discountValueInCents;
+	}
+	
+	public CustomerDirectCharge(String customerPaymentMethodId,Customer customer,Invoice invoice,Payer payer,Integer months,Integer discountValueInCents) {
+		this.customerPaymentMethodId = customerPaymentMethodId;
+		this.customerId = customer.getId();
+		this.invoiceId = invoice.getId();
+		this.payer = payer;
+		this.months = months;
+		this.discountCents = discountValueInCents;
+	}
 	
 	//customer_payment_method_id (não é preenchido caso method seja bank_slip ou utilize token)	ID da Forma de Pagamento do Cliente. 
 	//Em caso de Marketplace, é possível enviar um customer_payment_method_id de um Cliente criado pela conta mestre
@@ -19,6 +36,10 @@ public class CustomerDirectCharge {
 	@JsonProperty("customer_payment_method_id")
 	@SerializedName("customer_payment_method_id")
 	private String customerPaymentMethodId;
+	
+	//method (não é preenchido se enviar token)	Método de Pagamento (Atualmente só suporta bank_slip, que é o boleto)
+	//perguntar pq method so bank slip para direct charge
+	//private String method;
 	
 	//customer_id (opcional)	ID do Cliente. Utilizado para vincular a Fatura a um Cliente
 	//Vincular o cliente a fatura que sera gerada. [[[[client company nosso]]]]
@@ -43,7 +64,7 @@ public class CustomerDirectCharge {
 	//months (optional)	Número de Parcelas (2 até 12), não é necessário passar 1
 	//TODO Perguntar Para boleto também gera 12 parcelas
 	@JsonProperty("months")
-	private String months;
+	private Integer months;
 	
 	//discount_cents (opcional)	Valor dos Descontos em centavos. Funciona apenas para Cobranças Diretas criadas com Itens.
 	//TODO Perguntar Para boleto também gera 12 parcelas
@@ -61,13 +82,13 @@ public class CustomerDirectCharge {
 	//payer{} (necessário caso sua conta necessite de anti fraude ou para informações do boleto)
 	private Payer payer;
 	
-	public String getMethod() {
-		return method;
-	}
+	//public String getMethod() {
+	//	return method;
+	//}
 
-	public void setMethod(String method) {
-		this.method = method;
-	}
+	//public void setMethod(String method) {
+	//	this.method = method;
+	//}
 
 	public String getCustomerPaymentMethodId() {
 		return customerPaymentMethodId;
@@ -101,11 +122,11 @@ public class CustomerDirectCharge {
 		this.email = email;
 	}
 
-	public String getMonths() {
+	public Integer getMonths() {
 		return months;
 	}
 
-	public void setMonths(String months) {
+	public void setMonths(Integer months) {
 		this.months = months;
 	}
 

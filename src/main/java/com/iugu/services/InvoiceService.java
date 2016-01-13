@@ -12,7 +12,7 @@ import com.iugu.Iugu;
 import com.iugu.model.Invoice;
 import com.iugu.responses.InvoiceResponse;
 
-public class InvoiceService {
+public class InvoiceService extends BaseService{
 
 	private final String CREATE_URL = Iugu.url("/invoices");
 	private final String FIND_URL = Iugu.url("/invoices/%s");
@@ -25,23 +25,17 @@ public class InvoiceService {
 		Response response = Iugu.getClient().target(CREATE_URL).request()
 				.post(Entity.entity(invoice, MediaType.APPLICATION_JSON));
 
-		if (response.getStatus() == 200) {
-			return response.readEntity(InvoiceResponse.class);
-		}
-
-		response.close();
-		return null; // FIXME Tratar retornos de erro
+		InvoiceResponse paymentResponse = (InvoiceResponse) readResponse(response, InvoiceResponse.class);
+		
+		return paymentResponse;
 	}
 
 	public InvoiceResponse find(String id) {
 		Response response = Iugu.getClient().target(String.format(FIND_URL, id)).request().get();
 
-		if (response.getStatus() == 200) {
-			return response.readEntity(InvoiceResponse.class);
-		}
-
-		response.close();
-		return null; // FIXME Tratar retornos de erro
+		InvoiceResponse paymentResponse = (InvoiceResponse) readResponse(response, InvoiceResponse.class);
+		
+		return paymentResponse;
 	}
 
 	// FIXME Tratar ignore_canceled_email e Items
@@ -67,34 +61,25 @@ public class InvoiceService {
 	public InvoiceResponse remove(String id) {
 		Response response = Iugu.getClient().target(String.format(REMOVE_URL, id)).request().delete();
 
-		if (response.getStatus() == 200) {
-			return response.readEntity(InvoiceResponse.class);
-		}
-
-		response.close();
-		return null; // FIXME Tratar retornos de erro
+		InvoiceResponse paymentResponse = (InvoiceResponse) readResponse(response, InvoiceResponse.class);
+		
+		return paymentResponse;
 	}
 
 	public InvoiceResponse cancel(String id) {
 		Response response = Iugu.getClient().target(String.format(CANCEL_URL, id)).request().put(null);
 
-		if (response.getStatus() == 200) {
-			return response.readEntity(InvoiceResponse.class);
-		}
-
-		response.close();
-		return null; // FIXME Tratar retornos de erro
+		InvoiceResponse paymentResponse = (InvoiceResponse) readResponse(response, InvoiceResponse.class);
+		
+		return paymentResponse;
 	}
 
 	public InvoiceResponse refund(String id) {
 		Response response = Iugu.getClient().target(String.format(REFUND_URL, id)).request().post(null);
 
-		if (response.getStatus() == 200) {
-			return response.readEntity(InvoiceResponse.class);
-		}
-		response.close();
-
-		return null; // FIXME Tratar retornos de erro
+		InvoiceResponse paymentResponse = (InvoiceResponse) readResponse(response, InvoiceResponse.class);
+		
+		return paymentResponse;
 	}
 
 	// TODO Listar as faturas
