@@ -11,41 +11,6 @@ public class MailDirectCharge extends DirectCharge{
 
 	//Constructor for possible scenarios using Token
 	
-	//#1 Realiza uma cobranca Direta para usando um tokem criado na hora para um cartao de credito especifico e para um e-mail aleatorio
-	public MailDirectCharge(String token, String email,List<Item> items) {
-		this(token,email,items,null,null,null,null);
-	}
-	
-	//#1 Realiza uma cobranca Direta para usando um tokem criado na hora para um cartao de credito especifico e para um e-mail aleatorio
-	//# Possivel passar o numero de parcelas ou o desconto
-	public MailDirectCharge(String token, String email,List<Item> items,Integer months,Integer discountValueInCents) {
-		this(token,email,items,null,null,months,discountValueInCents);
-	}
-	
-	//#1 Realiza uma cobranca Direta para usando um tokem criado na hora para um cartao de credito especifico e para um e-mail aleatorio
-	//Passa os dados do pagador para verificação de fraldes
-	public MailDirectCharge(String token, String email,List<Item> items,Payer payer) {
-		this(token,email,items,payer,null,null,null);
-	}
-	
-	//#1 Realiza uma cobranca Direta para usando um tokem criado na hora para um cartao de credito especifico e para um invoice(fatura) já criado anteriormente
-	//Perguntar scenario iugu
-	public MailDirectCharge(String token, Invoice invoice,List<Item> items) {
-		this(token,invoice,items,null,null,null,null);
-	}
-	
-	//#1 Realiza uma cobranca Direta para usando um tokem criado na hora para um cartao de credito especifico e para um invoice(fatura) já criado anteriormente
-	//Alternativamente pode-se passar o numero de parcelas ou desconto
-	public MailDirectCharge(String token, Invoice invoice,List<Item> items,Integer months,Integer discountValueInCents) {
-		this(token,invoice,items,null,null,months,discountValueInCents);
-	}
-	
-	//#1 Realiza uma cobranca Direta para usando um tokem criado na hora para um cartao de credito especifico e para um invoice(fatura) já criado anteriormente
-	//Passando o Payer para verificação do AntiFraude
-	public MailDirectCharge(String token, Invoice invoice,List<Item> items,Payer payer) {
-		this(token,invoice,items,payer,null,null,null);
-	}
-	
 	public MailDirectCharge(String token, String email,List<Item> items,Payer payer,Customer customer,Integer months,Integer discountValueInCents) {
 		this.token = token;
 		this.email = email;

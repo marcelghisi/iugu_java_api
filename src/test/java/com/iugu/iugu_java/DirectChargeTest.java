@@ -87,6 +87,7 @@ public class DirectChargeTest
 		assertTrue(response != null);
 		
 		String token = response.getId();
+		
 
 		Item item = new Item("Refeição",1,100);
 		List<Item> items = new ArrayList<Item>(0);
@@ -97,7 +98,7 @@ public class DirectChargeTest
 		Payer payer = new Payer("12312312312","MARCEL JOSE DA SILVA GHISI","11","33995090","teste@teste.com",address);
 		
 		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(
-				new MailDirectCharge(token,"teste@teste.com",items,payer));
+				new MailDirectCharge(token,"teste@teste.com",items,payer,null,null,null));
 		assertTrue(responseDirectCharge  != null);
 		System.out.println(responseDirectCharge.getMessage());
     }

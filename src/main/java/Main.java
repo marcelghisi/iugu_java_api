@@ -42,7 +42,7 @@ public class Main {
 		Payer payer = new Payer("12312312312","MARCEL JOSE DA SILVA GHISI","11","33995090","teste@teste.com",address);
 		
 		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(
-				new MailDirectCharge(token,"teste@teste.com",items,payer));
+				new MailDirectCharge(token,"teste@teste.com",items,payer,null,null,null));
 		System.out.println(responseDirectCharge.getMessage());
 		
 	}
