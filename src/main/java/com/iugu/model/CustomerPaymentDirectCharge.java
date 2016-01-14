@@ -15,27 +15,37 @@ public class CustomerPaymentDirectCharge extends DirectCharge{
 	@JsonProperty("customer_payment_method_id")
 	@SerializedName("customer_payment_method_id")
 	private String customerPaymentMethodId;
-	
-	private boolean cheese;
-	private boolean pepperoni;
-	private boolean bacon;
 	  
 	public static class Builder {
 		//required
 		private String customerPaymentMethodId;
+		private String email;
+		private List<Item> items = new ArrayList<>();
+		private Payer payer;
 		
 		//optional
-		private boolean cheese = false;
-		private boolean pepperoni = false;
-		private boolean bacon = false;
+		private Integer months;
+		private Integer discountCents;
 		
-		public Builder(String customerPaymentMethodId) {
+		public Builder(String customerPaymentMethodId,String email,List<Item> items) {
 		  this.customerPaymentMethodId = customerPaymentMethodId;
+		  this.email = email;
+		  this.items = items;
 		}
 		
-		public Builder cheese(boolean value) {
-		  cheese = value;
+		public Builder months(Integer months) {
+		  this.months = months;
 		  return this;
+		}
+		
+		public Builder discount(Integer cents) {
+			  this.discountCents = cents;
+			  return this;
+		}
+		
+		public Builder payer(Payer payer) {
+			  this.payer = payer;
+			  return this;
 		}
 		
 	    public CustomerPaymentDirectCharge build() {
@@ -45,7 +55,11 @@ public class CustomerPaymentDirectCharge extends DirectCharge{
 	
 	private CustomerPaymentDirectCharge(Builder builder) {
 		customerPaymentMethodId = builder.customerPaymentMethodId;
-
+		email = builder.email;
+		items = builder.items;
+		payer = builder.payer;
+		months = builder.months;
+		discountCents = builder.discountCents;
 	}
 	
 	//method (não é preenchido se enviar token)	Método de Pagamento (Atualmente só suporta bank_slip, que é o boleto)

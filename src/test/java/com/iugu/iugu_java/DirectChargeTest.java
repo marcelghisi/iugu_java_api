@@ -10,6 +10,7 @@ import junit.framework.TestSuite;
 
 import com.iugu.Iugu;
 import com.iugu.model.Address;
+import com.iugu.model.CustomerPaymentDirectCharge;
 import com.iugu.model.Data;
 import com.iugu.model.Invoice;
 import com.iugu.model.Item;
@@ -100,6 +101,96 @@ public class DirectChargeTest
 		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(
 				new MailDirectCharge(token,"teste@teste.com",items,payer,null,null,null));
 		assertTrue(responseDirectCharge  != null);
+		System.out.println(responseDirectCharge.getMessage());
+    }
+    
+    /**
+     * Rigourous Test :-)
+     */
+    public void testDirectChargeWithCustomerPayment()
+    {
+
+		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+
+		
+		String token = "82EFB8FB193049E69161D958749E470F";
+		
+		String email = "marcel.ghisi@gmail.com";
+
+		Item item = new Item("Refeição",1,100);
+		List<Item> items = new ArrayList<Item>(0);
+		items.add(item);
+		
+		Address address = new Address("Rua Miguel Teles Junior", "129", "Sao Paulo", "SP", "BR","01540-040");
+		
+		Payer payer = new Payer("12312312312","MARCEL JOSE DA SILVA GHISI","11","33995090",email,address);
+		
+		CustomerPaymentDirectCharge cP = new CustomerPaymentDirectCharge.Builder(token,email,items).payer(payer).build();
+		
+		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
+		
+		assertTrue(responseDirectCharge  != null);
+		
+		System.out.println(responseDirectCharge.getMessage());
+    }
+    
+    /**
+     * Rigourous Test :-)
+     */
+    public void testDirectChargeWithCustomerPaymentAndDiscount()
+    {
+
+		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+
+		
+		String token = "82EFB8FB193049E69161D958749E470F";
+		
+		String email = "marcel.ghisi@gmail.com";
+
+		Item item = new Item("Refeição",1,1000);
+		List<Item> items = new ArrayList<Item>(0);
+		items.add(item);
+		
+		Address address = new Address("Rua Miguel Teles Junior", "129", "Sao Paulo", "SP", "BR","01540-040");
+		
+		Payer payer = new Payer("12312312312","MARCEL JOSE DA SILVA GHISI","11","33995090",email,address);
+		
+		CustomerPaymentDirectCharge cP = new CustomerPaymentDirectCharge.Builder(token,email,items).payer(payer).discount(100).build();
+		
+		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
+		
+		assertTrue(responseDirectCharge  != null);
+		
+		System.out.println(responseDirectCharge.getMessage());
+    }
+    
+    /**
+     * Rigourous Test :-)
+     */
+    public void testDirectChargeWithCustomerPaymentAndParcelas()
+    {
+
+		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+
+		
+		String token = "82EFB8FB193049E69161D958749E470F";
+		
+		String email = "marcel.ghisi@gmail.com";
+
+		Item item = new Item("Refeição",1,2000);
+		List<Item> items = new ArrayList<Item>(0);
+		items.add(item);
+		
+		Address address = new Address("Rua Miguel Teles Junior", "129", "Sao Paulo", "SP", "BR","01540-040");
+		
+		Payer payer = new Payer("12312312312","MARCEL JOSE DA SILVA GHISI","11","33995090",email,address);
+		
+		CustomerPaymentDirectCharge cP = new CustomerPaymentDirectCharge.Builder(token,email,items).payer(payer).months(10).build();
+		
+		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
+		
+		assertTrue(responseDirectCharge.getInvoiceId()  != null);
+		
 		System.out.println(responseDirectCharge.getMessage());
     }
 }
