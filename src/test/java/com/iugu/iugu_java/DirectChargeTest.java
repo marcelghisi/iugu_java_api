@@ -58,25 +58,11 @@ public class DirectChargeTest
     	
     	Data data = new Data("4242424242424242","123","Joao","Silva","12","2013");
     	PaymentTokenResponse response = new PaymentService().createToken(
-    			new PaymentToken("96461997-b6a0-48fb-808b-4f16ad88c718", PayableWith.CREDIT_CARD, true,data));
+    			new PaymentToken("BFE13F587384440BB8A05E63BC74B961", PayableWith.CREDIT_CARD, true,data));
     	
     	assertTrue(response != null);
     }
     
-    /**
-     * Rigourous Test :-)
-     */
-    public void testSimpleInvoiceChargeWithEmail()
-    {
-
-		//Funfa cria fatura e envia boleto com invoice
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		InvoiceResponse response = new InvoiceService().create(new Invoice("marcelghisi@gmail.com", new Date(), new Item("teste", 1, 100)));
-        assertTrue( response != null );
-    }
-    
-    
-
     
     /**
      * Rigourous Test :-)
@@ -178,7 +164,7 @@ public class DirectChargeTest
 
 		Data data = new Data("4242424242424242","123","Joao","Silva","12","2013");
 		PaymentTokenResponse response = new PaymentService().createToken(
-				new PaymentToken("96461997-b6a0-48fb-808b-4f16ad88c718", PayableWith.CREDIT_CARD, true,data));
+				new PaymentToken("BFE13F587384440BB8A05E63BC74B961", PayableWith.CREDIT_CARD, true,data));
 
 		assertTrue(response != null);
 		
@@ -267,7 +253,7 @@ public class DirectChargeTest
 		
 		Payer payer = new Payer("12312312312","MARCEL JOSE DA SILVA GHISI","11","33995090",email,address);
 		
-		InvoiceDirectCharge cP = new InvoiceDirectCharge.Builder(token,"52B2A928B23140239490D76EA14D884A").payer(payer).build();
+		InvoiceDirectCharge cP = new InvoiceDirectCharge.Builder(token,"ADD8246A1F61417C818DF428BE41FDDB").payer(payer).build();
 		
 		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
 		

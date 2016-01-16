@@ -13,7 +13,7 @@ import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class InvoiceResponse implements Serializable {
+public class InvoiceResponse extends MessageResponse implements Serializable {
 
 	private static final long serialVersionUID = -4229186497940178039L;
 

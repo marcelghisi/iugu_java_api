@@ -1,9 +1,15 @@
 package com.iugu.iugu_java;
 
+import java.util.Date;
+
 import com.iugu.Iugu;
 import com.iugu.model.Customer;
+import com.iugu.model.Invoice;
+import com.iugu.model.Item;
 import com.iugu.responses.CustomerResponse;
+import com.iugu.responses.InvoiceResponse;
 import com.iugu.services.CustomerService;
+import com.iugu.services.InvoiceService;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -36,56 +42,47 @@ public class InvoicesTest
     /**
      * Rigourous Test : testCreatePJTesteSubAccount
      */
-    public void testCreateInvoice()
+    public void testCreateInvoiceWithEmail()
     {
-
-    	//{"id":"E5A929BD4A364698ABA72568FAD15FE1","email":"marcel.ghisi@gmail.com","name":"MARCEL JOSE DA SILVA GHISI","notes":null,"created_at":"2016-01-09T18:14:08-02:00,"updated_at":"2016-01-09T17:58:05-02:00","cc_emails":null,"cpf_cnpj":"02479484971","default_payment_method_id":null,"proxy_payments_from_customer_id":null,"custom_variables":[]}
-    	
+		//Funfa cria fatura e envia boleto com invoice
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
 		
-		Customer customer = new Customer("MARCEL JOSE DA SILVA GHISI","marcel.ghisi@gmail.com","02479484971");
+		InvoiceResponse response = new InvoiceService().create(new Invoice("marcelghisi@gmail.com", new Date(), new Item("Manicure", 1, 100)));
+        
+		assertTrue( response != null );
+    }
+    
+    /*
+     * Rigourous Test : testCreatePJTesteSubAccount
+     */
+    public void testFindInvoice()
+    {
 
-		CustomerResponse responseCustomer = new CustomerService().create(customer);
+    	//{"id":"C9D0758BB74641CABCF4436E15A98C7E","email":"marcel.ghisi@gmail.com","name":"MARCEL JOSE DA SILVA GHISI","notes":null,"created_at":"2016-01-09T17:58:05-02:00","updated_at":"2016-01-09T17:58:05-02:00","cc_emails":null,"cpf_cnpj":"02479484971","default_payment_method_id":null,"proxy_payments_from_customer_id":null,"custom_variables":[]}
+    	
+		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+
+		InvoiceResponse responseCustomer = new InvoiceService().find("ADD8246A1F61417C818DF428BE41FDDB");
 		
-		assertTrue( responseCustomer.getId() != null);
+		assertTrue( responseCustomer != null);
 		
     }
     
     /**
      * Rigourous Test : testCreatePJTesteSubAccount
      */
-    public void testFindMasterCustomer()
+    public void testDuplicateInvoice()
     {
 
     	//{"id":"C9D0758BB74641CABCF4436E15A98C7E","email":"marcel.ghisi@gmail.com","name":"MARCEL JOSE DA SILVA GHISI","notes":null,"created_at":"2016-01-09T17:58:05-02:00","updated_at":"2016-01-09T17:58:05-02:00","cc_emails":null,"cpf_cnpj":"02479484971","default_payment_method_id":null,"proxy_payments_from_customer_id":null,"custom_variables":[]}
     	
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		
-		Customer customer = new Customer("MARCEL JOSE DA SILVA GHISI","marcel.ghisi@gmail.com","02479484971");
 
-		CustomerResponse responseCustomer = new CustomerService().find("C9D0758BB74641CABCF4436E15A98C7E");
+		InvoiceResponse responseCustomer = new InvoiceService().find("ADD8246A1F61417C818DF428BE41FDDB");
 		
-		assertTrue( responseCustomer.getId() != null);
-		assertEquals(customer.getEmail(),responseCustomer.getEmail());
+		InvoiceResponse responseInvoice = new InvoiceService().duplicate("C9D0758BB74641CABCF4436E15A98C7E",new Date());
 		
-    }
-    
-    /**
-     * Rigourous Test : testCreatePJTesteSubAccount
-     */
-    public void testChangeMasterCustomer()
-    {
-
-    	//{"id":"C9D0758BB74641CABCF4436E15A98C7E","email":"marcel.ghisi@gmail.com","name":"MARCEL JOSE DA SILVA GHISI","notes":null,"created_at":"2016-01-09T17:58:05-02:00","updated_at":"2016-01-09T17:58:05-02:00","cc_emails":null,"cpf_cnpj":"02479484971","default_payment_method_id":null,"proxy_payments_from_customer_id":null,"custom_variables":[]}
-    	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		
-		Customer customer = new Customer("MARCEL GHISI","marcel.ghisi@gmail.com","02479484971");
-
-		CustomerResponse responseCustomer = new CustomerService().change("C9D0758BB74641CABCF4436E15A98C7E",customer);
-		
-		assertTrue( responseCustomer.getId() != null);
-		assertEquals(customer.getName(),responseCustomer.getName());
+		assertTrue( responseInvoice.getId() != null);
 		
     }
     
