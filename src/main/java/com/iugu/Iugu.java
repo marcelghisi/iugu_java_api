@@ -21,6 +21,9 @@ public class Iugu {
 	}
 	
 	public static Client getClient() {
+		//ssl?
+		//SSLContext ssl = ... your configured SSL context;
+		//Client client = ClientBuilder.newBuilder().sslContext(ssl).build();
 		if(client == null) {
 			client = ClientBuilder.newClient()
 	                .register(new Authenticator(tokenId, ""));

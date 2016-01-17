@@ -34,12 +34,18 @@ public class Plan {
 
 	public Plan(String name, String identifier, Integer interval, IntervalType intervalType, Currency currency,
 			int valueCents) {
+			this(name,identifier,interval,intervalType,currency,valueCents,null);
+	}
+	
+	public Plan(String name, String identifier, Integer interval, IntervalType intervalType, Currency currency,
+			int valueCents,List<Feature> features) {
 		this.name = name;
 		this.identifier = identifier;
 		this.interval = interval;
 		this.intervalType = intervalType;
 		this.currency = currency;
 		this.valueCents = valueCents;
+		this.features = features;
 	}
 
 	public String getName() {

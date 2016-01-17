@@ -1,5 +1,6 @@
 package com.iugu.iugu_java;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Test;
@@ -8,6 +9,7 @@ import junit.framework.TestSuite;
 
 import com.iugu.Iugu;
 import com.iugu.model.Currency;
+import com.iugu.model.Feature;
 import com.iugu.model.IntervalType;
 import com.iugu.model.Plan;
 import com.iugu.responses.PlanResponse;
@@ -59,15 +61,20 @@ public class PlanTest
     /**
      * Rigourous Test : testCreatePJTesteSubAccount
      */
-    public void testCreatePlan2()
+    public void testCreatePlan2ComFeatures()
     {
 
     	//{"id":"04371BD080C2440FA0C913228F1ADCCD","name":"ATTENDME P200","identifier":"plano_premium","interval":1,"interval_type":"months","created_at":"2016-01-10T15:32:49-02:00","updated_at":"2016-01-10T15:32:49-02:00","prices":[{"created_at":"2016-01-10T15:32:49-02:00","currency":"BRL","id":"8D2F866DD85542798B76FBE3C7C341FA","plan_id":"04371BD080C2440FA0C913228F1ADCCD","updated_at":"2016-01-10T15:32:49-02:00","value_cents":30000}],"features":[],"payable_with":null}
     	
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
 		
-		Plan plan = new Plan("ATTENDME P200", "plano_premium", 1, IntervalType.MONTHS,Currency.BRL,30000);
+		List<Feature> lista = new ArrayList<Feature>(0);
+		lista.add(new Feature("Funcionalidade 1", "feature1", 100));
+		lista.add(new Feature("Funcionalidade 2", "feature2", 100));
 
+		Plan plan = new Plan("ATTENDME P500", "plano_premmiiumm", 1, IntervalType.MONTHS,Currency.BRL,300,lista);
+		
+		
 		PlanResponse planResponse = new PlanService().create(plan);
 		
 		assertTrue( planResponse.getId() != null);

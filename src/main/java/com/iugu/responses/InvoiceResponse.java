@@ -9,6 +9,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.google.gson.annotations.SerializedName;
+import com.iugu.model.Item;
 import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
 
@@ -44,6 +45,10 @@ public class InvoiceResponse extends MessageResponse implements Serializable {
 	@JsonProperty("return_url")
 	@SerializedName("return_url")
 	private String returnUrl;
+	
+	@JsonProperty("expired_url ")
+	@SerializedName("expired_url ")
+	private String expiredUrl;
 	
 	private String status;
 	
@@ -99,7 +104,7 @@ public class InvoiceResponse extends MessageResponse implements Serializable {
 	@SerializedName("bank_slip")
 	private BankSlipResponse bankSlip;
 	
-	private List<ItemResponse> items;
+	private List<Item> items;
 	
 	private List<VariableResponse> variables;
  	
@@ -157,6 +162,16 @@ public class InvoiceResponse extends MessageResponse implements Serializable {
 
 	public void setNotificationUrl(String notificationUrl) {
 		this.notificationUrl = notificationUrl;
+	}
+	
+	
+
+	public String getExpiredUrl() {
+		return expiredUrl;
+	}
+
+	public void setExpiredUrl(String expiredUrl) {
+		this.expiredUrl = expiredUrl;
 	}
 
 	public String getReturnUrl() {
@@ -295,11 +310,11 @@ public class InvoiceResponse extends MessageResponse implements Serializable {
 		this.bankSlip = bankSlip;
 	}
 
-	public List<ItemResponse> getItems() {
+	public List<Item> getItems() {
 		return items;
 	}
 
-	public void setItems(List<ItemResponse> items) {
+	public void setItems(List<Item> items) {
 		this.items = items;
 	}
 
