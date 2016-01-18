@@ -6,7 +6,6 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import com.iugu.model.Facets;
-import com.iugu.model.Invoice;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ListInvoiceResponse extends MessageResponse implements Serializable {
@@ -17,7 +16,7 @@ public class ListInvoiceResponse extends MessageResponse implements Serializable
 	
 	private Integer totalItems;
 	
-	private List<Invoice> items;
+	private List<InvoiceResponse> items;
 
 	public Facets getFacets() {
 		return facets;
@@ -35,11 +34,11 @@ public class ListInvoiceResponse extends MessageResponse implements Serializable
 		this.totalItems = totalItems;
 	}
 
-	public List<Invoice> getItems() {
+	public List<InvoiceResponse> getItems() {
 		return items;
 	}
 
-	public void setItems(List<Invoice> items) {
+	public void setItems(List<InvoiceResponse> items) {
 		this.items = items;
 	}
 	

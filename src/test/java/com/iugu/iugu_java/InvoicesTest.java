@@ -51,7 +51,48 @@ public class InvoicesTest
 		//Funfa cria fatura e envia boleto com invoice
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
 		
-		InvoiceResponse response = new InvoiceService().create(new Invoice("marcelghisi@gmail.com", new Date(), new Item("Manicure", 2, 100)));
+		Item item2 = new Item("Cafe",1,1200);
+		List<Item> items = new ArrayList<Item>(0);
+		items.add(item2);
+		
+		Invoice inv = new Invoice.Builder("marcelghisi@gmail.com", new Date(), items).build();
+		
+		InvoiceResponse response = new InvoiceService().create(inv);
+        
+		assertTrue( response != null );
+    }
+    
+    public void testCreateInvoiceWithCustomer()
+    {
+		//Funfa cria fatura e envia boleto com invoice
+		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		
+		Item item2 = new Item("Cafe",1,1200);
+		List<Item> items = new ArrayList<Item>(0);
+		items.add(item2);
+		
+		Invoice inv = new Invoice.Builder("marcelghisi@gmail.com", new Date(), items).customerId("E5A929BD4A364698ABA72568FAD15FE1").build();
+		
+		InvoiceResponse response = new InvoiceService().create(inv);
+        
+		assertTrue( response != null );
+    }
+    
+    public void testCreateInvoiceWithCustomerInvoice()
+    {
+		//Funfa cria fatura e envia boleto com invoice
+		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		
+		Item item2 = new Item("Cafe",1,1200);
+		List<Item> items = new ArrayList<Item>(0);
+		items.add(item2);
+		
+		Invoice inv = new Invoice.Builder("marcelghisi@gmail.com", new Date(), items)
+		.customerId("E5A929BD4A364698ABA72568FAD15FE1")
+		.subscriptionId("C4AE4B969B6F4B85A64BE83AC1F206D2")
+		.build();
+		
+		InvoiceResponse response = new InvoiceService().create(inv);
         
 		assertTrue( response != null );
     }
@@ -64,7 +105,7 @@ public class InvoicesTest
 
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
 
-		InvoiceResponse responseCustomer = new InvoiceService().find("ADD8246A1F61417C818DF428BE41FDDB");
+		InvoiceResponse responseCustomer = new InvoiceService().find("990FFB91E6FD4FEC892BAF52B8EC2AB7");
 		
 		assertTrue( responseCustomer != null);
 		
@@ -123,7 +164,7 @@ public class InvoicesTest
 
 		//Leia mais em: Trabalhando com as classes Date, Calendar e SimpleDateFormat em Java http://www.devmedia.com.br/trabalhando-com-as-classes-date-calendar-e-simpledateformat-em-java/27401#ixzz3xUzipLgA
 			
-		InvoiceResponse responseInvoice = new InvoiceService().duplicate("ACBB1EE8553E4BC3963DA77E74B4AFA8",duplicateRequestDate);
+		InvoiceResponse responseInvoice = new InvoiceService().duplicate("990FFB91E6FD4FEC892BAF52B8EC2AB7",duplicateRequestDate);
 		
 		assertTrue( responseInvoice.getStatusCode() != null);
 		assertTrue( responseInvoice.getId() != null);
@@ -324,7 +365,7 @@ public class InvoicesTest
 		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().updatedSince(c.getTime()).build();
 		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
 		
-		assertTrue( responseInvoice.getItems().size() == 38);
+		assertTrue( responseInvoice.getItems().size() == 43);
 		
     }
 
