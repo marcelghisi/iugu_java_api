@@ -246,41 +246,87 @@ public class InvoicesTest
     {
 
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		
-		//Leia mais em: Trabalhando com as classes Date, Calendar e SimpleDateFormat em Java http://www.devmedia.com.br/trabalhando-com-as-classes-date-calendar-e-simpledateformat-em-java/27401#ixzz3xUzipLgA
 			
 		Calendar c = Calendar.getInstance();  
 		c.set(Calendar.MONTH, Calendar.MARCH); 
-		c.set(Calendar.DAY_OF_MONTH, 18);
+		c.set(Calendar.DAY_OF_MONTH, 20);
 		
 		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().dueDate(c.getTime()).build();
-		List<InvoiceResponse> responseInvoice = new InvoiceService().list(crit);
+		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
 		
-		assertTrue( responseInvoice.size() > 0);
+		assertTrue( responseInvoice.getItems().size() == 6);
 		
     }
     
     /**
      * Rigourous Test : testCreatePJTesteSubAccount
      */
-    public void testListInvoiceslistWithParams()
+    public void testListInvoicesByCustomer()
     {
 
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
 		
-		//Leia mais em: Trabalhando com as classes Date, Calendar e SimpleDateFormat em Java http://www.devmedia.com.br/trabalhando-com-as-classes-date-calendar-e-simpledateformat-em-java/27401#ixzz3xUzipLgA
-			
-		Calendar c = Calendar.getInstance();  
-		c.set(Calendar.MONTH, Calendar.JANUARY); 
-		c.set(Calendar.DAY_OF_MONTH, 18);
+		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().customerId("E5A929BD4A364698ABA72568FAD15FE1").build();
+		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
 		
-		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().dueDate(c.getTime()).build();
-		ListInvoiceResponse responseInvoice = new InvoiceService().listWithParams(crit);
-		
-		assertTrue( responseInvoice != null);
+		assertTrue( responseInvoice.getItems().size() == 3);
 		
     }
     
+    /**
+     * Rigourous Test : testCreatePJTesteSubAccount
+     */
+    public void testListInvoicesByCustomerWithLimit()
+    {
+
+		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		
+		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().customerId("E5A929BD4A364698ABA72568FAD15FE1").limit(2).build();
+		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
+		
+		assertTrue( responseInvoice.getItems().size() == 2);
+		
+    }
+    
+    public void testListInvoicesByCustomerWithLimitAndStart()
+    {
+
+		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		
+		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().limit(10).start(0).build();
+		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
+		
+		assertEquals( responseInvoice.getItems().get(9).getId(),"7B09529D23DB47AEAC6AFCE7ACDE0A0E");
+		
+    }
+    
+    public void testListInvoicesByCustomerWithLimitAndStart10()
+    {
+
+		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		
+		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().limit(10).start(9).build();
+		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
+		
+		assertEquals( responseInvoice.getItems().get(0).getId(),"7B09529D23DB47AEAC6AFCE7ACDE0A0E");
+		
+    }
+    
+    public void testListInvoicesUpdatedSince()
+    {
+
+		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+			
+		Calendar c = Calendar.getInstance();  
+		c.set(Calendar.MONTH, Calendar.JANUARY); 
+		c.set(Calendar.DAY_OF_MONTH, 10);
+		
+		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().updatedSince(c.getTime()).build();
+		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
+		
+		assertTrue( responseInvoice.getItems().size() == 38);
+		
+    }
 
 
     
