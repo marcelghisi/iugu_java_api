@@ -1,7 +1,5 @@
 package com.iugu.model;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
 public class Address {
 
 	// street	Rua

@@ -3,18 +3,17 @@ package com.iugu.iugu_java;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import com.iugu.Iugu;
 import com.iugu.model.Currency;
 import com.iugu.model.Feature;
 import com.iugu.model.IntervalType;
 import com.iugu.model.Plan;
 import com.iugu.responses.PlanResponse;
-import com.iugu.services.CustomerService;
 import com.iugu.services.PlanService;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 /**
  * Unit test for simple App.
@@ -158,7 +157,6 @@ public class PlanTest
      */
     public void testListCustomerPaymentMethod()
     {
-    	String customerId = "E5A929BD4A364698ABA72568FAD15FE1";
     	
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
 

@@ -1,7 +1,5 @@
 package com.iugu.model;
 
-import javax.management.DescriptorKey;
-
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.google.gson.annotations.SerializedName;

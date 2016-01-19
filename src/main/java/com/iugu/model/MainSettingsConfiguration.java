@@ -2,8 +2,6 @@ package com.iugu.model;
 
 import java.io.Serializable;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
 public class MainSettingsConfiguration implements Serializable {
 	
 

@@ -3,7 +3,6 @@ package com.iugu.iugu_java;
 import java.util.List;
 
 import com.iugu.Iugu;
-import com.iugu.model.Customer;
 import com.iugu.model.Data;
 import com.iugu.model.ItemType;
 import com.iugu.model.PaymentMethodRequest;
@@ -44,12 +43,7 @@ public class CustomerPaymentMethodTest
      */
     public void testCreateCustomerPaymentMethod1()
     {
-
-    	//{"id":"E5A929BD4A364698ABA72568FAD15FE1","email":"marcel.ghisi@gmail.com","name":"MARCEL JOSE DA SILVA GHISI","notes":null,"created_at":"2016-01-09T18:14:08-02:00,"updated_at":"2016-01-09T17:58:05-02:00","cc_emails":null,"cpf_cnpj":"02479484971","default_payment_method_id":null,"proxy_payments_from_customer_id":null,"custom_variables":[]}
-    	
 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		
-		Customer customer = new Customer("MARCEL JOSE DA SILVA GHISI","marcel.ghisi@gmail.com","02479484971");
 
 		CustomerResponse responseCustomer = new CustomerService().find("E5A929BD4A364698ABA72568FAD15FE1");
 
@@ -59,9 +53,6 @@ public class CustomerPaymentMethodTest
 		PaymentMethodResponse responsePayM = new CustomerService().createPaymentMethod(pData);
 		
 		assertTrue( responsePayM.getId() != null);
-		
-		//{"id":"467B0630B4034A4896DC08D6FCC8B5A9","description":"Cart\u00e3o Extra","item_type":"credit_card","customer_id":"E5A929BD4A364698ABA72568FAD15FE1","data":{"token":"000000000000000000000000000000000000002","display_number":"XXXX-XXXX-XXXX-4242","brand":"VISA"}}
-		
     }
     
     /**
@@ -79,8 +70,6 @@ public class CustomerPaymentMethodTest
 		PaymentMethodResponse responsePayM = new CustomerService().createPaymentMethod(pData);
 		
 		assertTrue( responsePayM.getId() != null);
-		
-		//{"id":"74C27C6EC40B40E3B1556DBC5297427D","description":"Cart\u00e3o Extra","item_type":"credit_card","customer_id":"E5A929BD4A364698ABA72568FAD15FE1","data":{"token":"000000000000000000000000000000000000001","display_number":"XXXX-XXXX-XXXX-1111","brand":"VISA"}}
 		
     }
     
@@ -106,7 +95,6 @@ public class CustomerPaymentMethodTest
      */
     public void testChangePayment()
     {
-
     	String customerId = "E5A929BD4A364698ABA72568FAD15FE1";
     	String paymentId = "467B0630B4034A4896DC08D6FCC8B5A9";
     	
@@ -114,7 +102,6 @@ public class CustomerPaymentMethodTest
 
 		PaymentMethodResponse responseCustomer = new CustomerService().findPaymentMethod(customerId, paymentId);
 		
-		//82EFB8FB193049E69161D958749E470F
 		PaymentMethodResponse responseChange = new CustomerService().changePaymentMethod("E5A929BD4A364698ABA72568FAD15FE1",responseCustomer.getId(),"Cartao Neteller");
 		
 		assertTrue( responseChange.getId() != null);

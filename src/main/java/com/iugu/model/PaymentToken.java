@@ -22,12 +22,18 @@ public class PaymentToken {
 	 * data{}	Dados do Método de Pagamento
 	 */
 	private Data data;
+	
+	//Constructor for no test
+	public PaymentToken(String accountId, PayableWith paymentMethod, Data paymentData) {
+		this(accountId,paymentMethod,paymentData,Boolean.FALSE);
+	}
 
-	public PaymentToken(String accountId, PayableWith paymentMethod, Boolean test,Data paymentData) {
+	//Constructor for test
+	public PaymentToken(String accountId, PayableWith paymentMethod,Data paymentData,Boolean test) {
 		this.id = accountId;
 		this.method = paymentMethod;
-		this.test = test.toString();
 		this.data = paymentData;
+		this.test = test.toString();
 	}
 
 	public String getId() {

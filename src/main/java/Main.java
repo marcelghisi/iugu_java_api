@@ -1,17 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-
 import com.iugu.Iugu;
-import com.iugu.model.Address;
-import com.iugu.model.Data;
-import com.iugu.model.TokenDirectCharge;
-import com.iugu.model.Item;
-import com.iugu.model.PayableWith;
-import com.iugu.model.Payer;
-import com.iugu.model.PaymentToken;
-import com.iugu.responses.ChargeResponse;
-import com.iugu.responses.PaymentTokenResponse;
-import com.iugu.services.PaymentService;
 
 public class Main {
 

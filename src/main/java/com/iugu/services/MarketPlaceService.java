@@ -1,21 +1,17 @@
 package com.iugu.services;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.google.gson.Gson;
 import com.iugu.Iugu;
 import com.iugu.model.BankUpdate;
 import com.iugu.model.SubAccount;
 import com.iugu.model.SubAccountConfiguration;
 import com.iugu.model.SubAccountValidation;
-import com.iugu.responses.InvoiceResponse;
 import com.iugu.responses.MessageResponse;
 import com.iugu.responses.RequestWithDrawResponse;
 import com.iugu.responses.SubAccountInformationResponse;

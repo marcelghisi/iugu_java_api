@@ -3,11 +3,6 @@ package com.iugu.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
-import com.google.gson.annotations.SerializedName;
-import com.iugu.model.CustomerPaymentDirectCharge.Builder;
-
 public class TokenDirectCharge extends DirectCharge{
 
 	//Builder for possible scenarios using Token

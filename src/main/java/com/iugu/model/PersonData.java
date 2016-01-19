@@ -5,7 +5,7 @@ public class PersonData {
 
 	public PersonData(String cpf, String name,String phone) {
 		this.cpf = cpf;
-		this.personType = personType.PF;
+		this.personType = PersonType.PF;
 		this.name = name;
 		this.phone = phone;
 	}

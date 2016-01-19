@@ -4,11 +4,8 @@ import java.io.Serializable;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.google.gson.annotations.SerializedName;
-import com.iugu.serializers.DateSerializer;
-import com.iugu.serializers.JsonFormat;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CreditCardConfiguration implements Serializable {

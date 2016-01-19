@@ -1,17 +1,12 @@
 package com.iugu.services;
 
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.iugu.Iugu;
 import com.iugu.model.DuplicateInvoiceRequest;
 import com.iugu.model.Invoice;

@@ -2,9 +2,7 @@ package com.iugu.services;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -17,7 +15,6 @@ import com.iugu.model.Customer;
 import com.iugu.model.PaymentMethodRequest;
 import com.iugu.responses.CustomerResponse;
 import com.iugu.responses.PaymentMethodResponse;
-import com.iugu.responses.SubscriptionResponse;
 
 public class CustomerService extends BaseService{
 

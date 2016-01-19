@@ -1,12 +1,7 @@
 package com.iugu.iugu_java;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import com.iugu.Iugu;
 import com.iugu.model.Currency;
-import com.iugu.model.Customer;
 import com.iugu.model.IntervalType;
 import com.iugu.model.Plan;
 import com.iugu.model.Subscription;
@@ -16,6 +11,10 @@ import com.iugu.responses.SubscriptionResponse;
 import com.iugu.services.CustomerService;
 import com.iugu.services.PlanService;
 import com.iugu.services.SubscriptionService;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 /**
  * Unit test for simple App.
