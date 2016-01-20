@@ -7,7 +7,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.google.gson.annotations.SerializedName;
 
-public abstract class DirectCharge {
+public class DirectCharge {
 
 	//customer_id (opcional)	ID do Cliente. Utilizado para vincular a Fatura a um Cliente
 	//Vincular o cliente a fatura que sera gerada. [[[[client company nosso]]]]

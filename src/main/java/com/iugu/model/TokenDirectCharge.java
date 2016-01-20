@@ -17,12 +17,12 @@ public class TokenDirectCharge extends DirectCharge{
 		private String token;
 		private String email;
 		private List<Item> items = new ArrayList<>();
-		private Payer payer;
-		private String invoiceId;
 		
 		//optional
 		private Integer months;
 		private Integer discountCents;
+		private Payer payer;
+		private String invoiceId;
 		
 		public Builder(String tokenId,String email,List<Item> items) {
 		  this.token = tokenId;
