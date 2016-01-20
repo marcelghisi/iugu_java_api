@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -25,8 +27,6 @@ import com.iugu.responses.PaymentTokenResponse;
 import com.iugu.services.InvoiceService;
 import com.iugu.services.PaymentService;
 
-import junit.framework.TestCase;
-
 /**
  * Testa pagamentos diretos.
  */
@@ -36,14 +36,30 @@ public class DirectChargeTest extends TestCase{
     public static class IntegratedTest { 
     	
     	private static String tokemTest1;
-    	private static String email = "marcel.ghisi@gmail.com";
+    	private static String email = "marcelghisi@gmail.com";
     	private static String invoiceId;
+    	private static String masterApiTokemTeste = "21ab6ca14384901acaea1793b91cdc98";
+    	private static String masterAccountId = "96461997-b6a0-48fb-808b-4f16ad88c718";
     	
         public void setToken(String s) {
             tokemTest1 = s;
         }               
         public String getToken() {
             return tokemTest1;
+        }
+
+        public void setApiToken(String s) {
+            masterApiTokemTeste = s;
+        }               
+        public String getApiToken() {
+            return masterApiTokemTeste;
+        }
+        
+        public void setMasterAccountId(String s) {
+            masterAccountId = s;
+        }               
+        public String getMasterAccountId() {
+            return masterAccountId;
         }
         
         public void setInvoice(String s) {
@@ -62,24 +78,22 @@ public class DirectChargeTest extends TestCase{
 
     private IntegratedTest integratedTest;
 
-    @Override
-    protected void setUp() throws Exception {
-    	integratedTest = new IntegratedTest();
-    }
-    
     /**
      * Token
      * Cria um token de pagamento para pagamento direto, com o Id gerado é possível usálo ao invés de ficar usando os dados do cartão
      */
-	@Test
-    public void test1()
-    {
+    @Override
+    protected void setUp() throws Exception {
+    	integratedTest = new IntegratedTest();
+    	
+		Iugu.init(integratedTest.getApiToken());
+		
     	//Testa a criacao de uma Token de pagamento
 		//Usa os dados de um cartao de teste
     	Data data = new Data("4242424242424242","123","Joao","Silva","12","2013");
     	
     	//Constroi o objeto com dados do pagamento
-    	PaymentToken pT = new PaymentToken("BFE13F587384440BB8A05E63BC74B961", PayableWith.CREDIT_CARD,data,Boolean.TRUE);
+    	PaymentToken pT = new PaymentToken(integratedTest.getMasterAccountId(), PayableWith.CREDIT_CARD,data,Boolean.FALSE);
     	
     	//Cria o tokem
     	PaymentTokenResponse response = new PaymentService().createToken(pT);
@@ -94,17 +108,17 @@ public class DirectChargeTest extends TestCase{
     	integratedTest.setToken(response.getId());
     }
     
-    
+
     /**
      * Pagamento com Token e opcionalmente um payer
      * Faz um pagamento direto sem possuir o cadastro do cliente apenas usando o e-mail e o tokem contendo os dados do cartão dele @see test1
      * Necessário passar os dados do pagador para antifraude
      */
 	@Test
-    public void test2()
+    public void test1()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
 		//Cria o item e valor que será pago
 		Item item = new Item("Refeição",1,100);
@@ -118,7 +132,7 @@ public class DirectChargeTest extends TestCase{
 		Payer payer = new Payer("12312312312","MARCEL JOSE DA SILVA GHISI","11","33995090",integratedTest.getEmail(),address);
 		
 		//Constroi o objeto Para pagamento Direto usando um token de cartão de crédito e opção payer obrigatorio para market place
-		TokenDirectCharge cP = new TokenDirectCharge.Builder("E45FA98C8C7B4E48AB5EF913D69DD1DD",integratedTest.getEmail(),items).payer(payer).build();
+		TokenDirectCharge cP = new TokenDirectCharge.Builder(integratedTest.getToken(),integratedTest.getEmail(),items).payer(payer).build();
 		
 		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
 		
@@ -133,10 +147,10 @@ public class DirectChargeTest extends TestCase{
      * Necessário passar os dados do pagador para antifraude
      */
 	@Test
-    public void test3()
+    public void test2()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
 		Item item = new Item("Refeição",1,1000);
 		List<Item> items = new ArrayList<Item>(0);
@@ -160,9 +174,9 @@ public class DirectChargeTest extends TestCase{
      * Faz um pagamento direto sem possuir o cadastro do cliente apenas usando o e-mail e o tokem contendo os dados do cartão dele e usando parcelas no toal @see test1
      * Necessário passar os dados do pagador para antifraude
      */
-    public void test4()
+    public void test3()
     {
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
 		Item item = new Item("Refeição",1,200);
 		List<Item> items = new ArrayList<Item>(0);
@@ -176,9 +190,10 @@ public class DirectChargeTest extends TestCase{
 		
 		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
 		
-		assertEquals("Unauthorized",responseDirectCharge.getMessage());
+		assertTrue(responseDirectCharge.getErrors() != null);
 		
-		System.out.println(responseDirectCharge.getMessage());
+		assertTrue(responseDirectCharge.getErrors().get("base").toString().contains("o suporta parcelamento"));
+
     }
     
     /**
@@ -186,9 +201,9 @@ public class DirectChargeTest extends TestCase{
      * Faz um pagamento direto com boleto usando payer
      */
 	@Test
-    public void test5()
+    public void test4()
     {
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
 		Item item = new Item("Refeição",1,300);
 		List<Item> items = new ArrayList<Item>(0);
@@ -212,13 +227,13 @@ public class DirectChargeTest extends TestCase{
      * Cria um invoice com vencimento futuro para testar o direct charge de um invoice ja existente. Ex: Adiantamento de invoice
      */
 	@Test
-    public void test6()
+    public void test5()
     {
 		Calendar c = Calendar.getInstance();  
 		c.add(Calendar.DATE, 1);
 		
 		//Funfa cria fatura e envia boleto com invoice
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
 		Item item2 = new Item("Cafe",1,1200);
 		List<Item> items = new ArrayList<Item>(0);
@@ -231,7 +246,7 @@ public class DirectChargeTest extends TestCase{
         
 		assertTrue( response != null );
 		assertTrue(response.getErrors() == null);
-		assertTrue(response.getStatusCode() != 500);
+		assertTrue(response.getStatusCode() == null);
 		
 		integratedTest.setInvoice(response.getId());
 
@@ -242,10 +257,10 @@ public class DirectChargeTest extends TestCase{
      * 
      */
 	@Test
-    public void test7()
+    public void test6()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 
 		Item item = new Item("Refeição",1,300);
 		List<Item> items = new ArrayList<Item>(0);
