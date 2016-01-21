@@ -2,7 +2,11 @@ package com.iugu.iugu_java;
 
 import java.util.List;
 
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
+
 import com.iugu.Iugu;
+import com.iugu.iugu_java.DirectChargeTest.IntegratedTest;
 import com.iugu.model.Data;
 import com.iugu.model.ItemType;
 import com.iugu.model.PaymentMethodRequest;
@@ -14,30 +18,73 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+
 /**
- * Unit test for simple App.
+ * Testa CRUD de métodos de pagamento.
  */
-public class CustomerPaymentMethodTest 
-    extends TestCase
-{
-	/**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public CustomerPaymentMethodTest( String testName )
-    {
-        super( testName );
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class CustomerPaymentMethodTest extends TestCase{
+	
+    public static class IntegratedTest { 
+    	
+    	private static String tokemTest1;
+    	private static String email = "marcelghisi@gmail.com";
+    	private static String invoiceId;
+    	private static String customerId;
+    	private static String customerPaymentId;
+    	private static String masterApiTokemTeste = "21ab6ca14384901acaea1793b91cdc98";
+    	private static String masterAccountId = "96461997-b6a0-48fb-808b-4f16ad88c718";
+    	
+        public void setToken(String s) {
+            tokemTest1 = s;
+        }               
+        public String getToken() {
+            return tokemTest1;
+        }
+        
+        public void setCustomerId(String s) {
+            customerId = s;
+        }               
+        public String getCustomerId() {
+            return customerId;
+        }
+        
+        public void setCustomerPaymentId(String s) {
+            customerPaymentId = s;
+        }               
+        public String getCustomerPaymentId() {
+            return customerPaymentId;
+        }
+
+        public void setApiToken(String s) {
+            masterApiTokemTeste = s;
+        }               
+        public String getApiToken() {
+            return masterApiTokemTeste;
+        }
+        
+        public void setMasterAccountId(String s) {
+            masterAccountId = s;
+        }               
+        public String getMasterAccountId() {
+            return masterAccountId;
+        }
+        
+        public void setInvoice(String s) {
+            invoiceId = s;
+        }               
+        public String getInvoice() {
+            return invoiceId;
+        }
+        
+        public String getEmail() {
+            return email;
+        }
+        
+        
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( CustomerPaymentMethodTest.class );
-    }
-
+    private IntegratedTest integratedTest;
     /**
      * Rigourous Test : testCreatePJTesteSubAccount
      */

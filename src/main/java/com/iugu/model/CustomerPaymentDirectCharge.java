@@ -22,10 +22,10 @@ public class CustomerPaymentDirectCharge extends DirectCharge{
 		private String email;
 		private List<Item> items = new ArrayList<>();
 		private Payer payer;
-		
 		//optional
 		private Integer months;
 		private Integer discountCents;
+		private String customerId;
 		
 		public Builder(String customerPaymentMethodId,String email,List<Item> items) {
 		  this.customerPaymentMethodId = customerPaymentMethodId;
@@ -48,6 +48,10 @@ public class CustomerPaymentDirectCharge extends DirectCharge{
 			  return this;
 		}
 		
+		public Builder customer(String customerId) {
+			  this.customerId = customerId;
+			  return this;
+		}
 	    public CustomerPaymentDirectCharge build() {
 	        return new CustomerPaymentDirectCharge(this);
 	      }
@@ -60,21 +64,8 @@ public class CustomerPaymentDirectCharge extends DirectCharge{
 		payer = builder.payer;
 		months = builder.months;
 		discountCents = builder.discountCents;
+		customerId = builder.customerId;
 	}
-	
-	//method (não é preenchido se enviar token)	Método de Pagamento (Atualmente só suporta bank_slip, que é o boleto)
-	//perguntar pq method so bank slip para direct charge
-	//private String method;
-	
-
-	
-	//public String getMethod() {
-	//	return method;
-	//}
-
-	//public void setMethod(String method) {
-	//	this.method = method;
-	//}
 
 	public String getCustomerPaymentMethodId() {
 		return customerPaymentMethodId;
