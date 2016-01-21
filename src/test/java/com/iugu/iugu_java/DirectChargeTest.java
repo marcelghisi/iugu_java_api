@@ -6,6 +6,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -56,6 +57,7 @@ public class DirectChargeTest extends TestCase{
     	private static String invoiceId;
     	private static String customerId;
     	private static String customerPaymentId;
+    	private static String tokemTestInvalid;
     	private static String masterApiTokemTeste = "21ab6ca14384901acaea1793b91cdc98";
     	private static String masterAccountId = "96461997-b6a0-48fb-808b-4f16ad88c718";
     	
@@ -78,6 +80,13 @@ public class DirectChargeTest extends TestCase{
         }               
         public String getCustomerPaymentId() {
             return customerPaymentId;
+        }
+        
+        public void setInvalidToken(String s) {
+        	tokemTestInvalid = s;
+        }               
+        public String getInvalidTokem() {
+            return tokemTestInvalid;
         }
 
         public void setApiToken(String s) {
@@ -138,6 +147,25 @@ public class DirectChargeTest extends TestCase{
     	assertTrue(response.getStatusCode() == null);
     	//Seta o id Do Tokem para possível uso
     	integratedTest.setToken(response.getId());
+    	
+    	//Testa a criacao de uma Token Invalido
+		//Usa os dados de um cartao de teste
+    	Data data1 = new Data("4012888888881881","123","Joao","Silva","12","2013");
+    	
+    	//Constroi o objeto com dados do pagamento
+    	PaymentToken pTi = new PaymentToken(integratedTest.getMasterAccountId(), PayableWith.CREDIT_CARD,data1,Boolean.FALSE);
+    	
+    	//Cria o tokem
+    	PaymentTokenResponse responseI = new PaymentService().createToken(pTi);
+    	
+    	//Valida se o tokem foi criado
+    	assertTrue(responseI != null);
+    	//Valida se não retornou erros
+    	assertTrue(responseI.getErrors() == null);
+    	//Valida se não ocorreu erro 500
+    	assertTrue(responseI.getStatusCode() == null);
+    	
+    	integratedTest.setInvalidToken(responseI.getId());
     }
     
 
@@ -444,35 +472,6 @@ public class DirectChargeTest extends TestCase{
 		assertTrue(responseDirectCharge.getStatusCode() == null);
     }
 	
-    /**
-     * Gera um pagamento Tokem com Cartao Invalido
-     * 
-     */
-	@Test
-    public void testL()
-    {
-		
-		Iugu.init(integratedTest.getApiToken());
-		
-		//Testa a criacao de uma Token de pagamento
-		//Usa os dados de um cartao de teste
-		Data data = new Data("4012888888881881","123","Joao","Silva","12","2013");
-		
-		//Constroi o objeto com dados do pagamento
-		PaymentToken pT = new PaymentToken(integratedTest.getMasterAccountId(), PayableWith.CREDIT_CARD,data,Boolean.FALSE);
-		
-		//Cria o tokem
-		PaymentTokenResponse response = new PaymentService().createToken(pT);
-		
-		//Valida se o tokem foi criado
-		assertTrue(response != null);
-		//Valida se não retornou erros
-		assertTrue(response.getErrors() == null);
-		//Valida se não ocorreu erro 500
-		assertTrue(response.getStatusCode() == null);
-		//Seta o id Do Tokem para possível uso
-		integratedTest.setToken(response.getId());
-    }
 	
     /**
      * Pagamento direto Usando Tokem Com Cartao Invalido
@@ -496,13 +495,15 @@ public class DirectChargeTest extends TestCase{
 		Payer payer = new Payer("12312312312","MARCEL JOSE DA SILVA GHISI","11","33995090",integratedTest.getEmail(),address);
 		
 		//Constroi o objeto Para pagamento Direto usando um token de cartão de crédito e opção payer obrigatorio para market place
-		TokenDirectCharge cP = new TokenDirectCharge.Builder(integratedTest.getToken(),integratedTest.getEmail(),items).payer(payer).build();
+		TokenDirectCharge cP = new TokenDirectCharge.Builder(integratedTest.getInvalidTokem(),integratedTest.getEmail(),items).payer(payer).build();
 		
 		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
 		
 		assertTrue(responseDirectCharge  != null);
 		
-		System.out.println(responseDirectCharge.getMessage());
+		assertFalse(responseDirectCharge.getSuccess());
+		
+		System.out.println(responseDirectCharge.getSuccess());
     }
 	
 
