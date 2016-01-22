@@ -1,47 +1,110 @@
 package com.iugu.iugu_java;
 
+import junit.framework.TestCase;
+
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
 import com.iugu.Iugu;
 import com.iugu.model.Customer;
 import com.iugu.responses.CustomerResponse;
 import com.iugu.services.CustomerService;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 /**
- * Unit test for simple App.
+ * Testa CRUD de métodos de pagamento.
  */
-public class CustomerTest 
-    extends TestCase
-{
-	/**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public CustomerTest( String testName )
-    {
-        super( testName );
-    }
-
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( CustomerTest.class );
-    }
-
-    /**
-     * Rigourous Test : testCreatePJTesteSubAccount
-     */
-    public void testCreateNewMasterCustomer()
-    {
-
-    	//{"id":"E5A929BD4A364698ABA72568FAD15FE1","email":"marcel.ghisi@gmail.com","name":"MARCEL JOSE DA SILVA GHISI","notes":null,"created_at":"2016-01-09T18:14:08-02:00,"updated_at":"2016-01-09T17:58:05-02:00","cc_emails":null,"cpf_cnpj":"02479484971","default_payment_method_id":null,"proxy_payments_from_customer_id":null,"custom_variables":[]}
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class CustomerTest extends TestCase{
+	
+    public static class IntegratedTest { 
     	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+    	private static String tokemTest1;
+    	private static String email = "marcel.ghisi@gmail.com";
+    	private static String invoiceId;
+    	private static String customerId;
+    	private static String customerPaymentId;
+    	private static String customerPaymentIdB;
+    	private static String masterApiTokemTeste = "21ab6ca14384901acaea1793b91cdc98";
+    	private static String masterAccountId = "96461997-b6a0-48fb-808b-4f16ad88c718";
+    	
+        public void setToken(String s) {
+            tokemTest1 = s;
+        }               
+        public String getToken() {
+            return tokemTest1;
+        }
+        
+        public void setCustomerId(String s) {
+            customerId = s;
+        }               
+        public String getCustomerId() {
+            return customerId;
+        }
+        
+        public void setCustomerPaymentId(String s) {
+            customerPaymentId = s;
+        }               
+        public String getCustomerPaymentId() {
+            return customerPaymentId;
+        }
+        
+        public void setCustomerPaymentIdB(String s) {
+            customerPaymentIdB = s;
+        }               
+        public String getCustomerPaymentIdB() {
+            return customerPaymentIdB;
+        }
+
+        public void setApiToken(String s) {
+            masterApiTokemTeste = s;
+        }               
+        public String getApiToken() {
+            return masterApiTokemTeste;
+        }
+        
+        public void setMasterAccountId(String s) {
+            masterAccountId = s;
+        }               
+        public String getMasterAccountId() {
+            return masterAccountId;
+        }
+        
+        public void setInvoice(String s) {
+            invoiceId = s;
+        }               
+        public String getInvoice() {
+            return invoiceId;
+        }
+        
+        public String getEmail() {
+            return email;
+        }
+        
+        
+    }
+
+    private IntegratedTest integratedTest;
+
+    
+    /**
+     * Set Up
+     * 
+     */
+    @Override
+    protected void setUp() throws Exception {
+    	integratedTest = new IntegratedTest();
+    	
+    }
+    
+    /**
+     * Cria um customer 
+     */
+	@Test
+    public void testA()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
 		
 		Customer customer = new Customer("MARCEL JOSE DA SILVA GHISI","marcel.ghisi@gmail.com","02479484971");
 
@@ -49,61 +112,60 @@ public class CustomerTest
 		
 		assertTrue( responseCustomer.getId() != null);
 		
+		integratedTest.setCustomerId(responseCustomer.getId());
+		
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * Encontra um customer
      */
-    public void testFindMasterCustomer()
+	@Test
+    public void testB()
     {
 
-    	//{"id":"C9D0758BB74641CABCF4436E15A98C7E","email":"marcel.ghisi@gmail.com","name":"MARCEL JOSE DA SILVA GHISI","notes":null,"created_at":"2016-01-09T17:58:05-02:00","updated_at":"2016-01-09T17:58:05-02:00","cc_emails":null,"cpf_cnpj":"02479484971","default_payment_method_id":null,"proxy_payments_from_customer_id":null,"custom_variables":[]}
-    	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
-		Customer customer = new Customer("MARCEL JOSE DA SILVA GHISI","marcel.ghisi@gmail.com","02479484971");
-
-		CustomerResponse responseCustomer = new CustomerService().find("C9D0758BB74641CABCF4436E15A98C7E");
+		CustomerResponse responseCustomer = new CustomerService().find(integratedTest.getCustomerId());
 		
 		assertTrue( responseCustomer.getId() != null);
-		assertEquals(customer.getEmail(),responseCustomer.getEmail());
+		
+		assertEquals(integratedTest.getEmail(),responseCustomer.getEmail());
 		
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * Altera um customer
      */
-    public void testChangeMasterCustomer()
+	@Test
+    public void testC()
     {
 
-    	//{"id":"C9D0758BB74641CABCF4436E15A98C7E","email":"marcel.ghisi@gmail.com","name":"MARCEL JOSE DA SILVA GHISI","notes":null,"created_at":"2016-01-09T17:58:05-02:00","updated_at":"2016-01-09T17:58:05-02:00","cc_emails":null,"cpf_cnpj":"02479484971","default_payment_method_id":null,"proxy_payments_from_customer_id":null,"custom_variables":[]}
-    	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
 		Customer customer = new Customer("MARCEL GHISI","marcel.ghisi@gmail.com","02479484971");
 
-		CustomerResponse responseCustomer = new CustomerService().change("C9D0758BB74641CABCF4436E15A98C7E",customer);
+		CustomerResponse responseCustomer = new CustomerService().change(integratedTest.getCustomerId(),customer);
 		
 		assertTrue( responseCustomer.getId() != null);
+		
 		assertEquals(customer.getName(),responseCustomer.getName());
 		
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * Remove um customer
      */
-    public void testRemoveMasterCustomer()
+	@Test
+    public void testD()
     {
 
-    	//{"id":"C9D0758BB74641CABCF4436E15A98C7E","email":"marcel.ghisi@gmail.com","name":"MARCEL JOSE DA SILVA GHISI","notes":null,"created_at":"2016-01-09T17:58:05-02:00","updated_at":"2016-01-09T17:58:05-02:00","cc_emails":null,"cpf_cnpj":"02479484971","default_payment_method_id":null,"proxy_payments_from_customer_id":null,"custom_variables":[]}
-    	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
-		CustomerResponse responseCustomer = new CustomerService().remove("4038F6126FE74DDBB265CC5334560AC8");
+		CustomerResponse responseCustomer = new CustomerService().remove(integratedTest.getCustomerId());
 		
 		assertTrue( responseCustomer.getId() != null);
 		
-		CustomerResponse responseFind = new CustomerService().find("4038F6126FE74DDBB265CC5334560AC8");
+		CustomerResponse responseFind = new CustomerService().find(integratedTest.getCustomerId());
 		
 		assertTrue(responseFind.getErrors().get("errors").toString().contains("Customer Not Found"));
     }

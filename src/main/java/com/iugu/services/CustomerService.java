@@ -50,9 +50,9 @@ public class CustomerService extends BaseService{
 		return customerResponse;
 	}
 	
-	public CustomerResponse change(String id, Customer customer) {
+	public CustomerResponse change(String customerId, Customer customer) {
 		Response response = Iugu.getClient()
-				.target(String.format(CHANGE_URL, id))
+				.target(String.format(CHANGE_URL, customerId))
 				.request()
 				.put(Entity.entity(customer, MediaType.APPLICATION_JSON));
 		
@@ -93,12 +93,12 @@ public class CustomerService extends BaseService{
 		return paymentResponse;
 	}
 	
-	public PaymentMethodResponse changePaymentMethod(String id, String paymentMethodId,String newDescription) {
+	public PaymentMethodResponse changePaymentMethod(String customerId, String paymentMethodId,String newDescription) {
 		
 		PaymentMethodRequest request = new PaymentMethodRequest(null, null, newDescription, null);
 		
 		Response response = Iugu.getClient()
-				.target(String.format(CHANGE_PAYMENT_METHOD_URL, id,paymentMethodId))
+				.target(String.format(CHANGE_PAYMENT_METHOD_URL, customerId,paymentMethodId))
 				.request()
 				.put(Entity.entity(request, MediaType.APPLICATION_JSON));
 		
