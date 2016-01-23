@@ -38,6 +38,14 @@ public class BaseService {
 
 			MessageResponse responseReturn = (MessageResponse) gson.fromJson(responseEntity, clazz);
 			
+			if (responseReturn.getSuccess() != null && !responseReturn.getSuccess() && responseReturn.getMessage() != null && !responseReturn.getMessage().isEmpty() ){
+				Map<String,Object> mapa = new HashMap<String,Object>(0);
+				mapa.put("errors", responseReturn.getMessage());
+				responseReturn.setStatusCode(response.getStatus());
+				responseReturn.setMessage(responseReturn.getMessage());
+				responseReturn.setErrors(mapa);
+				return responseReturn;
+			}
 			//TODO A API Rest não envia empre o atributo success. Podia ser melhorado
 			if (response.getStatus() == 200){
 				responseReturn.setSuccess(Boolean.TRUE);

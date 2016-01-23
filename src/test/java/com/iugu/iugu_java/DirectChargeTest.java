@@ -478,7 +478,7 @@ public class DirectChargeTest extends TestCase{
      * 
      */
 	@Test
-    public void testM()
+    public void testL()
     {
 
 		Iugu.init(integratedTest.getApiToken());
