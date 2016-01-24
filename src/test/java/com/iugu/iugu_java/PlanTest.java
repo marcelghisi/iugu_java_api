@@ -3,166 +3,287 @@ package com.iugu.iugu_java;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.TestCase;
+
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
 import com.iugu.Iugu;
 import com.iugu.model.Currency;
 import com.iugu.model.Feature;
 import com.iugu.model.IntervalType;
 import com.iugu.model.Plan;
+import com.iugu.responses.ListPlanResponse;
 import com.iugu.responses.PlanResponse;
 import com.iugu.services.PlanService;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 /**
- * Unit test for simple App.
+ * Testa CRUD de plans.
  */
-public class PlanTest 
-    extends TestCase
-{
-	/**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public PlanTest( String testName )
-    {
-        super( testName );
-    }
-
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( PlanTest.class );
-    }
-
-    /**
-     * Rigourous Test : testCreatePJTesteSubAccount
-     */
-    public void testCreatePlan()
-    {
-
-    	//{"id":"3AE8AE3508554F36B0B547F858493DF0","name":"ATTENDME P100","identifier":"plano_basico","interval":1,"interval_type":"months","created_at":"2016-01-10T15:31:03-02:00","updated_at":"2016-01-10T15:31:03-02:00","prices":[{"created_at":"2016-01-10T15:31:03-02:00","currency":"BRL","id":"A8918B620D224C4CAAC6AC7E30E679DE","plan_id":"3AE8AE3508554F36B0B547F858493DF0","updated_at":"2016-01-10T15:31:03-02:00","value_cents":1000}],"features":[],"payable_with":null}
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class PlanTest extends TestCase{
+	
+    public static class IntegratedTest { 
     	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+    	private static String tokemTest1;
+    	private static String email = "thiagohcortez@gmail.com";
+    	private static String invoiceId;
+    	private static String customerId;
+    	private static String customerPaymentId;
+    	private static String subscriptionId;
+    	private static String customerPaymentIdB;
+    	private static String masterApiTokemTeste = "21ab6ca14384901acaea1793b91cdc98";
+    	private static String masterAccountId = "96461997-b6a0-48fb-808b-4f16ad88c718";
+    	private static String planIdentifier = "basic_plan_test2";
+    	private static String subAccountId;
+    	private static String liveApiToken;
+    	private static String testApiToken;
+    	private static String userToken; 
+    	private static String planId; 
+    	
+        public void setPlanIdentifier(String s) {
+        	planIdentifier = s;
+        }
+        
+        public String getPlanIdenifier() {
+            return planIdentifier;
+        }
+        
+        public void setPlanId(String s) {
+        	planId = s;
+        }
+        
+        public String getPlanId() {
+            return planId;
+        }
+        
+        public void setUserToken(String s) {
+        	userToken = s;
+        }
+        
+        public String getUserToken() {
+            return userToken;
+        }
+        
+        public void setTestApiToken(String s) {
+        	testApiToken = s;
+        }
+        
+        public String getTestApiToken() {
+            return testApiToken;
+        }
+        
+        public void setLiveApiToken(String s) {
+        	liveApiToken = s;
+        }
+        
+        public String getLiveApiToken() {
+            return liveApiToken;
+        }
+        
+        public void setSubAccountId(String s) {
+        	subAccountId = s;
+        }               
+        public String getSubAccountId() {
+            return subAccountId;
+        }
+        
+        public void setToken(String s) {
+            tokemTest1 = s;
+        }               
+        public String getToken() {
+            return tokemTest1;
+        }
+        
+        public void setCustomerId(String s) {
+            customerId = s;
+        }               
+        public String getCustomerId() {
+            return customerId;
+        }
+        
+        public void setSubscriptionId(String s) {
+            subscriptionId = s;
+        }               
+        public String getSubscriptionId() {
+            return subscriptionId;
+        }
+        
+        public void setCustomerPaymentId(String s) {
+            customerPaymentId = s;
+        }               
+        public String getCustomerPaymentId() {
+            return customerPaymentId;
+        }
+        
+        public void setCustomerPaymentIdB(String s) {
+            customerPaymentIdB = s;
+        }               
+        public String getCustomerPaymentIdB() {
+            return customerPaymentIdB;
+        }
+
+        public void setApiToken(String s) {
+            masterApiTokemTeste = s;
+        }               
+        public String getApiToken() {
+            return masterApiTokemTeste;
+        }
+        
+        public void setMasterAccountId(String s) {
+            masterAccountId = s;
+        }               
+        public String getMasterAccountId() {
+            return masterAccountId;
+        }
+        
+        public void setInvoice(String s) {
+            invoiceId = s;
+        }               
+        public String getInvoice() {
+            return invoiceId;
+        }
+        
+        public String getEmail() {
+            return email;
+        }
+        
+        
+    }
+
+    private IntegratedTest integratedTest;
+
+    /**
+     * Set Up
+     * 
+     */
+    @Override
+    protected void setUp() throws Exception {
+    	integratedTest = new IntegratedTest();
+    }
+
+    /**
+     * CreatePlan
+     */
+	@Test
+    public void testA()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
 		
-		Plan plan = new Plan("ATTENDME P100", "plano_basico", 1, IntervalType.MONTHS,Currency.BRL,1000);
+		Plan plan = new Plan("ATTENDME P100", integratedTest.getPlanIdenifier(), 1, IntervalType.MONTHS,Currency.BRL,1000);
 
 		PlanResponse planResponse = new PlanService().create(plan);
 		
 		assertTrue( planResponse.getId() != null);
 		
+		integratedTest.setPlanId(planResponse.getId());
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * CreatePlan2ComFeatures
      */
-    public void testCreatePlan2ComFeatures()
+	@Test
+    public void testB()
     {
 
-    	//{"id":"04371BD080C2440FA0C913228F1ADCCD","name":"ATTENDME P200","identifier":"plano_premium","interval":1,"interval_type":"months","created_at":"2016-01-10T15:32:49-02:00","updated_at":"2016-01-10T15:32:49-02:00","prices":[{"created_at":"2016-01-10T15:32:49-02:00","currency":"BRL","id":"8D2F866DD85542798B76FBE3C7C341FA","plan_id":"04371BD080C2440FA0C913228F1ADCCD","updated_at":"2016-01-10T15:32:49-02:00","value_cents":30000}],"features":[],"payable_with":null}
-    	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
 		List<Feature> lista = new ArrayList<Feature>(0);
 		lista.add(new Feature("Funcionalidade 1", "feature1", 100));
 		lista.add(new Feature("Funcionalidade 2", "feature2", 100));
 
-		Plan plan = new Plan("ATTENDME P500", "plano_premmiiumm", 1, IntervalType.MONTHS,Currency.BRL,300,lista);
+		Plan plan = new Plan("ATTENDME P500", integratedTest.getPlanIdenifier() + "_feat", 1, IntervalType.MONTHS,Currency.BRL,300,lista);
 		
 		
 		PlanResponse planResponse = new PlanService().create(plan);
 		
 		assertTrue( planResponse.getId() != null);
 		
+		assertTrue( planResponse.getFeatures().size() > 0);
+		
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * FindPlan
      */
-    public void testFindPlan()
+	@Test
+    public void testC()
     {
 
-    	//{"id":"04371BD080C2440FA0C913228F1ADCCD","name":"ATTENDME P200","identifier":"plano_premium","interval":1,"interval_type":"months","created_at":"2016-01-10T15:32:49-02:00","updated_at":"2016-01-10T15:32:49-02:00","prices":[{"created_at":"2016-01-10T15:32:49-02:00","currency":"BRL","id":"8D2F866DD85542798B76FBE3C7C341FA","plan_id":"04371BD080C2440FA0C913228F1ADCCD","updated_at":"2016-01-10T15:32:49-02:00","value_cents":30000}],"features":[],"payable_with":null}
-    	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 
-		PlanResponse responseCustomer = new PlanService().find("04371BD080C2440FA0C913228F1ADCCD");
+		PlanResponse responseCustomer = new PlanService().find(integratedTest.getPlanId());
 		
 		assertTrue( responseCustomer.getId() != null);
-		//assertEquals(customer.getEmail(),responseCustomer.getEmail());
 		
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * testFindPlanIdentifier
      */
-    public void testFindPlanIdentifier()
+	@Test
+    public void testD()
     {
 
-    	//{"id":"04371BD080C2440FA0C913228F1ADCCD","name":"ATTENDME P200","identifier":"plano_premium","interval":1,"interval_type":"months","created_at":"2016-01-10T15:32:49-02:00","updated_at":"2016-01-10T15:32:49-02:00","prices":[{"created_at":"2016-01-10T15:32:49-02:00","currency":"BRL","id":"8D2F866DD85542798B76FBE3C7C341FA","plan_id":"04371BD080C2440FA0C913228F1ADCCD","updated_at":"2016-01-10T15:32:49-02:00","value_cents":30000}],"features":[],"payable_with":null}
-    	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 
-		PlanResponse responseCustomer = new PlanService().findByIdentifier("plano_basico");
+		PlanResponse responseCustomer = new PlanService().findByIdentifier(integratedTest.getPlanIdenifier());
 		
 		assertTrue( responseCustomer.getId() != null);
-		//assertEquals(customer.getEmail(),responseCustomer.getEmail());
 		
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * ChangePlan
      */
-    public void testChangePlan()
+	@Test
+    public void testE()
     {
 
-    	//{"id":"04371BD080C2440FA0C913228F1ADCCD","name":"ATTENDME P200","identifier":"plano_premium","interval":1,"interval_type":"months","created_at":"2016-01-10T15:32:49-02:00","updated_at":"2016-01-10T15:32:49-02:00","prices":[{"created_at":"2016-01-10T15:32:49-02:00","currency":"BRL","id":"8D2F866DD85542798B76FBE3C7C341FA","plan_id":"04371BD080C2440FA0C913228F1ADCCD","updated_at":"2016-01-10T15:32:49-02:00","value_cents":30000}],"features":[],"payable_with":null}
-    	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 
-		PlanResponse responseCustomer = new PlanService().findByIdentifier("plano_basico");
+		PlanResponse responseCustomer = new PlanService().findByIdentifier(integratedTest.getPlanIdenifier());
 
-		Plan plan = new Plan("ATTENDME P250", "plano_basico", 2, IntervalType.WEEKS,Currency.BRL,10000);
+		Plan plan = new Plan("ATTENDME P250", integratedTest.getPlanIdenifier(), 2, IntervalType.WEEKS,Currency.BRL,10000);
 		
 		PlanResponse responseChange = new PlanService().change(responseCustomer.getId(),plan);
 		assertTrue( responseChange.getId() != null);
-		//assertEquals(customer.getEmail(),responseCustomer.getEmail());
 		
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * RemovePlan
      */
-    public void testRemovePlan()
+	@Test
+    public void testF()
     {
 
- 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
-		PlanResponse responsePlan = new PlanService().remove("402695DC136A466ABD2F5E3F375C7958");
+		PlanResponse responsePlan = new PlanService().remove(integratedTest.getPlanId());
 		
 		assertTrue( responsePlan.getId() != null);
 		
-		PlanResponse responseFind = new PlanService().find("402695DC136A466ABD2F5E3F375C7958");
+		PlanResponse responseFind = new PlanService().find(integratedTest.getPlanId());
 		
 		assertTrue(responseFind.getErrors().get("errors").toString().contains("Plan Not Found"));
     }
     
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * RemovePlan
      */
-    public void testListCustomerPaymentMethod()
+	@Test
+    public void testG()
     {
     	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 
-		List<PlanResponse> responsePlanList = new PlanService().list();
+		ListPlanResponse responsePlanList = new PlanService().list();
 		
-		assertTrue( responsePlanList.size() > 0);
+		assertTrue( responsePlanList.getItems().size() > 0);
 		
     }
 

@@ -1,17 +1,12 @@
 package com.iugu.services;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.iugu.Iugu;
 import com.iugu.model.Plan;
+import com.iugu.responses.ListPlanResponse;
 import com.iugu.responses.PlanResponse;
 
 public class PlanService extends BaseService{
@@ -77,27 +72,15 @@ public class PlanService extends BaseService{
 		return subscriptionResponse;
 	}
 	
-	public List<PlanResponse> list() {
+	public ListPlanResponse list() {
 		Response response = Iugu.getClient()
 				.target(LIST_URL)
 				.request()
 				.get();
 		
-		if(response.getStatus() == 200 || (response.getStatus() >= 400 && response.getStatus() < 500)) {
-			
-			final String responseEntity = response.readEntity(String.class);
+		ListPlanResponse paymentResponse = (ListPlanResponse) readResponse(
+				response, ListPlanResponse.class);
 
-			System.out.println(responseEntity);
-
-			Gson gson = new Gson();
-
-			Type listType = new TypeToken<ArrayList<PlanResponse>>() {}.getType();
-
-            List<PlanResponse> responseList = gson.fromJson(responseEntity, listType);
-			
-			return responseList;
-		}
-
-		return null;
+		return paymentResponse;
 	}
 }

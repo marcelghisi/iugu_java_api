@@ -2,7 +2,12 @@ package com.iugu.iugu_java;
 
 import java.io.IOException;
 
+import junit.framework.TestCase;
+
 import org.jboss.resteasy.util.Base64;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.iugu.Iugu;
 import com.iugu.model.AccountType;
@@ -30,97 +35,173 @@ import com.iugu.responses.SubAccountResponse;
 import com.iugu.responses.SubAccountValidationResponse;
 import com.iugu.services.MarketPlaceService;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 /**
- * Unit test for simple App.
+ * Testa SubAccounts Creation , configutations and validations.
  */
-public class MarketPlaceTest 
-    extends TestCase
-{
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class MarketPlaceTest extends TestCase{
 	
-	/**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public MarketPlaceTest( String testName )
-    {
-        super( testName );
-    }
-
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( MarketPlaceTest.class );
-    }
-
-    /**
-     * Rigourous Test : testCreatePJTesteSubAccount
-     */
-    public void testCreatePJTesteSubAccount()
-    {
-
-    	//{"account_id":"BFE13F587384440BB8A05E63BC74B961","name":"Marcel Ghisi","live_api_token":"56e9b3a30990a8c97260d475bca4f11f","test_api_token":"4485d3d52775dbccccc4b64eb5ccf996","user_token":"e6a1bc0e23f73fa6187c77b889a5d836"}
+    public static class IntegratedTest { 
     	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Marcel Ghisi",1));
+    	private static String tokemTest1;
+    	private static String email = "thiagohcortez@gmail.com";
+    	private static String invoiceId;
+    	private static String customerId;
+    	private static String customerPaymentId;
+    	private static String subscriptionId;
+    	private static String customerPaymentIdB;
+    	private static String masterApiTokemTeste = "21ab6ca14384901acaea1793b91cdc98";
+    	private static String masterAccountId = "96461997-b6a0-48fb-808b-4f16ad88c718";
+    	private static String subAccountId;
+    	private static String liveApiToken;
+    	private static String testApiToken;
+    	private static String userToken;    	
+    	
+        public void setUserToken(String s) {
+        	userToken = s;
+        }
+        
+        public String getUserToken() {
+            return userToken;
+        }
+        
+        public void setTestApiToken(String s) {
+        	testApiToken = s;
+        }
+        
+        public String getTestApiToken() {
+            return testApiToken;
+        }
+        
+        public void setLiveApiToken(String s) {
+        	liveApiToken = s;
+        }
+        
+        public String getLiveApiToken() {
+            return liveApiToken;
+        }
+        
+        public void setSubAccountId(String s) {
+        	subAccountId = s;
+        }               
+        public String getSubAccountId() {
+            return subAccountId;
+        }
+        
+        public void setToken(String s) {
+            tokemTest1 = s;
+        }               
+        public String getToken() {
+            return tokemTest1;
+        }
+        
+        public void setCustomerId(String s) {
+            customerId = s;
+        }               
+        public String getCustomerId() {
+            return customerId;
+        }
+        
+        public void setSubscriptionId(String s) {
+            subscriptionId = s;
+        }               
+        public String getSubscriptionId() {
+            return subscriptionId;
+        }
+        
+        public void setCustomerPaymentId(String s) {
+            customerPaymentId = s;
+        }               
+        public String getCustomerPaymentId() {
+            return customerPaymentId;
+        }
+        
+        public void setCustomerPaymentIdB(String s) {
+            customerPaymentIdB = s;
+        }               
+        public String getCustomerPaymentIdB() {
+            return customerPaymentIdB;
+        }
+
+        public void setApiToken(String s) {
+            masterApiTokemTeste = s;
+        }               
+        public String getApiToken() {
+            return masterApiTokemTeste;
+        }
+        
+        public void setMasterAccountId(String s) {
+            masterAccountId = s;
+        }               
+        public String getMasterAccountId() {
+            return masterAccountId;
+        }
+        
+        public void setInvoice(String s) {
+            invoiceId = s;
+        }               
+        public String getInvoice() {
+            return invoiceId;
+        }
+        
+        public String getEmail() {
+            return email;
+        }
+        
+        
+    }
+
+    private IntegratedTest integratedTest;
+
+    
+    /**
+     * Set Up
+     * 
+     */
+    @Override
+    protected void setUp() throws Exception {
+    	integratedTest = new IntegratedTest();
+    }
+
+    /**
+     * Cria uma sub conta
+     */
+	@Test
+    public void testA()
+    {
+    	//SetUp a subaccount to test
+		Iugu.init(integratedTest.getApiToken());
+		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Marcel Ghisi5",1));
 		
 		assertTrue( responseSubAccount.getId() != null);
 		
-		System.out.println("TESTANDO CREATE SUBACCOUNT");
-		System.out.println(" ACCOUNT ID: " + responseSubAccount.getId() + ";");
-		System.out.println(" LIVE TOKEN: " + responseSubAccount.getLiveApiToken()+ ";");
-		System.out.println(" TEST TOKEN: " + responseSubAccount.getTestApiToken()+ ";");
-		System.out.println(" USER TOKEN: " + responseSubAccount.getTestApiToken()+ ";");
-
-		
-		System.out.println("TESTANDO VALIDATE CNPJ");
-		System.out.print(" Message: " + responseSubAccount.getMessage() + ";");
-		System.out.print(" Success: " + responseSubAccount.getSuccess()+ ";");
-		System.out.print(" Code: " + responseSubAccount.getStatusCode()+ ";");
-		
-		System.out.println("END CERATION SUB ACCOUNT");
-		
+		integratedTest.setLiveApiToken(responseSubAccount.getLiveApiToken());
+		integratedTest.setTestApiToken(responseSubAccount.getTestApiToken());
+		integratedTest.setUserToken(responseSubAccount.getUserToken());
+		integratedTest.setSubAccountId(responseSubAccount.getId());
     }
     
     /**
-     * Rigourous Test :-)
+     * Encontra uma sub conta
      */
-    public void testFindSubAccount()
+	@Test
+    public void testB()
     {
-
-    	//{"account_id":"BFE13F587384440BB8A05E63BC74B961","name":"Marcel Ghisi","live_api_token":"56e9b3a30990a8c97260d475bca4f11f","test_api_token":"4485d3d52775dbccccc4b64eb5ccf996","user_token":"e6a1bc0e23f73fa6187c77b889a5d836"}
-		
-		Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
-		SubAccountInformationResponse responseInformation = new MarketPlaceService().find("BFE13F587384440BB8A05E63BC74B961");
-		
-		System.out.println("TESTANDO FIND SUBACCOUNT");
-		System.out.print(" ID: " + responseInformation.getId() + ";");
-		System.out.print(" Name: " + responseInformation.getName()+ ";");
-		
-		//Response
-		//{"id":"BFE13F587384440BB8A05E63BC74B961","name":"Marcel Ghisi","created_at":"2016-01-07T19:16:10-02:00","updated_at":"2016-01-07T19:16:12-02:00","can_receive?":false,"is_verified?":false,"last_verification_request_status":null,"last_verification_request_data":null,"last_verification_request_feedback":null,"change_plan_type":1,"subscriptions_trial_period":0,"subscriptions_billing_days":null,"disable_emails":false,"last_withdraw":null,"reply_to":null,"webapp_on_test_mode":false,"marketplace":false,"default_return_url":null,"credit_card_verified":null,"fines":null,"late_payment_fine":null,"per_day_interest":null,"auto_withdraw":false,"payment_email_notification":false,"auto_advance":false,"auto_advance_type":null,"auto_advance_option":null,"balance":"R$ 0,00","protected_balance":"R$ 0,00","payable_balance":"R$ 0,00","receivable_balance":"R$ 0,00","commission_balance":"R$ 0,00","volume_last_month":"R$ 0,00","volume_this_month":"R$ 0,00","total_subscriptions":0,"total_active_subscriptions":0,"taxes_paid_last_month":"R$ 0,00","taxes_paid_this_month":"R$ 0,00","custom_logo_url":null,"custom_logo_small_url":null,"informations":[{"key":"commission_percent","value":"1.0"}],"configuration":{"auto_withdraw":false,"payment_email_notification":false,"auto_advance":null,"auto_advance_type":null,"auto_advance_option":null,"commission_percent":1.0,"fines":null,"late_payment_fine":null,"per_day_interest":null,"bank_slip":{"active":true,"extra_due":"0","reprint_extra_due":"0"},"credit_card":{"active":false,"soft_descriptor":"","installments":false,"installments_pass_interest":false,"max_installments":"0","max_installments_without_interest":"0","two_step_transaction":false}}}
-		
+		Iugu.init(integratedTest.getUserToken());
+		SubAccountInformationResponse responseInformation = new MarketPlaceService().find(integratedTest.getSubAccountId());
 		assertTrue( responseInformation.getId() != null);
     }
     
     /**
-     * Rigourous Test :-)
+     * Valida CNPJ invalido
      */
-    public void testValidateCNPJInvalidoSubAccount()
+	@Test
+    public void testC()
     {
 
-    	//{"account_id":"BFE13F587384440BB8A05E63BC74B961","name":"Marcel Ghisi","live_api_token":"56e9b3a30990a8c97260d475bca4f11f","test_api_token":"4485d3d52775dbccccc4b64eb5ccf996","user_token":"e6a1bc0e23f73fa6187c77b889a5d836"}
-    	
-		Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
-		SubAccountInformationResponse responseInformation = new MarketPlaceService().find("BFE13F587384440BB8A05E63BC74B961");
-		
-		String accountId = responseInformation.getId().toString();
+		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		Iugu.init(integratedTest.getUserToken());
 		
 		MainSetthingsData mainSetthingsData = new MainSetthingsData("Serviços de Informática",SubAccountPriceRange.ENTRE_100_500,Boolean.FALSE,Boolean.TRUE);
 		LegalPersonData pJ = new LegalPersonData("03125011000171", "GHISI TECNOLOGIA EM SISTEMAS", "Marcel Ghisi", "02479484971", "11-96766-1709");
@@ -128,33 +209,26 @@ public class MarketPlaceTest
 		BankInformation bankInfo = new BankInformation(Bank.ITAU, AccountType.Corrente, "0036", "07722-0");
 		
 		SubAccountValidationData data = new SubAccountValidationData(mainSetthingsData,bankInfo,address,pJ);
-		//SubAccountValidationFiles files = new SubAccountValidationFiles("AAA","BBBBB","CCCC");
 		
 		SubAccountValidation subAccountValidation = new SubAccountValidation(data, null, Boolean.FALSE);
 		
-		//Iugu.init("849da38aec9bba86b2c2152728b9cd67");
-		SubAccountValidationResponse responseSubAccountValidation = new MarketPlaceService().createSubAccountValidation(accountId, subAccountValidation);
-		
-		//assertTrue(responseSubAccountValidation.getErrors().get("cnpj") != null);
+		SubAccountValidationResponse responseSubAccountValidation = new MarketPlaceService().createSubAccountValidation(integratedTest.getSubAccountId(), subAccountValidation);
 		
 		assertFalse( responseSubAccountValidation.getSuccess());
 		
-		//Response
-		//{"errors":{"cnpj":["n\u00e3o \u00e9 v\u00e1lido"]}}
     }
     
     /**
-     * Rigourous Test :-)
+     * Valida CNPJ valido
      */
-    public void testValidateCNPJValidoSubAccount()
+	@Test
+    public void testD()
     {
 
-    	//{"account_id":"BFE13F587384440BB8A05E63BC74B961","name":"Marcel Ghisi","live_api_token":"56e9b3a30990a8c97260d475bca4f11f","test_api_token":"4485d3d52775dbccccc4b64eb5ccf996","user_token":"e6a1bc0e23f73fa6187c77b889a5d836"}
-    	
-		Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
-		SubAccountInformationResponse responseInformation = new MarketPlaceService().find("BFE13F587384440BB8A05E63BC74B961");
+		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		Iugu.init(integratedTest.getUserToken());
 		
-		String accountId = responseInformation.getId().toString();
+		String accountId = integratedTest.getSubAccountId();
 
 		MainSetthingsData mainSetthingsData = new MainSetthingsData("Serviços de Informática",SubAccountPriceRange.ENTRE_100_500,Boolean.FALSE,Boolean.TRUE);
 		LegalPersonData pJ = new LegalPersonData("03487102000171", "GHISI TECNOLOGIA EM SISTEMAS", "Marcel Ghisi", "02479484971", "11-96766-1709");
@@ -186,32 +260,32 @@ public class MarketPlaceTest
 		
 		assertFalse( responseSubAccountValidation.getSuccess());
 		
-		//Response
-		//{"errors":{"cnpj":["n\u00e3o \u00e9 v\u00e1lido"]}}
     }
     
     /**
-     * Rigourous Test :-)
+     * Verifica se esta pendente
      */
-    public void testVerifyIsPendingVerificationCNPJ()
+	@Test
+    public void testE()
     {
-    	//{"account_id":"BFE13F587384440BB8A05E63BC74B961","name":"Marcel Ghisi","live_api_token":"56e9b3a30990a8c97260d475bca4f11f","test_api_token":"4485d3d52775dbccccc4b64eb5ccf996","user_token":"e6a1bc0e23f73fa6187c77b889a5d836"}
+		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		Iugu.init(integratedTest.getUserToken());
 		
-		Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
-		SubAccountInformationResponse responseInformation = new MarketPlaceService().find("BFE13F587384440BB8A05E63BC74B961");
+		SubAccountInformationResponse responseInformation = new MarketPlaceService().find(integratedTest.getSubAccountId());
 		
 		assertTrue( responseInformation.getLastVerificationRequestStatus().contains("pending"));
     }
     
     /**
-     * Rigourous Test :-)
+     * Configure sub Account
      */
-    public void testConfigureSoftDescriptionCnpjSubAccount()
+	@Test
+    public void testF()
     {
 
-    	//{"account_id":"9945CFA951234A85870B7C98E5283836","name":"Noeli Ghisi","live_api_token":"251df262110fc3d74ea3262c20093bbe","test_api_token":"744939511d57522c618466cc5966b72a","user_token":"06fa4a7767762feb3c0b82ebd3143944"}
-    	
-		Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		Iugu.init(integratedTest.getUserToken());
+		
 
 		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
 		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(true, null, null);
@@ -227,15 +301,16 @@ public class MarketPlaceTest
     }
     
     /**
-     * Rigourous Test :-)
+     * ConfigureKeepSoftDescriptionAndChangeComissionPercentCnpjSubAccount
      */
-    public void testConfigureKeepSoftDescriptionAndChangeComissionPercentCnpjSubAccount()
+	@Test
+    public void testG()
     {
 
-    	//{"account_id":"9945CFA951234A85870B7C98E5283836","name":"Noeli Ghisi","live_api_token":"251df262110fc3d74ea3262c20093bbe","test_api_token":"744939511d57522c618466cc5966b72a","user_token":"06fa4a7767762feb3c0b82ebd3143944"}
-    	
-		Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
 
+		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		Iugu.init(integratedTest.getUserToken());
+		
 		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(2, null, null, null, null, null, null, null);
 		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(true, null, null);
 		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration(null,null, null, null,null,null,null);
@@ -253,14 +328,15 @@ public class MarketPlaceTest
     }
     
     /**
-     * Rigourous Test :-)
+     * ConfigureKeepComissionPercentAndChangeAutoWithDraw
      */
-    public void testConfigureKeepComissionPercentAndChangeAutoWithDraw()
+	@Test
+    public void testH()
     {
 
-    	//{"account_id":"9945CFA951234A85870B7C98E5283836","name":"Noeli Ghisi","live_api_token":"251df262110fc3d74ea3262c20093bbe","test_api_token":"744939511d57522c618466cc5966b72a","user_token":"06fa4a7767762feb3c0b82ebd3143944"}
-    	
-		Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		
+		Iugu.init(integratedTest.getUserToken());
 
 		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, Boolean.TRUE, null, null, null, null, null, null);
 		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(true, null, null);
@@ -281,14 +357,15 @@ public class MarketPlaceTest
     }
     
     /**
-     * Rigourous Test :-)
+     * ConfigureBankSlip
      */
-    public void testConfigureBankSlip()
+	@Test
+    public void testI()
     {
 
-    	//{"account_id":"9945CFA951234A85870B7C98E5283836","name":"Noeli Ghisi","live_api_token":"251df262110fc3d74ea3262c20093bbe","test_api_token":"744939511d57522c618466cc5966b72a","user_token":"06fa4a7767762feb3c0b82ebd3143944"}
-    	
-		Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		Iugu.init(integratedTest.getUserToken());
+		
 
 		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
 		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(Boolean.TRUE, 2, 2);
@@ -306,14 +383,14 @@ public class MarketPlaceTest
     }
     
     /**
-     * Rigourous Test :-)
+     * ReConfigureBankSlip(
      */
-    public void testReConfigureBankSlip()
+	@Test
+    public void testJ()
     {
-
-    	//{"account_id":"9945CFA951234A85870B7C98E5283836","name":"Noeli Ghisi","live_api_token":"251df262110fc3d74ea3262c20093bbe","test_api_token":"744939511d57522c618466cc5966b72a","user_token":"06fa4a7767762feb3c0b82ebd3143944"}
-    	
-		Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		
+		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		Iugu.init(integratedTest.getUserToken());
 
 		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
 		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(Boolean.FALSE, 1, 1);
@@ -331,14 +408,14 @@ public class MarketPlaceTest
     }
     
     /**
-     * Rigourous Test :-)
+     * ConfigureCreditCard
      */
-    public void testConfigureCreditCard()
+	@Test
+    public void testK()
     {
 
-    	//{"account_id":"9945CFA951234A85870B7C98E5283836","name":"Noeli Ghisi","live_api_token":"251df262110fc3d74ea3262c20093bbe","test_api_token":"744939511d57522c618466cc5966b72a","user_token":"06fa4a7767762feb3c0b82ebd3143944"}
-    	
-		Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		Iugu.init(integratedTest.getUserToken());
 
 		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
 		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(null, null, null);
@@ -371,14 +448,15 @@ public class MarketPlaceTest
     }
     
     /**
-     * Rigourous Test :-)
+     * ReConfigureCreditCard
      */
-    public void testReConfigureCreditCard()
+	@Test
+    public void testL()
     {
 
-    	//{"account_id":"9945CFA951234A85870B7C98E5283836","name":"Noeli Ghisi","live_api_token":"251df262110fc3d74ea3262c20093bbe","test_api_token":"744939511d57522c618466cc5966b72a","user_token":"06fa4a7767762feb3c0b82ebd3143944"}
-    	
-		Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
+		Iugu.init(integratedTest.getUserToken());
+		
 
 		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
 		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(null, null, null);
@@ -407,14 +485,15 @@ public class MarketPlaceTest
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * CreatePFTesteSubAccount
      */
-    public void testCreatePFTesteSubAccount()
+	@Test
+    public void testM()
     {
 
-    	//{"account_id":"9945CFA951234A85870B7C98E5283836","name":"Noeli Ghisi","live_api_token":"251df262110fc3d74ea3262c20093bbe","test_api_token":"744939511d57522c618466cc5966b72a","user_token":"06fa4a7767762feb3c0b82ebd3143944"}
-    	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		//Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getUserToken());
+		
 		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Noeli Ghisi",1));
 		
 		assertTrue( responseSubAccount.getId() != null);
@@ -436,38 +515,35 @@ public class MarketPlaceTest
     }
     
     /**
-     * Rigourous Test :-)
+     * FindSubAccountPF
      */
-    public void testFindSubAccountPF()
+	@Test
+    public void testN()
     {
-
-    	//{"account_id":"BFE13F587384440BB8A05E63BC74B961","name":"Marcel Ghisi","live_api_token":"56e9b3a30990a8c97260d475bca4f11f","test_api_token":"4485d3d52775dbccccc4b64eb5ccf996","user_token":"e6a1bc0e23f73fa6187c77b889a5d836"}
+	
+		//Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
+		Iugu.init(integratedTest.getUserToken());
 		
-		Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
-		SubAccountInformationResponse responseInformation = new MarketPlaceService().find("9945CFA951234A85870B7C98E5283836");
+		SubAccountInformationResponse responseInformation = new MarketPlaceService().find(integratedTest.getSubAccountId());
 		
 		System.out.println("TESTANDO FIND SUBACCOUNT");
 		System.out.print(" ID: " + responseInformation.getId() + ";");
 		System.out.print(" Name: " + responseInformation.getName()+ ";");
 		
-		//Response
-		//{"id":"BFE13F587384440BB8A05E63BC74B961","name":"Marcel Ghisi","created_at":"2016-01-07T19:16:10-02:00","updated_at":"2016-01-07T19:16:12-02:00","can_receive?":false,"is_verified?":false,"last_verification_request_status":null,"last_verification_request_data":null,"last_verification_request_feedback":null,"change_plan_type":1,"subscriptions_trial_period":0,"subscriptions_billing_days":null,"disable_emails":false,"last_withdraw":null,"reply_to":null,"webapp_on_test_mode":false,"marketplace":false,"default_return_url":null,"credit_card_verified":null,"fines":null,"late_payment_fine":null,"per_day_interest":null,"auto_withdraw":false,"payment_email_notification":false,"auto_advance":false,"auto_advance_type":null,"auto_advance_option":null,"balance":"R$ 0,00","protected_balance":"R$ 0,00","payable_balance":"R$ 0,00","receivable_balance":"R$ 0,00","commission_balance":"R$ 0,00","volume_last_month":"R$ 0,00","volume_this_month":"R$ 0,00","total_subscriptions":0,"total_active_subscriptions":0,"taxes_paid_last_month":"R$ 0,00","taxes_paid_this_month":"R$ 0,00","custom_logo_url":null,"custom_logo_small_url":null,"informations":[{"key":"commission_percent","value":"1.0"}],"configuration":{"auto_withdraw":false,"payment_email_notification":false,"auto_advance":null,"auto_advance_type":null,"auto_advance_option":null,"commission_percent":1.0,"fines":null,"late_payment_fine":null,"per_day_interest":null,"bank_slip":{"active":true,"extra_due":"0","reprint_extra_due":"0"},"credit_card":{"active":false,"soft_descriptor":"","installments":false,"installments_pass_interest":false,"max_installments":"0","max_installments_without_interest":"0","two_step_transaction":false}}}
-		
 		assertTrue( responseInformation.getId() != null);
     }
     
     /**
-     * Rigourous Test :-)
+     * ValidateCPFInvalidoSubAccount
      */
-    public void testValidateCPFInvalidoSubAccount()
+	@Test
+    public void testO()
     {
 
-    	//{"account_id":"9945CFA951234A85870B7C98E5283836","name":"Noeli Ghisi","live_api_token":"251df262110fc3d74ea3262c20093bbe","test_api_token":"744939511d57522c618466cc5966b72a","user_token":"06fa4a7767762feb3c0b82ebd3143944"}
-    	
-		Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
-		SubAccountInformationResponse responseInformation = new MarketPlaceService().find("9945CFA951234A85870B7C98E5283836");
+		//Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
+		Iugu.init(integratedTest.getUserToken());
 		
-		String accountId = responseInformation.getId().toString();
+		String accountId = integratedTest.getSubAccountId();
 
 		MainSetthingsData mainSetthingsData = new MainSetthingsData("Serviços de Manicure",SubAccountPriceRange.ENTRE_100_500,Boolean.FALSE,Boolean.TRUE);
 		PersonData pF = new PersonData("123.123.123-12","NOELI OLIVA XAVIER GHISI","11-3399-5090");
@@ -488,17 +564,16 @@ public class MarketPlaceTest
     }
     
     /**
-     * Rigourous Test :-)
+     * ValidateCPFValidoSubAccount(
      */
-    public void testValidateCPFValidoSubAccount()
+	@Test
+    public void testP()
     {
 
-    	//{"account_id":"9945CFA951234A85870B7C98E5283836","name":"Noeli Ghisi","live_api_token":"251df262110fc3d74ea3262c20093bbe","test_api_token":"744939511d57522c618466cc5966b72a","user_token":"06fa4a7767762feb3c0b82ebd3143944"}
-    	
 		Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
-		SubAccountInformationResponse responseInformation = new MarketPlaceService().find("9945CFA951234A85870B7C98E5283836");
+		Iugu.init(integratedTest.getUserToken());
 		
-		String accountId = responseInformation.getId().toString();
+		String accountId = integratedTest.getSubAccountId();
 
 		MainSetthingsData mainSetthingsData = new MainSetthingsData("Serviços de Manicure",SubAccountPriceRange.ENTRE_100_500,Boolean.FALSE,Boolean.TRUE);
 		PersonData pF = new PersonData("18788209822","NOELI OLIVA XAVIER GHISI","11-3399-5090");
@@ -519,27 +594,30 @@ public class MarketPlaceTest
     }
     
     /**
-     * Rigourous Test :-)
+     * VerifyIsPendingVerificationForCPF
      */
-    public void testVerifyIsPendingVerificationForCPF()
+	@Test
+    public void testQ()
     {
-    	//{"account_id":"BFE13F587384440BB8A05E63BC74B961","name":"Marcel Ghisi","live_api_token":"56e9b3a30990a8c97260d475bca4f11f","test_api_token":"4485d3d52775dbccccc4b64eb5ccf996","user_token":"e6a1bc0e23f73fa6187c77b889a5d836"}
+
+		//Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
+		Iugu.init(integratedTest.getUserToken());
 		
-		Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
-		SubAccountInformationResponse responseInformation = new MarketPlaceService().find("9945CFA951234A85870B7C98E5283836");
+		SubAccountInformationResponse responseInformation = new MarketPlaceService().find(integratedTest.getSubAccountId());
 		
 		assertTrue( responseInformation.getLastVerificationRequestStatus().contains("pending"));
     }
     
     /**
-     * Rigourous Test :-)
+     * ConfigureSoftDescriptionSubAccount
      */
-    public void testConfigureSoftDescriptionSubAccount()
+	@Test
+    public void testR()
     {
 
-    	//{"account_id":"9945CFA951234A85870B7C98E5283836","name":"Noeli Ghisi","live_api_token":"251df262110fc3d74ea3262c20093bbe","test_api_token":"744939511d57522c618466cc5966b72a","user_token":"06fa4a7767762feb3c0b82ebd3143944"}
-    	
-		Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
+		//Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
+		Iugu.init(integratedTest.getUserToken());
+		
 
 		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
 		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(true, null, null);
@@ -555,12 +633,13 @@ public class MarketPlaceTest
     }
     
     /**
-     * Rigourous Test :-)
+     * UpdateBankDataDocumentBlankPF
      */
-    public void testUpdateBankDataDocumentBlankPF()
+	@Test
+    public void testS()
     {
-
-		Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
+		//Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
+		Iugu.init(integratedTest.getUserToken());
 		
 		String b64 = null; 
 		try {
@@ -577,14 +656,16 @@ public class MarketPlaceTest
     }
     
     /**
-     * Rigourous Test :-)
+     * RequestWithDraw
      */
-    public void testRequestWithDraw()
+	@Test
+    public void testT()
     {
-		Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
-		SubAccountInformationResponse responseInformation = new MarketPlaceService().find("9945CFA951234A85870B7C98E5283836");
 
-		String accountId = responseInformation.getId();
+		//Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
+		Iugu.init(integratedTest.getUserToken());
+		
+		String accountId = integratedTest.getSubAccountId();
 
 		RequestWithDrawResponse responseWithDraw = new MarketPlaceService().createWithDrawRequest(accountId, new Double(1));
 
