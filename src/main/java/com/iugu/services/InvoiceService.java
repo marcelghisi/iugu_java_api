@@ -70,12 +70,12 @@ public class InvoiceService extends BaseService {
 		return paymentResponse;
 	}
 
-	public InvoiceResponse duplicate(String id,
+	public InvoiceResponse duplicate(String invoiceId,
 			DuplicateInvoiceRequest duplicateRequest) {
 
 		Response response = Iugu
 				.getClient()
-				.target(String.format(DUPLICATE_URL, id))
+				.target(String.format(DUPLICATE_URL, invoiceId))
 				.request()
 				.post(Entity.entity(duplicateRequest,
 						MediaType.APPLICATION_JSON));

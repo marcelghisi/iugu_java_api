@@ -77,6 +77,7 @@ public class Invoice implements Serializable {
 	@SerializedName("due_date")
 	private Date dueDate;
 	
+	
 	private List<Item> items = new ArrayList<>();
 
 	@JsonProperty("return_url")
@@ -427,7 +428,6 @@ public class Invoice implements Serializable {
 	public void setCredits(Integer credits) {
 		this.credits = credits;
 	}
-	
 	
 	
 }

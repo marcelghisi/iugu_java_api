@@ -5,155 +5,377 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
+
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.iugu.Iugu;
+import com.iugu.model.Address;
+import com.iugu.model.BankSlipConfiguration;
+import com.iugu.model.CreditCardConfiguration;
+import com.iugu.model.Customer;
+import com.iugu.model.Data;
 import com.iugu.model.DuplicateInvoiceRequest;
 import com.iugu.model.DuplicateItemsInvoiceRequest;
 import com.iugu.model.Invoice;
 import com.iugu.model.Item;
 import com.iugu.model.ListInvoiceCriteria;
+import com.iugu.model.MainSettingsConfiguration;
+import com.iugu.model.PayableWith;
+import com.iugu.model.Payer;
+import com.iugu.model.PaymentToken;
+import com.iugu.model.SubAccount;
+import com.iugu.model.SubAccountConfiguration;
+import com.iugu.model.Subscription;
+import com.iugu.model.TokenDirectCharge;
+import com.iugu.responses.ChargeResponse;
+import com.iugu.responses.CustomerResponse;
 import com.iugu.responses.InvoiceResponse;
 import com.iugu.responses.ListInvoiceResponse;
+import com.iugu.responses.PaymentTokenResponse;
+import com.iugu.responses.SubAccountInformationResponse;
+import com.iugu.responses.SubAccountResponse;
+import com.iugu.responses.SubscriptionResponse;
+import com.iugu.services.CustomerService;
 import com.iugu.services.InvoiceService;
+import com.iugu.services.MarketPlaceService;
+import com.iugu.services.PaymentService;
+import com.iugu.services.SubscriptionService;
 
 /**
- * Unit test for simple App.
+ * Testa CRUD de métodos de pagamento.
  */
-public class InvoicesTest 
-    extends TestCase
-{
-	/**
-     * Create the test case
-     *
-     * @param testName name of the test case
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class InvoicesTest extends TestCase{
+	
+    public static class IntegratedTest { 
+    	
+    	private static String tokemTest1;
+    	private static String email = "thiagohcortez@gmail.com";
+    	private static String invoiceId;
+    	private static String customerId;
+    	private static String customerPaymentId;
+    	private static String subscriptionId;
+    	private static String customerPaymentIdB;
+    	private static String masterApiTokemTeste = "21ab6ca14384901acaea1793b91cdc98";
+    	private static String masterAccountId = "96461997-b6a0-48fb-808b-4f16ad88c718";
+    	private static String subAccountId;
+    	private static String liveApiToken;
+    	private static String testApiToken;
+    	private static String userToken;    	
+    	
+        public void setUserToken(String s) {
+        	userToken = s;
+        }
+        
+        public String getUserToken() {
+            return userToken;
+        }
+        
+        public void setTestApiToken(String s) {
+        	testApiToken = s;
+        }
+        
+        public String getTestApiToken() {
+            return testApiToken;
+        }
+        
+        public void setLiveApiToken(String s) {
+        	liveApiToken = s;
+        }
+        
+        public String getLiveApiToken() {
+            return liveApiToken;
+        }
+        
+        public void setSubAccountId(String s) {
+        	subAccountId = s;
+        }               
+        public String getSubAccountId() {
+            return subAccountId;
+        }
+        
+        public void setToken(String s) {
+            tokemTest1 = s;
+        }               
+        public String getToken() {
+            return tokemTest1;
+        }
+        
+        public void setCustomerId(String s) {
+            customerId = s;
+        }               
+        public String getCustomerId() {
+            return customerId;
+        }
+        
+        public void setSubscriptionId(String s) {
+            subscriptionId = s;
+        }               
+        public String getSubscriptionId() {
+            return subscriptionId;
+        }
+        
+        public void setCustomerPaymentId(String s) {
+            customerPaymentId = s;
+        }               
+        public String getCustomerPaymentId() {
+            return customerPaymentId;
+        }
+        
+        public void setCustomerPaymentIdB(String s) {
+            customerPaymentIdB = s;
+        }               
+        public String getCustomerPaymentIdB() {
+            return customerPaymentIdB;
+        }
+
+        public void setApiToken(String s) {
+            masterApiTokemTeste = s;
+        }               
+        public String getApiToken() {
+            return masterApiTokemTeste;
+        }
+        
+        public void setMasterAccountId(String s) {
+            masterAccountId = s;
+        }               
+        public String getMasterAccountId() {
+            return masterAccountId;
+        }
+        
+        public void setInvoice(String s) {
+            invoiceId = s;
+        }               
+        public String getInvoice() {
+            return invoiceId;
+        }
+        
+        public String getEmail() {
+            return email;
+        }
+        
+        
+    }
+
+    private IntegratedTest integratedTest;
+
+    
+    /**
+     * Set Up
+     * 
      */
-    public InvoicesTest( String testName )
+    @Override
+    protected void setUp() throws Exception {
+    	integratedTest = new IntegratedTest();
+    	
+		Iugu.init(integratedTest.getApiToken());
+		
+		//Cria cliente
+		Customer customer = new Customer("ARTHUR GHISI","arthur.ghisi@gmail.com","02479484971");
+		CustomerResponse responseCustomer = new CustomerService().create(customer);
+		assertTrue( responseCustomer.getId() != null);
+		
+		integratedTest.setCustomerId(responseCustomer.getId());
+		
+		//Cria subscription
+		Subscription subs = new Subscription(responseCustomer.getId(),"plano_basico");
+		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
+		assertTrue( subsResponse.getId() != null);
+		integratedTest.setSubscriptionId(subsResponse.getId());
+
+		//Cria uma subconta para tester captura de invoice 2 tempos
+		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Marcel Ghisi",1));
+		integratedTest.setLiveApiToken(responseSubAccount.getLiveApiToken());
+		integratedTest.setTestApiToken(responseSubAccount.getTestApiToken());
+		integratedTest.setUserToken(responseSubAccount.getUserToken());
+		integratedTest.setSubAccountId(responseSubAccount.getId());
+		
+		//Configura a subconta para criar invoices em 2 tempos
+		Iugu.init(responseSubAccount.getUserToken());
+
+		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
+		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(null, null, null);
+		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration(Boolean.TRUE,"ATTENDCHANG", Boolean.TRUE,Boolean.TRUE,10,6,Boolean.TRUE);
+		
+		SubAccountConfiguration subAccountConfiguration = new SubAccountConfiguration(mainSettingsConfiguration, bankSlipConfiguration, creditCardConfiguration);
+		
+		SubAccountInformationResponse responseInformationResp = new MarketPlaceService().configureSubAccount(subAccountConfiguration);
+		
+    	assertTrue(responseInformationResp != null);
+    }
+    
+    /**
+     * Cria um customer para testar a criação da carteira dele
+     */
+	@Test
+    public void testA()
     {
-        super( testName );
+    	
+    	integratedTest = new IntegratedTest();
+    	
+		Iugu.init(integratedTest.getApiToken());
+		
+		Customer customer = new Customer("THIAGO HENRIQUE",integratedTest.getEmail(),"02479484971");
+
+		CustomerResponse responseCustomer = new CustomerService().create(customer);
+    	
+    	//Valida se o tokem foi criado
+    	assertTrue(responseCustomer != null);
+    	
+    	//Valida se não retornou erros
+    	assertTrue(responseCustomer.getErrors() == null);
+    	
+    	//Valida se não ocorreu erro 500
+    	assertTrue(responseCustomer.getStatusCode() == null);
+    	
+    	integratedTest.setCustomerId(responseCustomer.getId());
     }
 
     /**
-     * @return the suite of tests being tested
+     * Cria invoice simples com e-mail data de vencimento e 1 item
      */
-    public static Test suite()
-    {
-        return new TestSuite( InvoicesTest.class );
-    }
-
-    /**
-     * Rigourous Test : testCreatePJTesteSubAccount
-     */
-    public void testCreateInvoiceWithEmail()
+	@Test
+    public void testB()
     {
 		//Funfa cria fatura e envia boleto com invoice
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
 		Item item2 = new Item("Cafe",1,1200);
 		List<Item> items = new ArrayList<Item>(0);
 		items.add(item2);
 		
-		Invoice inv = new Invoice.Builder("marcelghisi@gmail.com", new Date(), items).build();
+		Invoice inv = new Invoice.Builder(integratedTest.getEmail(), new Date(), items).build();
+		
+		InvoiceResponse response = new InvoiceService().create(inv);
+        
+		assertTrue( response != null );
+    }
+	
+    /**
+     * Cria invoice simples com e-mail data de vencimento e 1 item
+     */
+	@Test
+    public void testC()
+    {
+		Iugu.init(integratedTest.getApiToken());
+		
+		Item item2 = new Item("Cafe Perigina",1,490);
+		List<Item> items = new ArrayList<Item>(0);
+		items.add(item2);
+		
+		Calendar data = Calendar.getInstance();
+        data.add(Calendar.DAY_OF_MONTH, 1);
+		
+		Invoice inv = new Invoice.Builder(integratedTest.getEmail(), data.getTime(), items).build();
 		
 		InvoiceResponse response = new InvoiceService().create(inv);
         
 		assertTrue( response != null );
     }
     
-    public void testCreateInvoiceWithCustomer()
+    /**
+     * Cria invoice para um customer cadastrado na conta master
+     */
+	@Test
+    public void testD()
     {
-		//Funfa cria fatura e envia boleto com invoice
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
-		Item item2 = new Item("Cafe",1,1200);
+		Item item2 = new Item("Cafe Brazil Cacau",1,110);
 		List<Item> items = new ArrayList<Item>(0);
 		items.add(item2);
 		
-		Invoice inv = new Invoice.Builder("marcelghisi@gmail.com", new Date(), items).customerId("E5A929BD4A364698ABA72568FAD15FE1").build();
+		Invoice inv = new Invoice.Builder(integratedTest.getEmail(), new Date(), items).customerId(integratedTest.getApiToken()).build();
 		
 		InvoiceResponse response = new InvoiceService().create(inv);
         
 		assertTrue( response != null );
     }
     
-    public void testCreateInvoiceWithCustomerInvoice()
+    /**
+     * Cria invoice associada a uma asinatura especifica 
+     */
+	@Test
+    public void testE()
     {
-		//Funfa cria fatura e envia boleto com invoice
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
-		Item item2 = new Item("Cafe",1,1200);
+		Item item2 = new Item("Cafe Nespresso",1,220);
 		List<Item> items = new ArrayList<Item>(0);
 		items.add(item2);
 		
-		Invoice inv = new Invoice.Builder("marcelghisi@gmail.com", new Date(), items)
-		.customerId("E5A929BD4A364698ABA72568FAD15FE1")
-		.subscriptionId("C4AE4B969B6F4B85A64BE83AC1F206D2")
+		Invoice inv = new Invoice.Builder(integratedTest.getEmail(), new Date(), items)
+		.customerId(integratedTest.getCustomerId())
+		.subscriptionId(integratedTest.getSubscriptionId())
 		.build();
 		
 		InvoiceResponse response = new InvoiceService().create(inv);
         
 		assertTrue( response != null );
-    }
-    
-    /*
-     * Rigourous Test : testCreatePJTesteSubAccount
-     */
-    public void testFindInvoice()
-    {
-
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-
-		InvoiceResponse responseCustomer = new InvoiceService().find("990FFB91E6FD4FEC892BAF52B8EC2AB7");
 		
-		assertTrue( responseCustomer != null);
-		
+    	assertTrue(response != null);
+    	
+    	assertTrue(response.getErrors() == null);
+    	
+    	assertTrue(response.getStatusCode() == null);
+    	
+    	integratedTest.setInvoice(response.getId());
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * Procura por um invoice 
      */
-    public void testChangeInvoice()
+	@Test
+    public void testF()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 
-		InvoiceResponse responseInvoice = new InvoiceService().find("B1540CA6ACDA44F3A42C47748CE43C28");
+		InvoiceResponse responseCustomer = new InvoiceService().find(integratedTest.getInvoice());
 		
-		Invoice invoice = new Invoice(responseInvoice);
-		invoice.setDiscountCents(100);
+		assertTrue( responseCustomer != null );
+    	
+    	assertTrue(responseCustomer.getErrors() == null);
+    	
+    	assertTrue(responseCustomer.getStatusCode() == null);
 		
-		InvoiceResponse responseChange = new InvoiceService().change(invoice);
-
-		
-		assertTrue( responseChange.getDiscountCents() != null);
-		
+    	integratedTest.setInvoice(responseCustomer.getId());
     }
+	
+
+//	@Test
+//    public void testG()
+//    {
+//
+//		Iugu.init(integratedTest.getApiToken());
+//
+//		InvoiceResponse responseInvoice = new InvoiceService().find(integratedTest.getInvoice());
+//		
+//		Invoice invoice = new Invoice(responseInvoice);
+//		
+//		invoice.setDiscountCents(100);
+//		
+//		InvoiceResponse responseChange = new InvoiceService().change(invoice);
+//
+//		
+//		assertTrue( responseChange.getDiscountCents() != null);
+//		
+//    }
+    
+    
+
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * Duplica um invoice
      */
-    public void testCaptureInvoice()
-    {
-    	//TODO Testar com sub conta de avaliacao das faturas
-
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		
-		InvoiceResponse responseInvoice = new InvoiceService().capture("ADD8246A1F61417C818DF428BE41FDDB");
-		
-		assertTrue( responseInvoice.getId() != null);
-		
-    }
-    
-    /**
-     * Rigourous Test : testDuplicateInvoice
-     */
-    public void testDuplicateInvoiceWithNewDate()
+	@Test
+    public void testG()
     {
 
-    	//BUG Aberto na iugu
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
 		//New Expire Date
 		Calendar c = Calendar.getInstance();  
@@ -161,25 +383,26 @@ public class InvoicesTest
 		c.set(Calendar.DAY_OF_MONTH, 23);
 		
 		DuplicateInvoiceRequest duplicateRequestDate = new DuplicateInvoiceRequest(c.getTime(), Boolean.FALSE, Boolean.FALSE);
-
-		//Leia mais em: Trabalhando com as classes Date, Calendar e SimpleDateFormat em Java http://www.devmedia.com.br/trabalhando-com-as-classes-date-calendar-e-simpledateformat-em-java/27401#ixzz3xUzipLgA
-			
-		InvoiceResponse responseInvoice = new InvoiceService().duplicate("990FFB91E6FD4FEC892BAF52B8EC2AB7",duplicateRequestDate);
+	
+		InvoiceResponse responseInvoice = new InvoiceService().duplicate(integratedTest.getInvoice(),duplicateRequestDate);
 		
-		assertTrue( responseInvoice.getStatusCode() != null);
+		assertTrue( responseInvoice.getStatusCode() == null);
 		assertTrue( responseInvoice.getId() != null);
+		
+		integratedTest.setInvoice(responseInvoice.getId());
 		
     }
     
     /**
-     * Rigourous Test : testDuplicateInvoice
+     * Duplica um invoice add Item
      */
-    public void testDuplicateInvoiceAddItem()
+	@Test
+    public void testH()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
-		InvoiceResponse responseInvoice = new InvoiceService().find("638FF3F181ED4B27B60536398427AD62");
+		InvoiceResponse responseInvoice = new InvoiceService().find(integratedTest.getInvoice());
 		
 		//New Expire Date
 		Calendar c = Calendar.getInstance();  
@@ -200,17 +423,20 @@ public class InvoicesTest
 		
 		assertTrue( responseInvoiceD.getId() != null);
 		
+		integratedTest.setInvoice(responseInvoiceD.getId());
+		
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * Duplica um invoice Eliminando Item
      */
-    public void testDuplicateInvoiceEliminandoItem()
+	@Test
+    public void testI()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
-		InvoiceResponse responseInvoice = new InvoiceService().find("8A1DB9601D3744D6B40718447C7ECE69");
+		InvoiceResponse responseInvoice = new InvoiceService().find(integratedTest.getInvoice());
 		
 		//New Expire Date
 		Calendar c = Calendar.getInstance();  
@@ -230,63 +456,115 @@ public class InvoicesTest
 		
 		assertTrue( responseInvoiceD.getId() != null);
 		
+		integratedTest.setInvoice(responseInvoiceD.getId());
+		
+    }
+	
+    /**
+     * Cancela um invoice
+     */
+	@Test
+    public void testJ()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+			
+		InvoiceResponse responseInvoice = new InvoiceService().cancel(integratedTest.getInvoice());
+		
+		assertTrue( responseInvoice.getId() != null);
+		
+		integratedTest.setInvoice(responseInvoice.getId());
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * Remove um invoice
      */
-    public void testRemoveInvoice()
+	@Test
+    public void testK()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
+	
+		InvoiceResponse responseInvoice = new InvoiceService().remove(integratedTest.getInvoice());
+		
+		assertTrue( responseInvoice.getId() != null);
+		
+    }
+    
 
-		//Leia mais em: Trabalhando com as classes Date, Calendar e SimpleDateFormat em Java http://www.devmedia.com.br/trabalhando-com-as-classes-date-calendar-e-simpledateformat-em-java/27401#ixzz3xUzipLgA
+    /**
+     * Pagamento com Tokem e opcionalmente Payer e Desconto
+     */
+	@Test
+    public void testL()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+
+		//Testa a criacao de uma Token de pagamento
+		//Usa os dados de um cartao de teste
+    	Data data = new Data("4242424242424242","123","Joao","Silva","12","2013");
+    	
+    	//Constroi o objeto com dados do pagamento
+    	PaymentToken pT = new PaymentToken(integratedTest.getMasterAccountId(), PayableWith.CREDIT_CARD,data,Boolean.FALSE);
+    	
+    	//Cria o tokem
+    	PaymentTokenResponse responseToken = new PaymentService().createToken(pT);
+    	
+		
+		Iugu.init(integratedTest.getApiToken());
+		
+		Item item = new Item("Refeição",1,1000);
+		List<Item> items = new ArrayList<Item>(0);
+		items.add(item);
+		
+		Address address = new Address("Rua Miguel Teles Junior", "129", "Sao Paulo", "SP", "BR","01540-040");
+		
+		Payer payer = new Payer("12312312312","MARCEL JOSE DA SILVA GHISI","11","33995090","marcel.ghisi@gmail.com",address);
+		
+		TokenDirectCharge cP = new TokenDirectCharge.Builder(responseToken.getId(),"marcel.ghisi@gmail.com",items).payer(payer).build();
+		
+		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
+		
+		assertTrue(responseDirectCharge  != null);
+		
+		integratedTest.setInvoice(responseDirectCharge.getInvoiceId());
+    }
+	
+    /**
+     * Captura um invoice 
+     */
+	@Test
+    public void testM()
+    {
+		Iugu.init(integratedTest.getApiToken());
+		InvoiceResponse responseInvoice = new InvoiceService().capture(integratedTest.getInvoice());
+		assertTrue( responseInvoice.getId() != null);	
+    }
+	
+    /**
+     * Refund um invoice
+     */
+	@Test
+    public void testN()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
 			
-		InvoiceResponse responseInvoice = new InvoiceService().remove("F425F2C510E7410897E6E6DE20D400D3");
+		InvoiceResponse responseInvoice = new InvoiceService().refund(integratedTest.getInvoice());
 		
 		assertTrue( responseInvoice.getId() != null);
 		
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * Lista invoices
      */
-    public void testCancelInvoice()
+	@Test
+    public void testO()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		
-		//Leia mais em: Trabalhando com as classes Date, Calendar e SimpleDateFormat em Java http://www.devmedia.com.br/trabalhando-com-as-classes-date-calendar-e-simpledateformat-em-java/27401#ixzz3xUzipLgA
-			
-		InvoiceResponse responseInvoice = new InvoiceService().cancel("B6E612827DBA4CE6B567524D9EAEA14E");
-		
-		assertTrue( responseInvoice.getId() != null);
-		
-    }
-    
-    /**
-     * Rigourous Test : testCreatePJTesteSubAccount
-     */
-    public void testRefundInvoice()
-    {
-
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		
-		//Leia mais em: Trabalhando com as classes Date, Calendar e SimpleDateFormat em Java http://www.devmedia.com.br/trabalhando-com-as-classes-date-calendar-e-simpledateformat-em-java/27401#ixzz3xUzipLgA
-			
-		InvoiceResponse responseInvoice = new InvoiceService().refund("6944C806BA9840F381C24DF8AC7F2D6A");
-		
-		assertTrue( responseInvoice.getId() != null);
-		
-    }
-    
-    /**
-     * Rigourous Test : testCreatePJTesteSubAccount
-     */
-    public void testListInvoices()
-    {
-
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 			
 		Calendar c = Calendar.getInstance();  
 		c.set(Calendar.MONTH, Calendar.MARCH); 
@@ -295,68 +573,82 @@ public class InvoicesTest
 		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().dueDate(c.getTime()).build();
 		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
 		
-		assertTrue( responseInvoice.getItems().size() == 6);
+		assertTrue( responseInvoice.getItems().size() >0);
 		
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * Lista invoices por cliente
      */
-    public void testListInvoicesByCustomer()
+	@Test
+    public void testP()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
-		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().customerId("E5A929BD4A364698ABA72568FAD15FE1").build();
+		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().customerId(integratedTest.getCustomerId()).build();
 		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
 		
-		assertTrue( responseInvoice.getItems().size() == 3);
+		assertTrue( responseInvoice.getItems().size() > 0);
 		
     }
     
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * Lista invoices por limit
      */
-    public void testListInvoicesByCustomerWithLimit()
+	@Test
+    public void testQ()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
-		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().customerId("E5A929BD4A364698ABA72568FAD15FE1").limit(2).build();
+		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().customerId(integratedTest.getCustomerId()).limit(2).build();
 		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
 		
-		assertTrue( responseInvoice.getItems().size() == 2);
+		assertTrue( responseInvoice.getItems().size() > 0);
 		
     }
     
-    public void testListInvoicesByCustomerWithLimitAndStart()
+    /**
+     * Lista invoices por limit e indice inicial
+     */
+	@Test
+    public void testR()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
 		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().limit(10).start(0).build();
 		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
 		
-		assertEquals( responseInvoice.getItems().get(9).getId(),"7B09529D23DB47AEAC6AFCE7ACDE0A0E");
+		assertTrue(responseInvoice.getItems().size() > 0);
 		
     }
     
-    public void testListInvoicesByCustomerWithLimitAndStart10()
+    /**
+     * Lista invoices por limit e indice inicial page 2
+     */
+	@Test
+    public void testS()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
 		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().limit(10).start(9).build();
 		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
 		
-		assertEquals( responseInvoice.getItems().get(0).getId(),"7B09529D23DB47AEAC6AFCE7ACDE0A0E");
+		assertTrue(responseInvoice.getItems().size() > 0);
 		
     }
     
-    public void testListInvoicesUpdatedSince()
+    /**
+     * Lista invoices updated desde 
+     */
+	@Test
+    public void testT()
     {
 
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 			
 		Calendar c = Calendar.getInstance();  
 		c.set(Calendar.MONTH, Calendar.JANUARY); 
@@ -365,7 +657,7 @@ public class InvoicesTest
 		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().updatedSince(c.getTime()).build();
 		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
 		
-		assertTrue( responseInvoice.getItems().size() == 43);
+		assertTrue( responseInvoice.getItems().size() > 0);
 		
     }
 
