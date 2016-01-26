@@ -35,7 +35,7 @@ public class PlanTest extends TestCase{
     	private static String customerPaymentIdB;
     	private static String masterApiTokemTeste = "21ab6ca14384901acaea1793b91cdc98";
     	private static String masterAccountId = "96461997-b6a0-48fb-808b-4f16ad88c718";
-    	private static String planIdentifier = "basic_plan_test2";
+    	private static String planIdentifier = "basic_plan_test3";
     	private static String subAccountId;
     	private static String liveApiToken;
     	private static String testApiToken;

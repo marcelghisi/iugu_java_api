@@ -1,15 +1,28 @@
 package com.iugu.iugu_java;
 
-import junit.framework.Test;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
+
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.iugu.Iugu;
 import com.iugu.model.Currency;
+import com.iugu.model.Customer;
+import com.iugu.model.Data;
 import com.iugu.model.IntervalType;
+import com.iugu.model.ItemType;
+import com.iugu.model.PayableWith;
+import com.iugu.model.PaymentMethodRequest;
 import com.iugu.model.Plan;
+import com.iugu.model.SubItem;
 import com.iugu.model.Subscription;
 import com.iugu.responses.CustomerResponse;
+import com.iugu.responses.PaymentMethodResponse;
 import com.iugu.responses.PlanResponse;
 import com.iugu.responses.SubscriptionResponse;
 import com.iugu.services.CustomerService;
@@ -17,139 +30,414 @@ import com.iugu.services.PlanService;
 import com.iugu.services.SubscriptionService;
 
 /**
- * Unit test for simple App.
+ * Testa CRUD de plans.
  */
-public class SubscriptionTest 
-    extends TestCase
-{
-	/**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public SubscriptionTest( String testName )
-    {
-        super( testName );
-    }
-
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( SubscriptionTest.class );
-    }
-
-    /**
-     * Rigourous Test : testCreatePJTesteSubAccount
-     */
-    public void testCreateSubscription()
-    {
-
-    	//{"id":"3AE8AE3508554F36B0B547F858493DF0","name":"ATTENDME P100","identifier":"plano_basico","interval":1,"interval_type":"months","created_at":"2016-01-10T15:31:03-02:00","updated_at":"2016-01-10T15:31:03-02:00","prices":[{"created_at":"2016-01-10T15:31:03-02:00","currency":"BRL","id":"A8918B620D224C4CAAC6AC7E30E679DE","plan_id":"3AE8AE3508554F36B0B547F858493DF0","updated_at":"2016-01-10T15:31:03-02:00","value_cents":1000}],"features":[],"payable_with":null}
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class SubscriptionTest extends TestCase{
+	
+    public static class IntegratedTest { 
     	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+    	private static String tokemTest1;
+    	private static String email = "thiagohcortez@gmail.com";
+    	private static String invoiceId;
+    	private static String customerId;
+    	private static String customerIdB;
+    	private static String customerPaymentId;
+    	private static String subscriptionId;
+    	private static String customerPaymentIdB;
+    	private static String masterApiTokemTeste = "21ab6ca14384901acaea1793b91cdc98";
+    	private static String masterAccountId = "96461997-b6a0-48fb-808b-4f16ad88c718";
+    	private static String planIdentifier = "basic_plan_testsubs22";
+    	private static String subAccountId;
+    	private static String liveApiToken;
+    	private static String testApiToken;
+    	private static String userToken; 
+    	private static String planId; 
+    	
+        public void setPlanIdentifier(String s) {
+        	planIdentifier = s;
+        }
+        
+        public String getPlanIdenifier() {
+            return planIdentifier;
+        }
+        
+        public void setPlanId(String s) {
+        	planId = s;
+        }
+        
+        public String getPlanId() {
+            return planId;
+        }
+        
+        public void setUserToken(String s) {
+        	userToken = s;
+        }
+        
+        public String getUserToken() {
+            return userToken;
+        }
+        
+        public void setTestApiToken(String s) {
+        	testApiToken = s;
+        }
+        
+        public String getTestApiToken() {
+            return testApiToken;
+        }
+        
+        public void setLiveApiToken(String s) {
+        	liveApiToken = s;
+        }
+        
+        public String getLiveApiToken() {
+            return liveApiToken;
+        }
+        
+        public void setSubAccountId(String s) {
+        	subAccountId = s;
+        }               
+        public String getSubAccountId() {
+            return subAccountId;
+        }
+        
+        public void setToken(String s) {
+            tokemTest1 = s;
+        }               
+        public String getToken() {
+            return tokemTest1;
+        }
+        
+        public void setCustomerId(String s) {
+            customerId = s;
+        }               
+        public String getCustomerId() {
+            return customerId;
+        }
+        
+        public void setCustomerIdB(String s) {
+            customerIdB = s;
+        }               
+        public String getCustomerIdB() {
+            return customerIdB;
+        }
+        
+        public void setSubscriptionId(String s) {
+            subscriptionId = s;
+        }               
+        public String getSubscriptionId() {
+            return subscriptionId;
+        }
+        
+        public void setCustomerPaymentId(String s) {
+            customerPaymentId = s;
+        }               
+        public String getCustomerPaymentId() {
+            return customerPaymentId;
+        }
+        
+        public void setCustomerPaymentIdB(String s) {
+            customerPaymentIdB = s;
+        }               
+        public String getCustomerPaymentIdB() {
+            return customerPaymentIdB;
+        }
+
+        public void setApiToken(String s) {
+            masterApiTokemTeste = s;
+        }               
+        public String getApiToken() {
+            return masterApiTokemTeste;
+        }
+        
+        public void setMasterAccountId(String s) {
+            masterAccountId = s;
+        }               
+        public String getMasterAccountId() {
+            return masterAccountId;
+        }
+        
+        public void setInvoice(String s) {
+            invoiceId = s;
+        }               
+        public String getInvoice() {
+            return invoiceId;
+        }
+        
+        public String getEmail() {
+            return email;
+        }
+        
+        
+    }
+
+    private IntegratedTest integratedTest;
+
+    /**
+     * Set Up
+     * 
+     */
+    @Override
+    protected void setUp() throws Exception {
+    	integratedTest = new IntegratedTest();
+    	
+
+    }
+    
+    
+    /**
+     * Create Subscription
+     */
+	@Test
+    public void testA()
+    {
+	
+		Iugu.init(integratedTest.getApiToken());
 		
-		CustomerResponse responseCustomer = new CustomerService().find("E5A929BD4A364698ABA72568FAD15FE1");
-		Subscription subs = new Subscription(responseCustomer.getId(),"plano_basico");
+		Plan plan = new Plan("ATTENDME P1000", integratedTest.getPlanIdenifier(), 1, IntervalType.MONTHS,Currency.BRL,1000);
+
+		PlanResponse planResponse = new PlanService().create(plan);
+		
+		assertTrue( planResponse.getId() != null);
+		
+		integratedTest.setPlanId(planResponse.getId());
+		
+    }
+    /**
+     * Create Subscription
+     */
+	@Test
+    public void testB()
+    {
+		
+		//Cria customer e Pay A
+		Iugu.init(integratedTest.getApiToken());
+		
+		Customer customer = new Customer("MARCEL GHISI","marcel.ghisi@gmail.com","02479484971");
+
+		CustomerResponse responseCustomer = new CustomerService().create(customer);
+    	
+    	//Valida se o tokem foi criado
+    	assertTrue(responseCustomer != null);
+    	
+    	//Valida se não retornou erros
+    	assertTrue(responseCustomer.getErrors() == null);
+    	
+    	//Valida se não ocorreu erro 500
+    	assertTrue(responseCustomer.getStatusCode() == null);
+    	
+    	integratedTest.setCustomerId(responseCustomer.getId());
+    	
+		Data data = new Data("4242424242424242","123","Joao","Silva","12","2013");
+		PaymentMethodRequest pData = new PaymentMethodRequest(ItemType.CREDIT_CARD, responseCustomer.getId(), "Cartão Teste", data, Boolean.FALSE);
+		
+		PaymentMethodResponse responsePayM = new CustomerService().createPaymentMethod(pData);
+		
+		assertTrue( responsePayM.getId() != null);
+		
+		
+		
+		
+		//Cria customer e Pay B
+		Iugu.init(integratedTest.getApiToken());
+		
+		Customer customerB = new Customer("ARTHUR GHISI","marcel.ghisi@gmail.com","02479484971");
+
+		CustomerResponse responseCustomerB = new CustomerService().create(customerB);
+    	
+    	//Valida se o tokem foi criado
+    	assertTrue(responseCustomerB != null);
+    	
+    	//Valida se não retornou erros
+    	assertTrue(responseCustomerB.getErrors() == null);
+    	
+    	//Valida se não ocorreu erro 500
+    	assertTrue(responseCustomerB.getStatusCode() == null);
+    	
+    	integratedTest.setCustomerIdB(responseCustomerB.getId());
+    	
+		Data dataB = new Data("4012888888881881","123","Joao","Silva","12","2013");
+		PaymentMethodRequest pDataB = new PaymentMethodRequest(ItemType.CREDIT_CARD, responseCustomerB.getId(), "Cartão Teste", dataB, Boolean.FALSE);
+		
+		PaymentMethodResponse responsePayMB = new CustomerService().createPaymentMethod(pDataB);
+		
+		assertTrue( responsePayMB.getId() != null);
+    }
+
+    /**
+     * Create Subscription
+     */
+	@Test
+    public void testC()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+		
+		Subscription subs = new Subscription
+								.Builder(integratedTest.getCustomerId())
+								.planIdentifier(integratedTest.getPlanIdenifier())
+								.build();
 
 		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
 		
 		assertTrue( subsResponse.getId() != null);
 		
     }
-    
+	
     /**
-     * Rigourous Test : testCreatePJTesteSubAccount
+     * Create Subscription com data de expiração
      */
-    public void testCreatePlan2()
+	@Test
+    public void testD()
     {
 
-    	//{"id":"04371BD080C2440FA0C913228F1ADCCD","name":"ATTENDME P200","identifier":"plano_premium","interval":1,"interval_type":"months","created_at":"2016-01-10T15:32:49-02:00","updated_at":"2016-01-10T15:32:49-02:00","prices":[{"created_at":"2016-01-10T15:32:49-02:00","currency":"BRL","id":"8D2F866DD85542798B76FBE3C7C341FA","plan_id":"04371BD080C2440FA0C913228F1ADCCD","updated_at":"2016-01-10T15:32:49-02:00","value_cents":30000}],"features":[],"payable_with":null}
-    	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
+		Iugu.init(integratedTest.getApiToken());
 		
-		Plan plan = new Plan("ATTENDME P200", "plano_premium", 1, IntervalType.MONTHS,Currency.BRL,30000);
+		//Primeira data dia 20 do mes atual
+		Calendar data = Calendar.getInstance();
+        data.add(Calendar.DAY_OF_MONTH, 20);
+        data.add(Calendar.YEAR, 1);
+        
+		Subscription subs = new Subscription
+								.Builder(integratedTest.getCustomerId())
+								.planIdentifier(integratedTest.getPlanIdenifier())
+								.expiresAt(data.getTime())
+								.build();
 
-		PlanResponse planResponse = new PlanService().create(plan);
+		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
 		
-		assertTrue( planResponse.getId() != null);
+		assertTrue( subsResponse.getId() != null);
+		
+    }
+	
+    /**
+     * Create Subscription com data de expiração se realizar o charge da primeira cobranca
+     */
+	@Test
+    public void testE()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+		
+		//Primeira data dia 20 do mes atual
+		Calendar data = Calendar.getInstance();
+        data.add(Calendar.DAY_OF_MONTH, 20);
+        data.add(Calendar.YEAR, 1);
+        
+		Subscription subs = new Subscription
+								.Builder(integratedTest.getCustomerId())
+								.planIdentifier(integratedTest.getPlanIdenifier())
+								.expiresAt(data.getTime())
+								.initOnlyOnChargeSuccess("true")
+								.build();
+
+		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
+		
+		assertTrue( subsResponse.getId() != null);
+		
+    }
+	
+    /**
+     * Create Subscription com data de expiração se realizar o charge da primeira cobranca
+     */
+	@Test
+    public void testF()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+		
+		//Primeira data dia 20 do mes atual
+		Calendar data = Calendar.getInstance();
+        data.add(Calendar.DAY_OF_MONTH, 1);
+        data.add(Calendar.YEAR, 1);
+        
+		Subscription subs = new Subscription
+								.Builder(integratedTest.getCustomerId())
+								.expiresAt(data.getTime())
+								.payableWith(PayableWith.BANK_SLIP)
+								.initOnlyOnChargeSuccess("true")
+								.creditsBased(Boolean.TRUE)
+								.creditsCycle(4)
+								.creditsCycleStartAt(0)
+								.priceInCents(10000)
+								.build();
+
+		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
+		
+		assertTrue( subsResponse.getId() != null);
+		assertEquals(0, subsResponse.getCredits().intValue());
+    }
+	
+    /**
+     * Create Subscription com data de expiração se realizar o charge da primeira cobranca
+     */
+	@Test
+    public void testG()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+		
+		//Primeira data dia 20 do mes atual
+		Calendar data = Calendar.getInstance();
+        data.set(Calendar.YEAR, data.get(Calendar.YEAR) + 1);
+        data.set(Calendar.DAY_OF_MONTH, data.get(Calendar.DAY_OF_MONTH) + 1);
+       
+        
+		Subscription subs = new Subscription
+								.Builder(integratedTest.getCustomerId())
+								.expiresAt(data.getTime())
+								.payableWith(PayableWith.CREDIT_CARD)
+								.creditsBased(Boolean.TRUE)
+								.creditsCycle(4)
+								.creditsCycleStartAt(0)
+								.priceInCents(10000)
+								.build();
+
+		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
+		
+		assertTrue( subsResponse.getId() != null);
+		assertEquals(4,subsResponse.getCredits().intValue());
+		
+    }
+	
+    /**
+     * Create Subscription com data de expiração se realizar o charge da primeira cobranca
+     */
+	@Test
+    public void testH()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+		
+		//Primeira data dia 20 do mes atual
+		Calendar data = Calendar.getInstance();
+        data.set(Calendar.YEAR, data.get(Calendar.YEAR) + 1);
+        data.set(Calendar.DAY_OF_MONTH, data.get(Calendar.DAY_OF_MONTH) + 1);
+        
+        SubItem sI = new SubItem("Corte de cabelo", 1, 23);
+        List<SubItem> lista = new ArrayList<SubItem>(0);
+        lista.add(sI);
+        
+		Subscription subs = new Subscription
+								.Builder(integratedTest.getCustomerIdB())
+								.expiresAt(data.getTime())
+								.payableWith(PayableWith.CREDIT_CARD)
+								.creditsBased(Boolean.TRUE)
+								.initOnlyOnChargeSuccess("true")
+								.creditsCycle(4)
+								.creditsCycleStartAt(0)
+								.priceInCents(10000)
+								.items(lista)
+								.build();
+
+		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
+		
+		assertTrue( subsResponse.getId() != null);
+		assertEquals(0,subsResponse.getCredits().intValue());
 		
     }
     
-    /**
-     * Rigourous Test : testCreatePJTesteSubAccount
-     */
-    public void testFindPlan()
-    {
 
-    	//{"id":"04371BD080C2440FA0C913228F1ADCCD","name":"ATTENDME P200","identifier":"plano_premium","interval":1,"interval_type":"months","created_at":"2016-01-10T15:32:49-02:00","updated_at":"2016-01-10T15:32:49-02:00","prices":[{"created_at":"2016-01-10T15:32:49-02:00","currency":"BRL","id":"8D2F866DD85542798B76FBE3C7C341FA","plan_id":"04371BD080C2440FA0C913228F1ADCCD","updated_at":"2016-01-10T15:32:49-02:00","value_cents":30000}],"features":[],"payable_with":null}
-    	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-
-		PlanResponse responseCustomer = new PlanService().find("04371BD080C2440FA0C913228F1ADCCD");
-		
-		assertTrue( responseCustomer.getId() != null);
-		//assertEquals(customer.getEmail(),responseCustomer.getEmail());
-		
-    }
-    
-    /**
-     * Rigourous Test : testCreatePJTesteSubAccount
-     */
-    public void testFindPlanIdentifier()
-    {
-
-    	//{"id":"04371BD080C2440FA0C913228F1ADCCD","name":"ATTENDME P200","identifier":"plano_premium","interval":1,"interval_type":"months","created_at":"2016-01-10T15:32:49-02:00","updated_at":"2016-01-10T15:32:49-02:00","prices":[{"created_at":"2016-01-10T15:32:49-02:00","currency":"BRL","id":"8D2F866DD85542798B76FBE3C7C341FA","plan_id":"04371BD080C2440FA0C913228F1ADCCD","updated_at":"2016-01-10T15:32:49-02:00","value_cents":30000}],"features":[],"payable_with":null}
-    	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-
-		PlanResponse responseCustomer = new PlanService().findByIdentifier("plano_basico");
-		
-		assertTrue( responseCustomer.getId() != null);
-		//assertEquals(customer.getEmail(),responseCustomer.getEmail());
-		
-    }
-    
-    /**
-     * Rigourous Test : testCreatePJTesteSubAccount
-     */
-    public void testChangePlan()
-    {
-
-    	//{"id":"04371BD080C2440FA0C913228F1ADCCD","name":"ATTENDME P200","identifier":"plano_premium","interval":1,"interval_type":"months","created_at":"2016-01-10T15:32:49-02:00","updated_at":"2016-01-10T15:32:49-02:00","prices":[{"created_at":"2016-01-10T15:32:49-02:00","currency":"BRL","id":"8D2F866DD85542798B76FBE3C7C341FA","plan_id":"04371BD080C2440FA0C913228F1ADCCD","updated_at":"2016-01-10T15:32:49-02:00","value_cents":30000}],"features":[],"payable_with":null}
-    	
-		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-
-		PlanResponse responseCustomer = new PlanService().findByIdentifier("plano_basico");
-
-		Plan plan = new Plan("ATTENDME P250", "plano_basico", 2, IntervalType.WEEKS,Currency.BRL,10000);
-		
-		PlanResponse responseChange = new PlanService().change(responseCustomer.getId(),plan);
-		assertTrue( responseChange.getId() != null);
-		//assertEquals(customer.getEmail(),responseCustomer.getEmail());
-		
-    }
-    
-    /**
-     * Rigourous Test : testCreatePJTesteSubAccount
-     */
-    public void testRemovePlan()
-    {
-
- 		Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		
-		PlanResponse responsePlan = new PlanService().remove("402695DC136A466ABD2F5E3F375C7958");
-		
-		assertTrue( responsePlan.getId() != null);
-		
-		PlanResponse responseFind = new PlanService().find("402695DC136A466ABD2F5E3F375C7958");
-		
-		assertTrue(responseFind.getErrors().get("errors").toString().contains("Plan Not Found"));
-    }
-
-
-    
 
 
 }
