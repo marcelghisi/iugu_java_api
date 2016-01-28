@@ -4,6 +4,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.google.gson.Gson;
 import com.iugu.Iugu;
 import com.iugu.model.Credit;
 import com.iugu.model.Subscription;
@@ -22,10 +23,16 @@ public class SubscriptionService extends BaseService{
 	private final String REMOVE_CREDITS_URL = Iugu.url("/subscriptions/%s/remove_credits");
 	
 	public SubscriptionResponse create(Subscription subscription) {
+		
+		Gson gson = new Gson();  
+		String json = gson.toJson(subscription);
+
+		System.out.println("+++ Prepare Request" + json);
+		
 		Response response = Iugu.getClient()
 				.target(CREATE_URL)
 				.request()
-				.post(Entity.entity(subscription, MediaType.APPLICATION_JSON));
+				.post(Entity.entity(json, MediaType.APPLICATION_JSON));
 		
 		SubscriptionResponse subscriptionResponse = (SubscriptionResponse) readResponse(response, SubscriptionResponse.class);
 		
@@ -44,10 +51,15 @@ public class SubscriptionService extends BaseService{
 	}
 	
 	public SubscriptionResponse change(String id, Subscription subscription) {
+		
+		Gson gson = new Gson();  
+		String json = gson.toJson(subscription);
+		System.out.println("+++ Prepare Request" + json);
+		
 		Response response = Iugu.getClient()
 				.target(String.format(CHANGE_URL, id))
 				.request()
-				.put(Entity.entity(subscription, MediaType.APPLICATION_JSON));
+				.put(Entity.entity(json, MediaType.APPLICATION_JSON));
 		
 		SubscriptionResponse subscriptionResponse = (SubscriptionResponse) readResponse(response, SubscriptionResponse.class);
 		

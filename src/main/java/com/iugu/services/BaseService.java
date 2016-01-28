@@ -20,7 +20,7 @@ public class BaseService {
 			
 			final String responseEntity = response.readEntity(String.class);
 
-			System.out.println(responseEntity);
+			System.out.println("+++ Response" + responseEntity);
 
 			//TODO Melhorar isso Acontece porque a API Rest devolve Erros em Types diferentes Lista e Texto
 			if (responseEntity.startsWith("{\"errors\":\"")){

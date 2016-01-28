@@ -8,6 +8,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.google.gson.annotations.SerializedName;
+import com.iugu.model.PayableWith;
 import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
 
@@ -43,6 +44,10 @@ public class SubscriptionResponse  extends MessageResponse{
 	@SerializedName("customer_email")
 	private String customerEmail;
 	
+	@JsonProperty("payable_with")
+	@SerializedName("payable_with")
+	private PayableWith payableWith;
+	
 	@JsonProperty("cycled_at")
 	@JsonFormat("yyyy-MM-dd'T'HH:mm:ssZ") 
 	@JsonSerialize(using = DateSerializer.class)
@@ -53,11 +58,17 @@ public class SubscriptionResponse  extends MessageResponse{
 	@SerializedName("credits_min")
 	private Integer creditsMin;
 	
+	@JsonProperty("credits_cycle")
+	@SerializedName("credits_cycle")
+	private Integer creditsCycle;
+	
 	//TODO Credits Cycle
 	
 	@JsonProperty("customer_id")
 	@SerializedName("customer_id")
 	private String customerId;
+	
+	
 	
 	@JsonProperty("plan_name")
 	@SerializedName("plan_name")
@@ -260,5 +271,22 @@ public class SubscriptionResponse  extends MessageResponse{
 	public void setCustomVariables(List<CustomVariableResponse> customVariables) {
 		this.customVariables = customVariables;
 	}
-	
+
+	public Integer getCreditsCycle() {
+		return creditsCycle;
+	}
+
+	public void setCreditsCycle(Integer creditsCycle) {
+		this.creditsCycle = creditsCycle;
+	}
+
+	public PayableWith getPayableWith() {
+		return payableWith;
+	}
+
+	public void setPayableWith(PayableWith payableWith) {
+		this.payableWith = payableWith;
+	}
+
+
 }

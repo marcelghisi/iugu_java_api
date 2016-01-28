@@ -2,9 +2,16 @@ package com.iugu.model;
 
 import org.codehaus.jackson.annotate.JsonValue;
 
+import com.google.gson.annotations.SerializedName;
+
 public enum PayableWith {
 
-	CREDIT_CARD("credit_card"), ALL("all"), BANK_SLIP("bank_slip");
+	@SerializedName("credit_card")
+	CREDIT_CARD("credit_card"), 
+	@SerializedName("all")
+	ALL("all"), 
+	@SerializedName("bank_slip")
+	BANK_SLIP("bank_slip");
 
 	private String value;
 

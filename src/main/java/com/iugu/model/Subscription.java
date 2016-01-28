@@ -8,12 +8,15 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.google.gson.annotations.SerializedName;
+import com.iugu.responses.SubscriptionResponse;
 import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Subscription {
 
+	private SubscriptionResponse response;
+	
 	@JsonProperty("customer_id")
 	@SerializedName("customer_id")
 	private String customerId;
@@ -31,10 +34,14 @@ public class Subscription {
 	@JsonProperty("only_on_charge_sucess")
 	@SerializedName("only_on_charge_sucess")
 	public String onlyOnChargeSucess;
+	
+	@JsonProperty("suspended")
+	@SerializedName("suspended")
+	public Boolean suspended;
 
 	@JsonProperty("payable_with")
 	@SerializedName("payable_with")
-	public PayableWith payableWith;
+	public String payableWith;
 
 	@JsonProperty("credits_based")
 	@SerializedName("credits_based")
@@ -75,7 +82,8 @@ public class Subscription {
 		private Integer creditsMin;
 		private List<CustomVariable> customVariables;
 		private List<SubItem> subItems;
-		 
+		private Boolean suspended; 
+		private SubscriptionResponse response;
 		
 		public Builder(String customerId) {
 		  this.customerId = customerId;
@@ -131,27 +139,49 @@ public class Subscription {
 			  return this;
 		}
 		
+		public Builder suspended (Boolean suspended) {
+			  this.suspended = suspended;
+			  return this;
+		}
+		
+		public Builder response (SubscriptionResponse response) {
+			  this.response = response;
+			  return this;
+		}
+		
 	    public Subscription build() {
 	        return new Subscription(this);
 	      }
 	}
 	
 	private Subscription(Builder builder) {
-		customerId = builder.customerId;
-		planIdentifier = builder.planIdentifier;
-		expiresAt = builder.expiresAt;
-		onlyOnChargeSucess = builder.onlyOnChargeSuccess;
-		payableWith = builder.payableWith;
-		creditsBased = (builder.creditsBased == null) ? Boolean.FALSE : builder.creditsBased;
-		priceCents = builder.priceCents == null ? null : builder.priceCents;
-		creditsCycle = builder.creditsCycle == null ? null : builder.creditsCycle;
-		creditsMin = builder.creditsMin == null ? null : builder.creditsMin;
-		customVariables = builder.customVariables == null ? null : builder.customVariables;
-		subItems = builder.subItems == null ? null : builder.subItems;
 		
 		if (planIdentifier != null && creditsBased != null && creditsBased == Boolean.TRUE) {
 			  throw new IllegalStateException("No Identifier for credit based subscriptios"); 
 		}
+		
+		String planIdentifierI = (response == null) ? builder.planIdentifier : response.getPlanIdentifier();
+		Integer credCycle = (response == null) ? builder.creditsCycle : response.getCreditsCycle();
+		Integer credMin = (response == null) ? builder.creditsMin : response.getCreditsMin();
+		Boolean credBased = (response == null) ? builder.creditsBased : response.getCreditsBased();
+		Integer price = (response == null) ? builder.priceCents : response.getPriceCents();
+		Boolean suspendido = (response == null) ? builder.suspended : response.getSuspended();
+		PayableWith payable = (response == null ) ? builder.payableWith : response.getPayableWith();
+		
+		customerId = builder.customerId;
+		planIdentifier = (planIdentifierI == null) ? null : planIdentifierI;
+		creditsCycle = (credCycle == null) ? null : credCycle;
+		creditsMin = (credMin == null) ? null : credMin;
+		creditsBased = (credBased == null) ? null : credBased;
+		priceCents = (price == null) ? null : price;
+		suspended = (suspendido == null) ? null : suspendido;
+		payableWith = (payable == null) ? null : payable.getValue();
+
+		expiresAt = builder.expiresAt;
+		onlyOnChargeSucess = builder.onlyOnChargeSuccess;
+		customVariables = builder.customVariables == null ? null : builder.customVariables;
+		subItems = builder.subItems == null ? null : builder.subItems;
+
 		
 	}
 	
@@ -183,15 +213,17 @@ public class Subscription {
 		this.onlyOnChargeSucess = onlyOnChargeSucess;
 	}
 
-	public PayableWith getPayableWith() {
+
+
+	public String getPayableWith() {
 		return payableWith;
 	}
 
-	public void setPayableWith(PayableWith payableWith) {
+	public void setPayableWith(String payableWith) {
 		this.payableWith = payableWith;
 	}
 
-	public boolean isCreditsBased() {
+	public Boolean isCreditsBased() {
 		return creditsBased;
 	}
 
@@ -238,4 +270,14 @@ public class Subscription {
 	public void setSubItems(List<SubItem> subItems) {
 		this.subItems = subItems;
 	}
+
+	public Boolean getSuspended() {
+		return suspended;
+	}
+
+	public void setSuspended(Boolean suspended) {
+		this.suspended = suspended;
+	}
+	
+	
 }
