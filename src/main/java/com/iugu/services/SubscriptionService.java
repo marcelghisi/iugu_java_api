@@ -1,18 +1,25 @@
 package com.iugu.services;
 
+import java.text.SimpleDateFormat;
+
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 import com.iugu.Iugu;
 import com.iugu.model.Credit;
+import com.iugu.model.ListInvoiceCriteria;
 import com.iugu.model.Subscription;
+import com.iugu.responses.ListInvoiceResponse;
+import com.iugu.responses.ListSubscriptionResponse;
 import com.iugu.responses.SubscriptionResponse;
 
 public class SubscriptionService extends BaseService{
 
 	private final String CREATE_URL = Iugu.url("/subscriptions");
+	private final String LIST_URL = Iugu.url("/subscriptions");
 	private final String FIND_URL = Iugu.url("/subscriptions/%s");
 	private final String CHANGE_URL = Iugu.url("/subscriptions/%s");
 	private final String REMOVE_URL = Iugu.url("/subscriptions/%s");
@@ -21,6 +28,8 @@ public class SubscriptionService extends BaseService{
 	private final String CHANGE_SUBSCRIPTION_PLAN_URL = Iugu.url("/subscriptions/%s/change_plan/%s");
 	private final String ADD_CREDITS_URL = Iugu.url("/subscriptions/%s/add_credits");
 	private final String REMOVE_CREDITS_URL = Iugu.url("/subscriptions/%s/remove_credits");
+
+	
 	
 	public SubscriptionResponse create(Subscription subscription) {
 		
@@ -106,26 +115,80 @@ public class SubscriptionService extends BaseService{
 		return subscriptionResponse;
 	}
 	
-	public SubscriptionResponse addCredits(String id, Credit credit) {
+	public SubscriptionResponse addCredits(String id, Integer newCredits) {
+		
+		Credit credit = new Credit(newCredits);
+		
+		Gson gson = new Gson();  
+		String json = gson.toJson(credit);
+		System.out.println("+++ Prepare Request" + json);
+		
 		Response response = Iugu.getClient().target(String.format(ADD_CREDITS_URL, id))
 		 .request()
-		 .post(Entity.entity(credit, MediaType.APPLICATION_JSON));
+		 .put(Entity.entity(json, MediaType.APPLICATION_JSON));
 		
 		SubscriptionResponse subscriptionResponse = (SubscriptionResponse) readResponse(response, SubscriptionResponse.class);
 		
 		return subscriptionResponse;
 	}
 	
-	public SubscriptionResponse removeCredits(String id, Credit credit) {
+	public SubscriptionResponse removeCredits(String id, Integer newCredits) {
+		
+		Credit credit = new Credit(newCredits);
+		
 		Response response = Iugu.getClient().target(String.format(REMOVE_CREDITS_URL, id))
 		 .request()
-		 .post(Entity.entity(credit, MediaType.APPLICATION_JSON));
+		 .put(Entity.entity(credit, MediaType.APPLICATION_JSON));
 		
 		SubscriptionResponse subscriptionResponse = (SubscriptionResponse) readResponse(response, SubscriptionResponse.class);
 		
 		return subscriptionResponse;
 	}
 	
-	//TODO Listar as assinaturas
+	public ListSubscriptionResponse list() {
+
+		SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
+
+		// Response response =
+		// Iugu.getClient().target(LIST_URL).queryParam("due_date",
+		// "2016-03-20").request().get();
+		
+		WebTarget target = Iugu.getClient().target(LIST_URL);
+		
+//		if (criteria.getDueDate() != null){
+//			target = target.queryParam("due_date", sm.format(criteria.getDueDate()));
+//		}
+//		if (criteria.getCustomerId() != null){
+//			target = target.queryParam("customer_id", criteria.getCustomerId());
+//		}
+//		if (criteria.getLimit() != null){
+//			target = target.queryParam("limit", criteria.getLimit());
+//		}
+//		if (criteria.getStart() != null){
+//			target = target.queryParam("start", criteria.getStart());
+//		}
+//		if (criteria.getCreatedAtFrom() != null){
+//			target = target.queryParam("created_at_from", sm.format(criteria.getCreatedAtFrom()));
+//		}
+//		if (criteria.getCreatedAtTo() != null){
+//			target = target.queryParam("created_at_to", sm.format(criteria.getCreatedAtTo()));
+//		}
+//		if (criteria.getUpdatedSince() != null){
+//			target = target.queryParam("updated_since", sm.format(criteria.getUpdatedSince()));
+//		}
+//		if (criteria.getQuery() != null){
+//			target = target.queryParam("query", criteria.getQuery());
+//		}
+//		if (criteria.getSortBy() != null){
+//			target = target.queryParam("sortBy", criteria.getSortBy());
+//		}
+		
+		Response response = target.request().get();
+
+		ListSubscriptionResponse paymentResponse = (ListSubscriptionResponse) readResponse(
+				response, ListSubscriptionResponse.class);
+
+		return paymentResponse;
+	}
 
 }

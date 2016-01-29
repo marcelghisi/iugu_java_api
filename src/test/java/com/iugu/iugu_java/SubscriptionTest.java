@@ -16,17 +16,22 @@ import com.iugu.model.Customer;
 import com.iugu.model.Data;
 import com.iugu.model.IntervalType;
 import com.iugu.model.ItemType;
+import com.iugu.model.ListInvoiceCriteria;
 import com.iugu.model.PayableWith;
 import com.iugu.model.PaymentMethodRequest;
 import com.iugu.model.Plan;
 import com.iugu.model.SubItem;
 import com.iugu.model.Subscription;
 import com.iugu.responses.CustomerResponse;
+import com.iugu.responses.ListInvoiceResponse;
 import com.iugu.responses.ListPlanResponse;
+import com.iugu.responses.ListSubscriptionResponse;
 import com.iugu.responses.PaymentMethodResponse;
 import com.iugu.responses.PlanResponse;
+import com.iugu.responses.SubItemResponse;
 import com.iugu.responses.SubscriptionResponse;
 import com.iugu.services.CustomerService;
+import com.iugu.services.InvoiceService;
 import com.iugu.services.PlanService;
 import com.iugu.services.SubscriptionService;
 
@@ -125,10 +130,10 @@ public class SubscriptionTest extends TestCase{
         }
         
         public void setSubscriptionPlanBasedId(String s) {
-            subscriptionCreditBasedId = s;
+            subscriptionPlanBasedId = s;
         }               
         public String getSubscriptionPlanBasedId() {
-            return subscriptionCreditBasedId;
+            return subscriptionPlanBasedId;
         }
         
         public void setSubscriptionCreditBasedId(String s) {
@@ -283,7 +288,8 @@ public class SubscriptionTest extends TestCase{
 		Iugu.init(integratedTest.getApiToken());
 		
 		Subscription subs = new Subscription
-								.Builder(integratedTest.getCustomerId())
+								.Builder()
+								.customerId(integratedTest.getCustomerId())
 								.planIdentifier(integratedTest.getPlanIdenifier())
 								.build();
 
@@ -308,7 +314,8 @@ public class SubscriptionTest extends TestCase{
         data.add(Calendar.YEAR, 1);
         
 		Subscription subs = new Subscription
-								.Builder(integratedTest.getCustomerId())
+								.Builder()
+								.customerId(integratedTest.getCustomerId())
 								.planIdentifier(integratedTest.getPlanIdenifier())
 								.expiresAt(data.getTime())
 								.build();
@@ -334,7 +341,8 @@ public class SubscriptionTest extends TestCase{
         data.add(Calendar.YEAR, 1);
         
 		Subscription subs = new Subscription
-								.Builder(integratedTest.getCustomerId())
+								.Builder()
+								.customerId(integratedTest.getCustomerId())
 								.planIdentifier(integratedTest.getPlanIdenifier())
 								.expiresAt(data.getTime())
 								.initOnlyOnChargeSuccess("true")
@@ -362,7 +370,8 @@ public class SubscriptionTest extends TestCase{
         data.add(Calendar.YEAR, 1);
         
 		Subscription subs = new Subscription
-								.Builder(integratedTest.getCustomerId())
+								.Builder()
+								.customerId(integratedTest.getCustomerId())
 								.expiresAt(data.getTime())
 								.payableWith(PayableWith.BANK_SLIP)
 								.initOnlyOnChargeSuccess("true")
@@ -394,7 +403,8 @@ public class SubscriptionTest extends TestCase{
        
         
 		Subscription subs = new Subscription
-								.Builder(integratedTest.getCustomerId())
+								.Builder()
+								.customerId(integratedTest.getCustomerId())
 								.expiresAt(data.getTime())
 								.payableWith(PayableWith.CREDIT_CARD)
 								.creditsBased(Boolean.TRUE)
@@ -429,7 +439,8 @@ public class SubscriptionTest extends TestCase{
         lista.add(sI);
         
 		Subscription subs = new Subscription
-								.Builder(integratedTest.getCustomerIdB())
+								.Builder()
+								.customerId(integratedTest.getCustomerId())
 								.expiresAt(data.getTime())
 								.payableWith(PayableWith.CREDIT_CARD)
 								.creditsBased(Boolean.TRUE)
@@ -443,7 +454,7 @@ public class SubscriptionTest extends TestCase{
 		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
 		
 		assertTrue( subsResponse.getId() != null);
-		assertEquals(0,subsResponse.getCredits().intValue());
+		assertEquals(4,subsResponse.getCredits().intValue());
 		assertEquals(Boolean.FALSE,subsResponse.getSuspended());
 		
 		integratedTest.setSubscriptionCreditBasedId(subsResponse.getId());
@@ -469,7 +480,7 @@ public class SubscriptionTest extends TestCase{
     
 
     /**
-     * Change Suspended Subscription
+     * Change Suspended based credit subscription
      */
 	@Test
     public void testJ()
@@ -477,13 +488,10 @@ public class SubscriptionTest extends TestCase{
 
 		Iugu.init(integratedTest.getApiToken());
 		
-		SubscriptionResponse subsResponse = new SubscriptionService().find(integratedTest.getSubscriptionCreditBasedId());
-		
-
 		Subscription subs = new Subscription
-				.Builder(integratedTest.getCustomerIdB())
+				.Builder()
+				.subscriptionId(integratedTest.getSubscriptionCreditBasedId())
 				.suspended(Boolean.TRUE)
-				.response(subsResponse)
 				.build();
 
 
@@ -497,22 +505,18 @@ public class SubscriptionTest extends TestCase{
 	
 
     /**
-     * Change Date Subscription
+     * Change Suspended for based plan Subscription
      */
 	@Test
     public void testK()
     {
 
 		Iugu.init(integratedTest.getApiToken());
-		
-		SubscriptionResponse subsResponse = new SubscriptionService().find(integratedTest.getSubscriptionPlanBasedId());
-		//Hack para suprir a falta do plan_identifier no find
-		subsResponse.setPlanIdentifier(integratedTest.getPlanIdenifier());
 
 		Subscription subs = new Subscription
-				.Builder(integratedTest.getCustomerIdB())
+				.Builder()
+				.subscriptionId(integratedTest.getSubscriptionPlanBasedId())
 				.suspended(Boolean.TRUE)
-				.response(subsResponse)
 				.build();
 
 
@@ -524,8 +528,188 @@ public class SubscriptionTest extends TestCase{
 		
     }
 	
-	
-	
+    /**
+     * Create Subscription plan based with items to test delete
+     */
+	@Test
+    public void testL()
+    {
 
+		Iugu.init(integratedTest.getApiToken());
+		
+		//Primeira data dia 20 do mes atual
+		Calendar data = Calendar.getInstance();
+        data.add(Calendar.DAY_OF_MONTH, 20);
+        data.add(Calendar.YEAR, 1);
+        
+        SubItem sI = new SubItem("Corte de cabelo", 1, 23);
+        List<SubItem> lista = new ArrayList<SubItem>(0);
+        lista.add(sI);
+        
+		Subscription subs = new Subscription
+								.Builder()
+								.customerId(integratedTest.getCustomerId())
+								.planIdentifier(integratedTest.getPlanIdenifier())
+								.expiresAt(data.getTime())
+								.initOnlyOnChargeSuccess("true")
+								.items(lista)
+								.build();
+
+		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
+		
+		assertTrue( subsResponse.getId() != null);
+		assertTrue( subsResponse.getSubitems().size() == 1);
+		
+		integratedTest.setSubscriptionPlanBasedId(subsResponse.getId());
+    }
+	
+    /**
+     * Suspend Subscription
+     */
+	@Test
+    public void testM()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+
+
+		SubscriptionResponse subsResponseC = new SubscriptionService().suspend(integratedTest.getSubscriptionPlanBasedId());
+		
+		assertTrue( subsResponseC.getId() != null);
+		assertTrue(subsResponseC.getSuspended());
+		
+		
+    }
+	
+    /**
+     * Activate Subscription
+     */
+	@Test
+    public void testN()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+
+
+		SubscriptionResponse subsResponseC = new SubscriptionService().activate(integratedTest.getSubscriptionPlanBasedId());
+		
+		assertTrue( subsResponseC.getId() != null);
+		assertFalse(subsResponseC.getSuspended());
+		
+		
+    }
+	
+    /**
+     * Change Plan for Subscription
+     */
+	@Test
+    public void testO()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+
+		SubscriptionResponse subsResponseC = new SubscriptionService().changePlan(integratedTest.getSubscriptionPlanBasedId(), "plano_basico");
+		
+		assertTrue( subsResponseC.getId() != null);
+		assertEquals("plano_basico",subsResponseC.getPlanIdentifier());
+		
+		
+    }
+	
+    /**
+     * Adiciona Créditos Subscription
+     */
+	@Test
+    public void testP()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+		
+		SubscriptionResponse subsResponse = new SubscriptionService().find(integratedTest.getSubscriptionCreditBasedId());
+		
+		Integer cred = subsResponse.getCredits();
+		
+		SubscriptionResponse subsResponseC = new SubscriptionService().addCredits(integratedTest.getSubscriptionCreditBasedId(), 10);
+		
+		assertTrue( subsResponseC.getId() != null);
+		assertEquals(cred+10,subsResponseC.getCredits().intValue());
+			
+    }
+	
+    /**
+     * Remove Créditos Subscription
+     */
+	@Test
+    public void testQ()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+		
+		SubscriptionResponse subsResponse = new SubscriptionService().find(integratedTest.getSubscriptionCreditBasedId());
+		
+		Integer cred = subsResponse.getCredits();
+		
+		SubscriptionResponse subsResponseC = new SubscriptionService().removeCredits(integratedTest.getSubscriptionCreditBasedId(), 10);
+		
+		assertTrue( subsResponseC.getId() != null);
+		assertEquals(cred-10,subsResponseC.getCredits().intValue());
+			
+    }
+	
+    /**
+     * Remove Créditos Subscription
+     */
+	@Test
+    public void testR()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+		
+		SubscriptionResponse subsResponseD = new SubscriptionService().remove(integratedTest.getSubscriptionCreditBasedId());
+		
+		SubscriptionResponse subsResponse = new SubscriptionService().remove(integratedTest.getSubscriptionCreditBasedId());
+		
+		
+		assertTrue( subsResponse.getErrors().get("errors").toString().contains("Subscription Not Found"));
+			
+    }
+	
+    /**
+     * Lista subscriptios updated desde 
+     */
+	@Test
+    public void testS()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+			
+		Calendar c = Calendar.getInstance();  
+		c.set(Calendar.MONTH, Calendar.JANUARY); 
+		c.set(Calendar.DAY_OF_MONTH, 10);
+		
+		//ListSubscriptionResponse crit = new ListSubscriptionResponse.Builder().updatedSince(c.getTime()).build();
+		ListSubscriptionResponse responseInvoice = new SubscriptionService().list();
+		
+		assertTrue( responseInvoice.getItems().size() > 0);
+		
+		for (SubscriptionResponse response : responseInvoice.getItems()) {
+			SubscriptionResponse subsResponse = new SubscriptionService().remove(response.getId());
+		}
+    }
+	
+    /**
+     * Lista subscriptios updated desde 
+     */
+	@Test
+    public void testT()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+			
+		ListSubscriptionResponse responseInvoice = new SubscriptionService().list();
+		
+		assertTrue( responseInvoice.getItems().size() == 0);
+		
+    }
 
 }

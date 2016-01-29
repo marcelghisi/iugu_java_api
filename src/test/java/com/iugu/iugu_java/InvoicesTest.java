@@ -181,7 +181,7 @@ public class InvoicesTest extends TestCase{
 		integratedTest.setCustomerId(responseCustomer.getId());
 		
 		//Cria subscription
-		Subscription subs = new Subscription.Builder(responseCustomer.getId()).planIdentifier("plano_basico").build();
+		Subscription subs = new Subscription.Builder().customerId(responseCustomer.getId()).planIdentifier("plano_basico").build();
 		
 		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
 		assertTrue( subsResponse.getId() != null);

@@ -15,6 +15,8 @@ public class FacetsStatus {
 	
 	private Integer missing;
 	
+	private Integer count;
+	
 	private Integer total;
 	
 	private Integer other;
@@ -61,10 +63,13 @@ public class FacetsStatus {
 		this.terms = terms;
 	}
 
-	
-	
+	public Integer getCount() {
+		return count;
+	}
 
-	
+	public void setCount(Integer count) {
+		this.count = count;
+	}
 
 	
 }

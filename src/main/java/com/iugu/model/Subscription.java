@@ -14,12 +14,14 @@ import com.iugu.serializers.JsonFormat;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Subscription {
-
-	private SubscriptionResponse response;
 	
 	@JsonProperty("customer_id")
 	@SerializedName("customer_id")
 	private String customerId;
+	
+	@JsonProperty("id")
+	@SerializedName("id")
+	private String Id;
 
 	@JsonProperty("plan_identifier")
 	@SerializedName("plan_identifier")
@@ -46,6 +48,10 @@ public class Subscription {
 	@JsonProperty("credits_based")
 	@SerializedName("credits_based")
 	public Boolean creditsBased;
+	
+	@JsonProperty("skip_charge")
+	@SerializedName("skip_charge")
+	public Boolean skipCharge;
 
 	@JsonProperty("price_cents")
 	@SerializedName("price_cents")
@@ -72,21 +78,31 @@ public class Subscription {
 		private String customerId;
 		
 		//optional
+		private String subscriptionId;
 		private String planIdentifier;
 		private Date expiresAt;
 		private String onlyOnChargeSuccess;
 		private PayableWith payableWith;
 		private Boolean creditsBased;
+		private Boolean skipCharge;
 		private Integer priceCents;
 		private Integer creditsCycle;
 		private Integer creditsMin;
 		private List<CustomVariable> customVariables;
 		private List<SubItem> subItems;
 		private Boolean suspended; 
-		private SubscriptionResponse response;
 		
-		public Builder(String customerId) {
-		  this.customerId = customerId;
+		public Builder() {
+		}
+
+		public Builder customerId(String id) {
+			  this.customerId = id;
+			  return this;
+		}
+		
+		public Builder subscriptionId(String id) {
+			  this.subscriptionId = id;
+			  return this;
 		}
 		
 		public Builder planIdentifier(String identifier) {
@@ -111,6 +127,11 @@ public class Subscription {
 		
 		public Builder creditsBased(Boolean basedInCredits) {
 			  this.creditsBased = basedInCredits;
+			  return this;
+		}
+		
+		public Builder skipCharge(Boolean skipCharge) {
+			  this.skipCharge = skipCharge;
 			  return this;
 		}
 		
@@ -144,10 +165,6 @@ public class Subscription {
 			  return this;
 		}
 		
-		public Builder response (SubscriptionResponse response) {
-			  this.response = response;
-			  return this;
-		}
 		
 	    public Subscription build() {
 	        return new Subscription(this);
@@ -160,22 +177,16 @@ public class Subscription {
 			  throw new IllegalStateException("No Identifier for credit based subscriptios"); 
 		}
 		
-		String planIdentifierI = (response == null) ? builder.planIdentifier : response.getPlanIdentifier();
-		Integer credCycle = (response == null) ? builder.creditsCycle : response.getCreditsCycle();
-		Integer credMin = (response == null) ? builder.creditsMin : response.getCreditsMin();
-		Boolean credBased = (response == null) ? builder.creditsBased : response.getCreditsBased();
-		Integer price = (response == null) ? builder.priceCents : response.getPriceCents();
-		Boolean suspendido = (response == null) ? builder.suspended : response.getSuspended();
-		PayableWith payable = (response == null ) ? builder.payableWith : response.getPayableWith();
-		
 		customerId = builder.customerId;
-		planIdentifier = (planIdentifierI == null) ? null : planIdentifierI;
-		creditsCycle = (credCycle == null) ? null : credCycle;
-		creditsMin = (credMin == null) ? null : credMin;
-		creditsBased = (credBased == null) ? null : credBased;
-		priceCents = (price == null) ? null : price;
-		suspended = (suspendido == null) ? null : suspendido;
-		payableWith = (payable == null) ? null : payable.getValue();
+		Id = builder.subscriptionId;
+		planIdentifier = builder.planIdentifier;
+		creditsCycle = builder.creditsCycle;
+		creditsMin = builder.creditsMin;
+		creditsBased = builder.creditsBased;
+		skipCharge = builder.skipCharge;
+		priceCents = builder.priceCents;
+		suspended = builder.suspended;
+		payableWith = builder.payableWith == null ? null : builder.payableWith.getValue();
 
 		expiresAt = builder.expiresAt;
 		onlyOnChargeSucess = builder.onlyOnChargeSuccess;
@@ -278,6 +289,21 @@ public class Subscription {
 	public void setSuspended(Boolean suspended) {
 		this.suspended = suspended;
 	}
-	
+
+	public Boolean getSkipCharge() {
+		return skipCharge;
+	}
+
+	public void setSkipCharge(Boolean skipCharge) {
+		this.skipCharge = skipCharge;
+	}
+
+	public String getId() {
+		return Id;
+	}
+
+	public void setId(String id) {
+		Id = id;
+	}
 	
 }

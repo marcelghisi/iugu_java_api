@@ -27,6 +27,10 @@ public class SubscriptionResponse  extends MessageResponse{
 	@SerializedName("price_cents")
 	private Integer priceCents;
 	
+	@JsonProperty("skip_charge")
+	@SerializedName("skip_charge")
+	private Boolean skipCharge;
+	
 	private String currency;
 	
 	//TODO Features
@@ -286,6 +290,14 @@ public class SubscriptionResponse  extends MessageResponse{
 
 	public void setPayableWith(PayableWith payableWith) {
 		this.payableWith = payableWith;
+	}
+
+	public Boolean getSkipCharge() {
+		return skipCharge;
+	}
+
+	public void setSkipCharge(Boolean skipCharge) {
+		this.skipCharge = skipCharge;
 	}
 
 
