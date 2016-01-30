@@ -4,36 +4,30 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.iugu.Iugu;
-import com.iugu.model.Currency;
 import com.iugu.model.Customer;
 import com.iugu.model.Data;
-import com.iugu.model.IntervalType;
 import com.iugu.model.ItemType;
-import com.iugu.model.ListInvoiceCriteria;
+import com.iugu.model.ListSubscriptionCriteria;
 import com.iugu.model.PayableWith;
 import com.iugu.model.PaymentMethodRequest;
-import com.iugu.model.Plan;
 import com.iugu.model.SubItem;
 import com.iugu.model.Subscription;
 import com.iugu.responses.CustomerResponse;
-import com.iugu.responses.ListInvoiceResponse;
 import com.iugu.responses.ListPlanResponse;
 import com.iugu.responses.ListSubscriptionResponse;
 import com.iugu.responses.PaymentMethodResponse;
 import com.iugu.responses.PlanResponse;
-import com.iugu.responses.SubItemResponse;
 import com.iugu.responses.SubscriptionResponse;
 import com.iugu.services.CustomerService;
-import com.iugu.services.InvoiceService;
 import com.iugu.services.PlanService;
 import com.iugu.services.SubscriptionService;
+
+import junit.framework.TestCase;
 
 /**
  * Testa CRUD de plans.
@@ -675,10 +669,74 @@ public class SubscriptionTest extends TestCase{
     }
 	
     /**
-     * Lista subscriptios updated desde 
+     * Lista subscription por cliente
      */
 	@Test
     public void testS()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+		
+		ListSubscriptionCriteria crit = new ListSubscriptionCriteria.Builder().customerId(integratedTest.getCustomerId()).build();
+		ListSubscriptionResponse subsResponse = new SubscriptionService().list(crit);
+		
+		assertTrue( subsResponse.getItems().size() > 0);
+		
+    }
+    
+    /**
+     * Lista invoices por limit
+     */
+	@Test
+    public void testT()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+		
+		ListSubscriptionCriteria crit = new ListSubscriptionCriteria.Builder().customerId(integratedTest.getCustomerId()).limit(2).build();
+		ListSubscriptionResponse subsResponse = new SubscriptionService().list(crit);
+		
+		assertTrue( subsResponse.getItems().size() > 0);
+		
+    }
+    
+    /**
+     * Lista invoices por limit e indice inicial
+     */
+	@Test
+    public void testU()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+		
+		ListSubscriptionCriteria crit = new ListSubscriptionCriteria.Builder().limit(10).start(0).build();
+		ListSubscriptionResponse subsResponse = new SubscriptionService().list(crit);
+		
+		assertTrue(subsResponse.getItems().size() > 0);
+		
+    }
+    
+    /**
+     * Lista invoices por limit e indice inicial page 2
+     */
+	@Test
+    public void testV()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+		
+		ListSubscriptionCriteria crit = new ListSubscriptionCriteria.Builder().limit(10).start(9).build();
+		ListSubscriptionResponse subsResponse = new SubscriptionService().list(crit);
+		
+		assertTrue(subsResponse.getItems().size() == 0);
+		
+    }
+    
+    /**
+     * Lista subscription updated desde 
+     */
+	@Test
+    public void testX()
     {
 
 		Iugu.init(integratedTest.getApiToken());
@@ -687,8 +745,28 @@ public class SubscriptionTest extends TestCase{
 		c.set(Calendar.MONTH, Calendar.JANUARY); 
 		c.set(Calendar.DAY_OF_MONTH, 10);
 		
-		//ListSubscriptionResponse crit = new ListSubscriptionResponse.Builder().updatedSince(c.getTime()).build();
-		ListSubscriptionResponse responseInvoice = new SubscriptionService().list();
+		ListSubscriptionCriteria crit = new ListSubscriptionCriteria.Builder().updatedSince(c.getTime()).build();
+		ListSubscriptionResponse subsResponse = new SubscriptionService().list(crit);
+		
+		assertTrue( subsResponse.getItems().size() > 0);
+		
+    }
+	
+    /**
+     * Lista subscriptios updated desde 
+     */
+	@Test
+    public void testZ()
+    {
+
+		Iugu.init(integratedTest.getApiToken());
+			
+		Calendar c = Calendar.getInstance();  
+		c.set(Calendar.MONTH, Calendar.DECEMBER); 
+		c.set(Calendar.YEAR, 2015);
+		
+		ListSubscriptionCriteria crit = new ListSubscriptionCriteria.Builder().updatedSince(c.getTime()).build();
+		ListSubscriptionResponse responseInvoice = new SubscriptionService().list(crit);
 		
 		assertTrue( responseInvoice.getItems().size() > 0);
 		
@@ -698,17 +776,22 @@ public class SubscriptionTest extends TestCase{
     }
 	
     /**
-     * Lista subscriptios updated desde 
+     * Lista subscription updated desde 
      */
 	@Test
-    public void testT()
+    public void testZA()
     {
 
 		Iugu.init(integratedTest.getApiToken());
 			
-		ListSubscriptionResponse responseInvoice = new SubscriptionService().list();
+		Calendar c = Calendar.getInstance();  
+		c.set(Calendar.MONTH, Calendar.DECEMBER); 
+		c.set(Calendar.YEAR, 2015);
 		
-		assertTrue( responseInvoice.getItems().size() == 0);
+		ListSubscriptionCriteria crit = new ListSubscriptionCriteria.Builder().updatedSince(c.getTime()).build();
+		ListSubscriptionResponse subsResponse = new SubscriptionService().list(crit);
+		
+		assertTrue( subsResponse.getItems().size() == 0);
 		
     }
 

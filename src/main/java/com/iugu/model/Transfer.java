@@ -12,9 +12,9 @@ public class Transfer {
 
 	@JsonProperty("amount_cents")
 	@SerializedName("amount_cents")
-	private int amountCents;
+	private Integer amountCents;
 
-	public Transfer(String receiverId, int amountCents) {
+	public Transfer(String receiverId, Integer amountCents) {
 		this.receiverId = receiverId;
 		this.amountCents = amountCents;
 	}
@@ -23,7 +23,7 @@ public class Transfer {
 		return receiverId;
 	}
 
-	public int getAmountCents() {
+	public Integer getAmountCents() {
 		return amountCents;
 	}
 

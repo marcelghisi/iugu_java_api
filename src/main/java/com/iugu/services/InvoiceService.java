@@ -120,10 +120,6 @@ public class InvoiceService extends BaseService {
 
 		SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
 
-		// Response response =
-		// Iugu.getClient().target(LIST_URL).queryParam("due_date",
-		// "2016-03-20").request().get();
-		
 		WebTarget target = Iugu.getClient().target(LIST_URL);
 		
 		if (criteria.getDueDate() != null){

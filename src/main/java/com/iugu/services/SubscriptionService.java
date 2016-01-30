@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.iugu.Iugu;
 import com.iugu.model.Credit;
 import com.iugu.model.ListInvoiceCriteria;
+import com.iugu.model.ListSubscriptionCriteria;
 import com.iugu.model.Subscription;
 import com.iugu.responses.ListInvoiceResponse;
 import com.iugu.responses.ListSubscriptionResponse;
@@ -145,43 +146,36 @@ public class SubscriptionService extends BaseService{
 		return subscriptionResponse;
 	}
 	
-	public ListSubscriptionResponse list() {
+	public ListSubscriptionResponse list(ListSubscriptionCriteria criteria) {
 
 		SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
 
-		// Response response =
-		// Iugu.getClient().target(LIST_URL).queryParam("due_date",
-		// "2016-03-20").request().get();
-		
 		WebTarget target = Iugu.getClient().target(LIST_URL);
 		
-//		if (criteria.getDueDate() != null){
-//			target = target.queryParam("due_date", sm.format(criteria.getDueDate()));
-//		}
-//		if (criteria.getCustomerId() != null){
-//			target = target.queryParam("customer_id", criteria.getCustomerId());
-//		}
-//		if (criteria.getLimit() != null){
-//			target = target.queryParam("limit", criteria.getLimit());
-//		}
-//		if (criteria.getStart() != null){
-//			target = target.queryParam("start", criteria.getStart());
-//		}
-//		if (criteria.getCreatedAtFrom() != null){
-//			target = target.queryParam("created_at_from", sm.format(criteria.getCreatedAtFrom()));
-//		}
-//		if (criteria.getCreatedAtTo() != null){
-//			target = target.queryParam("created_at_to", sm.format(criteria.getCreatedAtTo()));
-//		}
-//		if (criteria.getUpdatedSince() != null){
-//			target = target.queryParam("updated_since", sm.format(criteria.getUpdatedSince()));
-//		}
-//		if (criteria.getQuery() != null){
-//			target = target.queryParam("query", criteria.getQuery());
-//		}
-//		if (criteria.getSortBy() != null){
-//			target = target.queryParam("sortBy", criteria.getSortBy());
-//		}
+		if (criteria.getCustomerId() != null){
+			target = target.queryParam("customer_id", criteria.getCustomerId());
+		}
+		if (criteria.getLimit() != null){
+			target = target.queryParam("limit", criteria.getLimit());
+		}
+		if (criteria.getStart() != null){
+			target = target.queryParam("start", criteria.getStart());
+		}
+		if (criteria.getCreatedAtFrom() != null){
+			target = target.queryParam("created_at_from", sm.format(criteria.getCreatedAtFrom()));
+		}
+		if (criteria.getCreatedAtTo() != null){
+			target = target.queryParam("created_at_to", sm.format(criteria.getCreatedAtTo()));
+		}
+		if (criteria.getUpdatedSince() != null){
+			target = target.queryParam("updated_since", sm.format(criteria.getUpdatedSince()));
+		}
+		if (criteria.getQuery() != null){
+			target = target.queryParam("query", criteria.getQuery());
+		}
+		if (criteria.getSortBy() != null){
+			target = target.queryParam("sortBy", criteria.getSortBy());
+		}
 		
 		Response response = target.request().get();
 
