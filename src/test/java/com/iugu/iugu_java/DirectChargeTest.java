@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import junit.framework.TestCase;
-
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import com.iugu.Iugu;
+import com.iugu.IuguFactory;
 import com.iugu.model.Address;
 import com.iugu.model.BankSlipDirectCharge;
 import com.iugu.model.Customer;
@@ -34,6 +31,8 @@ import com.iugu.responses.PaymentTokenResponse;
 import com.iugu.services.CustomerService;
 import com.iugu.services.InvoiceService;
 import com.iugu.services.PaymentService;
+
+import junit.framework.TestCase;
 
 /**
  * Testa pagamentos diretos.
@@ -127,7 +126,7 @@ public class DirectChargeTest extends TestCase{
     protected void setUp() throws Exception {
     	integratedTest = new IntegratedTest();
     	
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
     	//Testa a criacao de uma Token de pagamento
 		//Usa os dados de um cartao de teste
@@ -137,7 +136,7 @@ public class DirectChargeTest extends TestCase{
     	PaymentToken pT = new PaymentToken(integratedTest.getMasterAccountId(), PayableWith.CREDIT_CARD,data,Boolean.FALSE);
     	
     	//Cria o tokem
-    	PaymentTokenResponse response = new PaymentService().createToken(pT);
+    	PaymentTokenResponse response = new PaymentService(factory.getMarketPlaceClient()).createToken(pT);
     	
     	//Valida se o tokem foi criado
     	assertTrue(response != null);
@@ -156,7 +155,7 @@ public class DirectChargeTest extends TestCase{
     	PaymentToken pTi = new PaymentToken(integratedTest.getMasterAccountId(), PayableWith.CREDIT_CARD,data1,Boolean.FALSE);
     	
     	//Cria o tokem
-    	PaymentTokenResponse responseI = new PaymentService().createToken(pTi);
+    	PaymentTokenResponse responseI = new PaymentService(factory.getMarketPlaceClient()).createToken(pTi);
     	
     	//Valida se o tokem foi criado
     	assertTrue(responseI != null);
@@ -178,7 +177,7 @@ public class DirectChargeTest extends TestCase{
     public void testA()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		//Cria o item e valor que será pago
 		Item item = new Item("Refeição",1,100);
@@ -194,7 +193,7 @@ public class DirectChargeTest extends TestCase{
 		//Constroi o objeto Para pagamento Direto usando um token de cartão de crédito e opção payer obrigatorio para market place
 		TokenDirectCharge cP = new TokenDirectCharge.Builder(integratedTest.getToken(),integratedTest.getEmail(),items).payer(payer).build();
 		
-		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
+		ChargeResponse responseDirectCharge = new PaymentService(factory.getMarketPlaceClient()).createDirectCharge(cP);
 		
 		assertTrue(responseDirectCharge  != null);
 		
@@ -210,7 +209,7 @@ public class DirectChargeTest extends TestCase{
     public void testB()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		Item item = new Item("Refeição",1,1000);
 		List<Item> items = new ArrayList<Item>(0);
@@ -222,7 +221,7 @@ public class DirectChargeTest extends TestCase{
 		
 		TokenDirectCharge cP = new TokenDirectCharge.Builder(integratedTest.getToken(),integratedTest.getEmail(),items).payer(payer).discount(100).build();
 		
-		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
+		ChargeResponse responseDirectCharge = new PaymentService(factory.getMarketPlaceClient()).createDirectCharge(cP);
 		
 		assertTrue(responseDirectCharge  != null);
 		
@@ -236,7 +235,7 @@ public class DirectChargeTest extends TestCase{
      */
     public void testC()
     {
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		Item item = new Item("Refeição",1,200);
 		List<Item> items = new ArrayList<Item>(0);
@@ -248,7 +247,7 @@ public class DirectChargeTest extends TestCase{
 		
 		TokenDirectCharge cP = new TokenDirectCharge.Builder(integratedTest.getToken(),integratedTest.getEmail(),items).payer(payer).months(10).build();
 		
-		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
+		ChargeResponse responseDirectCharge = new PaymentService(factory.getMarketPlaceClient()).createDirectCharge(cP);
 		
 		assertTrue(responseDirectCharge.getErrors() != null);
 		
@@ -263,7 +262,7 @@ public class DirectChargeTest extends TestCase{
 	@Test
     public void testD()
     {
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		Item item = new Item("Refeição",1,300);
 		List<Item> items = new ArrayList<Item>(0);
@@ -275,7 +274,7 @@ public class DirectChargeTest extends TestCase{
 		
 		BankSlipDirectCharge cP = new BankSlipDirectCharge.Builder(integratedTest.getEmail(),items).payer(payer).build();
 		
-		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
+		ChargeResponse responseDirectCharge = new PaymentService(factory.getMarketPlaceClient()).createDirectCharge(cP);
 		
 		assertTrue(responseDirectCharge.getInvoiceId()  != null);
 		
@@ -293,7 +292,7 @@ public class DirectChargeTest extends TestCase{
 		c.add(Calendar.DATE, 1);
 		
 		//Funfa cria fatura e envia boleto com invoice
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		Item item2 = new Item("Cafe",1,1200);
 		List<Item> items = new ArrayList<Item>(0);
@@ -302,7 +301,7 @@ public class DirectChargeTest extends TestCase{
 		//Cria uma fatura com vencimento amanha = pendente
 		Invoice inv = new Invoice.Builder("marcelghisi@gmail.com", c.getTime(), items).build();
 		
-		InvoiceResponse response = new InvoiceService().create(inv);
+		InvoiceResponse response = new InvoiceService(factory.getMarketPlaceClient()).create(inv);
         
 		assertTrue( response != null );
 		assertTrue(response.getErrors() == null);
@@ -320,7 +319,7 @@ public class DirectChargeTest extends TestCase{
     public void testF()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 
 		Item item = new Item("Refeição",1,300);
 		List<Item> items = new ArrayList<Item>(0);
@@ -332,7 +331,7 @@ public class DirectChargeTest extends TestCase{
 		
 		InvoiceDirectCharge cP = new InvoiceDirectCharge.Builder(integratedTest.getToken(),integratedTest.getInvoice()).payer(payer).build();
 		
-		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
+		ChargeResponse responseDirectCharge = new PaymentService(factory.getMarketPlaceClient()).createDirectCharge(cP);
 		
 		assertTrue(responseDirectCharge.getInvoiceId()  != null);
 		
@@ -347,11 +346,11 @@ public class DirectChargeTest extends TestCase{
     public void testG()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		Customer customer = new Customer("NOELI OLIVA XAVIER GHISI","noeli.ghisi@gmail.com","18788209822");
 
-		CustomerResponse responseCustomer = new CustomerService().create(customer);
+		CustomerResponse responseCustomer = new CustomerService(factory.getMarketPlaceClient()).create(customer);
 		
 		assertTrue( responseCustomer != null);
 		
@@ -369,14 +368,14 @@ public class DirectChargeTest extends TestCase{
 	@Test
     public void testH()
     {
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 
 		//Dados do cartao de credito da carteira do cliente
 		Data data = new Data("4242424242424242","123","Joao","Silva","12","2013");
 		
 		PaymentMethodRequest pData = new PaymentMethodRequest(ItemType.CREDIT_CARD, integratedTest.getCustomerId(), "Cartão Passarela", data, Boolean.FALSE);
 		
-		PaymentMethodResponse responsePayM = new CustomerService().createPaymentMethod(pData);
+		PaymentMethodResponse responsePayM = new CustomerService(factory.getMarketPlaceClient()).createPaymentMethod(pData);
 		
 		assertTrue( responsePayM != null);
 		assertTrue(responsePayM.getErrors() == null);
@@ -393,7 +392,7 @@ public class DirectChargeTest extends TestCase{
     public void testI()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 
 		Item item = new Item("Refeição",1,300);
 		List<Item> items = new ArrayList<Item>(0);
@@ -405,7 +404,7 @@ public class DirectChargeTest extends TestCase{
 		
 		CustomerPaymentDirectCharge cP = new CustomerPaymentDirectCharge.Builder(integratedTest.getCustomerPaymentId(),integratedTest.getEmail(),items).payer(payer).build();
 		
-		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
+		ChargeResponse responseDirectCharge = new PaymentService(factory.getMarketPlaceClient()).createDirectCharge(cP);
 		
 		assertTrue( responseDirectCharge != null);
 		assertTrue(responseDirectCharge.getInvoiceId() != null);
@@ -420,7 +419,7 @@ public class DirectChargeTest extends TestCase{
     public void testJ()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 
 		Item item = new Item("Refeição",1,300);
 		List<Item> items = new ArrayList<Item>(0);
@@ -435,7 +434,7 @@ public class DirectChargeTest extends TestCase{
 		.customer(integratedTest.getCustomerId())
 		.build();
 		
-		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
+		ChargeResponse responseDirectCharge = new PaymentService(factory.getMarketPlaceClient()).createDirectCharge(cP);
 		
 		assertTrue( responseDirectCharge != null);
 		assertTrue(responseDirectCharge.getInvoiceId() != null);
@@ -450,8 +449,8 @@ public class DirectChargeTest extends TestCase{
     public void testK()
     {
 
-		Iugu.init(integratedTest.getApiToken());
-
+		IuguFactory factory = new IuguFactory();
+		
 		Item item = new Item("Refeição",1,300);
 		List<Item> items = new ArrayList<Item>(0);
 		items.add(item);
@@ -465,7 +464,7 @@ public class DirectChargeTest extends TestCase{
 		.customer(integratedTest.getCustomerId())
 		.build();
 		
-		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
+		ChargeResponse responseDirectCharge = new PaymentService(factory.getMarketPlaceClient()).createDirectCharge(cP);
 		
 		assertTrue( responseDirectCharge != null);
 		assertTrue(responseDirectCharge.getInvoiceId() != null);
@@ -481,7 +480,7 @@ public class DirectChargeTest extends TestCase{
     public void testL()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		//Cria o item e valor que será pago
 		Item item = new Item("Refeição",1,100);
@@ -497,7 +496,7 @@ public class DirectChargeTest extends TestCase{
 		//Constroi o objeto Para pagamento Direto usando um token de cartão de crédito e opção payer obrigatorio para market place
 		TokenDirectCharge cP = new TokenDirectCharge.Builder(integratedTest.getInvalidTokem(),integratedTest.getEmail(),items).payer(payer).build();
 		
-		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
+		ChargeResponse responseDirectCharge = new PaymentService(factory.getMarketPlaceClient()).createDirectCharge(cP);
 		
 		assertTrue(responseDirectCharge  != null);
 		

@@ -2,13 +2,11 @@ package com.iugu.iugu_java;
 
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import com.iugu.Iugu;
+import com.iugu.IuguFactory;
 import com.iugu.model.Customer;
 import com.iugu.model.Data;
 import com.iugu.model.ItemType;
@@ -16,6 +14,8 @@ import com.iugu.model.PaymentMethodRequest;
 import com.iugu.responses.CustomerResponse;
 import com.iugu.responses.PaymentMethodResponse;
 import com.iugu.services.CustomerService;
+
+import junit.framework.TestCase;
 
 
 /**
@@ -113,11 +113,10 @@ public class CustomerPaymentMethodTest extends TestCase{
     	
     	integratedTest = new IntegratedTest();
     	
-		Iugu.init(integratedTest.getApiToken());
-		
 		Customer customer = new Customer("MARCEL JOSE DA SILVA GHISI","marcel.ghisi@gmail.com","02479484971");
 
-		CustomerResponse responseCustomer = new CustomerService().create(customer);
+		IuguFactory factory = new IuguFactory();
+		CustomerResponse responseCustomer = new CustomerService(factory.getMarketPlaceClient()).create(customer);
     	
     	//Valida se o tokem foi criado
     	assertTrue(responseCustomer != null);
@@ -138,14 +137,15 @@ public class CustomerPaymentMethodTest extends TestCase{
 	@Test
     public void testB()
     {
-		Iugu.init(integratedTest.getApiToken());
 
-		CustomerResponse responseCustomer = new CustomerService().find(integratedTest.getCustomerId());
+		//CustomerPaymentMethodTest.java#testB
+		IuguFactory factory = new IuguFactory();
+		CustomerResponse responseCustomer = new CustomerService(factory.getMarketPlaceClient()).find(integratedTest.getCustomerId());
 
 		Data data = new Data("4242424242424242","123","Joao","Silva","12","2013");
 		PaymentMethodRequest pData = new PaymentMethodRequest(ItemType.CREDIT_CARD, responseCustomer.getId(), "Cartão Extra", data, Boolean.FALSE);
 		
-		PaymentMethodResponse responsePayM = new CustomerService().createPaymentMethod(pData);
+		PaymentMethodResponse responsePayM = new CustomerService(factory.getMarketPlaceClient()).createPaymentMethod(pData);
 		
 		assertTrue( responsePayM.getId() != null);
 		
@@ -159,14 +159,13 @@ public class CustomerPaymentMethodTest extends TestCase{
 	@Test
     public void testC()
     {
-		Iugu.init(integratedTest.getApiToken());
-		
-		CustomerResponse responseCustomer = new CustomerService().find(integratedTest.getCustomerId());
+		IuguFactory factory = new IuguFactory();		
+		CustomerResponse responseCustomer = new CustomerService(factory.getMarketPlaceClient()).find(integratedTest.getCustomerId());
 
 		Data data = new Data("4111111111111111","123","Joao","Silva","12","2013");
 		PaymentMethodRequest pData = new PaymentMethodRequest(ItemType.CREDIT_CARD, responseCustomer.getId(), "Cartão Submarino", data, Boolean.FALSE);
 		
-		PaymentMethodResponse responsePayM = new CustomerService().createPaymentMethod(pData);
+		PaymentMethodResponse responsePayM = new CustomerService(factory.getMarketPlaceClient()).createPaymentMethod(pData);
 		
 		assertTrue( responsePayM.getId() != null);
 		
@@ -181,9 +180,8 @@ public class CustomerPaymentMethodTest extends TestCase{
     public void testD()
     {
     	
-		Iugu.init(integratedTest.getApiToken());
-
-		PaymentMethodResponse responseCustomer = new CustomerService().findPaymentMethod(integratedTest.getCustomerId(), integratedTest.getCustomerPaymentId());
+		IuguFactory factory = new IuguFactory();
+		PaymentMethodResponse responseCustomer = new CustomerService(factory.getMarketPlaceClient()).findPaymentMethod(integratedTest.getCustomerId(), integratedTest.getCustomerPaymentId());
 		
 		assertTrue( responseCustomer.getId() != null);
 		
@@ -195,10 +193,10 @@ public class CustomerPaymentMethodTest extends TestCase{
 	@Test
     public void testE()
     {
-		Iugu.init(integratedTest.getApiToken());
 
+		IuguFactory factory = new IuguFactory();
 		String novoCardName = "Cartao Neteller";
-		PaymentMethodResponse responseChange = new CustomerService().changePaymentMethod(integratedTest.getCustomerId(),integratedTest.getCustomerPaymentId(),novoCardName);
+		PaymentMethodResponse responseChange = new CustomerService(factory.getMarketPlaceClient()).changePaymentMethod(integratedTest.getCustomerId(),integratedTest.getCustomerPaymentId(),novoCardName);
 		
 		assertTrue( responseChange.getId() != null);
 		assertEquals(novoCardName, responseChange.getDescription());
@@ -215,14 +213,12 @@ public class CustomerPaymentMethodTest extends TestCase{
     	String customerId = integratedTest.getCustomerId();
     	String paymentId = integratedTest.getCustomerPaymentId();
     	
-		Iugu.init(integratedTest.getApiToken());
-
-
-		PaymentMethodResponse responseCustomerP = new CustomerService().removePaymentMethod(customerId,paymentId);
+		IuguFactory factory = new IuguFactory();
+		PaymentMethodResponse responseCustomerP = new CustomerService(factory.getMarketPlaceClient()).removePaymentMethod(customerId,paymentId);
 		
 		assertTrue( responseCustomerP.getId() != null);
 		
-		PaymentMethodResponse responseFindCustomerP = new CustomerService().findPaymentMethod(customerId, paymentId);
+		PaymentMethodResponse responseFindCustomerP = new CustomerService(factory.getMarketPlaceClient()).findPaymentMethod(customerId, paymentId);
 		
 		assertTrue(responseFindCustomerP.getErrors().get("errors").toString().contains("Customer payment method Not Found"));
     }
@@ -235,9 +231,8 @@ public class CustomerPaymentMethodTest extends TestCase{
     {
     	String customerId = integratedTest.getCustomerId();
     	
-		Iugu.init(integratedTest.getApiToken());
-
-		List<PaymentMethodResponse> responseCustomerList = new CustomerService().listPaymentMethod(customerId);
+		IuguFactory factory = new IuguFactory();
+		List<PaymentMethodResponse> responseCustomerList = new CustomerService(factory.getMarketPlaceClient()).listPaymentMethod(customerId);
 		
 		assertTrue( responseCustomerList.size() > 0);
 		
@@ -253,13 +248,13 @@ public class CustomerPaymentMethodTest extends TestCase{
     	String customerId = integratedTest.getCustomerId();
     	String paymentId = integratedTest.getCustomerPaymentIdB();
     	
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 
-		PaymentMethodResponse responseCustomerP = new CustomerService().removePaymentMethod(customerId,paymentId);
+		PaymentMethodResponse responseCustomerP = new CustomerService(factory.getMarketPlaceClient()).removePaymentMethod(customerId,paymentId);
 		
 		assertTrue( responseCustomerP.getId() != null);
 		
-		PaymentMethodResponse responseFindCustomerP = new CustomerService().findPaymentMethod(customerId, paymentId);
+		PaymentMethodResponse responseFindCustomerP = new CustomerService(factory.getMarketPlaceClient()).findPaymentMethod(customerId, paymentId);
 		
 		assertTrue(responseFindCustomerP.getErrors().get("errors").toString().contains("Customer payment method Not Found"));
     }

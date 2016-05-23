@@ -2,12 +2,13 @@ package com.iugu.services;
 
 import java.text.SimpleDateFormat;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.iugu.Iugu;
+import com.iugu.IuguFactory;
 import com.iugu.model.DuplicateInvoiceRequest;
 import com.iugu.model.Invoice;
 import com.iugu.model.ListInvoiceCriteria;
@@ -16,18 +17,33 @@ import com.iugu.responses.ListInvoiceResponse;
 
 public class InvoiceService extends BaseService {
 
-	private final String CREATE_URL = Iugu.url("/invoices");
-	private final String LIST_URL = Iugu.url("/invoices");
-	private final String FIND_URL = Iugu.url("/invoices/%s");
-	private final String CHANGE_URL = Iugu.url("/invoices/%s");
-	private final String CAPTURE_URL = Iugu.url("/invoices/%s/capture");
-	private final String DUPLICATE_URL = Iugu.url("/invoices/%s/duplicate");
-	private final String REMOVE_URL = Iugu.url("/invoices/%s");
-	private final String CANCEL_URL = Iugu.url("/invoices/%s/cancel");
-	private final String REFUND_URL = Iugu.url("/invoices/%s/refund");
+	private final String CREATE_URL = IuguFactory.generateEndPointUrl("/invoices");
+	private final String LIST_URL = IuguFactory.generateEndPointUrl("/invoices");
+	private final String FIND_URL = IuguFactory.generateEndPointUrl("/invoices/%s");
+	private final String CHANGE_URL = IuguFactory.generateEndPointUrl("/invoices/%s");
+	private final String CAPTURE_URL = IuguFactory.generateEndPointUrl("/invoices/%s/capture");
+	private final String DUPLICATE_URL = IuguFactory.generateEndPointUrl("/invoices/%s/duplicate");
+	private final String REMOVE_URL = IuguFactory.generateEndPointUrl("/invoices/%s");
+	private final String CANCEL_URL = IuguFactory.generateEndPointUrl("/invoices/%s/cancel");
+	private final String REFUND_URL = IuguFactory.generateEndPointUrl("/invoices/%s/refund");
 
+	private Client client = null;
+	
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public InvoiceService(Client client) {
+		super();
+		this.setClient(client);
+	}
+	
 	public InvoiceResponse create(Invoice invoice) {
-		Response response = Iugu.getClient().target(CREATE_URL).request()
+		Response response = this.client.target(CREATE_URL).request()
 				.post(Entity.entity(invoice, MediaType.APPLICATION_JSON));
 
 		InvoiceResponse paymentResponse = (InvoiceResponse) readResponse(
@@ -37,7 +53,7 @@ public class InvoiceService extends BaseService {
 	}
 
 	public InvoiceResponse find(String id) {
-		Response response = Iugu.getClient()
+		Response response = this.client
 				.target(String.format(FIND_URL, id)).request().get();
 
 		InvoiceResponse paymentResponse = (InvoiceResponse) readResponse(
@@ -48,7 +64,7 @@ public class InvoiceService extends BaseService {
 
 	public InvoiceResponse change(Invoice invoice) {
 
-		Response response = Iugu.getClient()
+		Response response = this.client
 				.target(String.format(CHANGE_URL, invoice.getId())).request()
 				.put(Entity.entity(invoice, MediaType.APPLICATION_JSON));
 
@@ -60,7 +76,7 @@ public class InvoiceService extends BaseService {
 
 	public InvoiceResponse capture(String invoiceId) {
 
-		Response response = Iugu.getClient()
+		Response response = this.client
 				.target(String.format(CAPTURE_URL, invoiceId)).request()
 				.post(null);
 
@@ -73,8 +89,7 @@ public class InvoiceService extends BaseService {
 	public InvoiceResponse duplicate(String invoiceId,
 			DuplicateInvoiceRequest duplicateRequest) {
 
-		Response response = Iugu
-				.getClient()
+		Response response = this.client
 				.target(String.format(DUPLICATE_URL, invoiceId))
 				.request()
 				.post(Entity.entity(duplicateRequest,
@@ -87,7 +102,7 @@ public class InvoiceService extends BaseService {
 	}
 
 	public InvoiceResponse remove(String id) {
-		Response response = Iugu.getClient()
+		Response response = this.client
 				.target(String.format(REMOVE_URL, id)).request().delete();
 
 		InvoiceResponse paymentResponse = (InvoiceResponse) readResponse(
@@ -97,7 +112,7 @@ public class InvoiceService extends BaseService {
 	}
 
 	public InvoiceResponse cancel(String id) {
-		Response response = Iugu.getClient()
+		Response response = this.client
 				.target(String.format(CANCEL_URL, id)).request().put(null);
 
 		InvoiceResponse paymentResponse = (InvoiceResponse) readResponse(
@@ -107,7 +122,7 @@ public class InvoiceService extends BaseService {
 	}
 
 	public InvoiceResponse refund(String id) {
-		Response response = Iugu.getClient()
+		Response response = this.client
 				.target(String.format(REFUND_URL, id)).request().post(null);
 
 		InvoiceResponse paymentResponse = (InvoiceResponse) readResponse(
@@ -120,7 +135,7 @@ public class InvoiceService extends BaseService {
 
 		SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
 
-		WebTarget target = Iugu.getClient().target(LIST_URL);
+		WebTarget target = this.client.target(LIST_URL);
 		
 		if (criteria.getDueDate() != null){
 			target = target.queryParam("due_date", sm.format(criteria.getDueDate()));

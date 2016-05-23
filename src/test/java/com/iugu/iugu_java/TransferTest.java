@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.iugu.Iugu;
+import com.iugu.IuguFactory;
 import com.iugu.model.AccountType;
 import com.iugu.model.Address;
 import com.iugu.model.Bank;
@@ -170,9 +171,9 @@ public class TransferTest extends TestCase{
 	@Test
     public void testA()
     {
-    	//SetUp a subaccount to test
-		Iugu.init(integratedTest.getApiToken());
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Marcel Ghisi5",1));
+		IuguFactory factory = new IuguFactory();
+
+		SubAccountResponse responseSubAccount = new MarketPlaceService(factory.getMarketPlaceClient()).createSubAccount(new SubAccount("Marcel Ghisi5",1));
 		
 		assertTrue( responseSubAccount.getId() != null);
 		
@@ -188,8 +189,9 @@ public class TransferTest extends TestCase{
 	@Test
     public void testB()
     {
-		Iugu.init(integratedTest.getUserToken());
-		SubAccountInformationResponse responseInformation = new MarketPlaceService().find(integratedTest.getSubAccountId());
+		IuguFactory factory = new IuguFactory();
+
+		SubAccountInformationResponse responseInformation = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).find(integratedTest.getSubAccountId());
 		assertTrue( responseInformation.getId() != null);
     }
     
@@ -200,8 +202,8 @@ public class TransferTest extends TestCase{
     public void testC()
     {
 
-		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
-		Iugu.init(integratedTest.getUserToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		MainSetthingsData mainSetthingsData = new MainSetthingsData("Serviços de Informática",SubAccountPriceRange.ENTRE_100_500,Boolean.FALSE,Boolean.TRUE);
 		LegalPersonData pJ = new LegalPersonData("03125011000171", "GHISI TECNOLOGIA EM SISTEMAS", "Marcel Ghisi", "02479484971", "11-96766-1709");
@@ -212,7 +214,7 @@ public class TransferTest extends TestCase{
 		
 		SubAccountValidation subAccountValidation = new SubAccountValidation(data, null, Boolean.FALSE);
 		
-		SubAccountValidationResponse responseSubAccountValidation = new MarketPlaceService().createSubAccountValidation(integratedTest.getSubAccountId(), subAccountValidation);
+		SubAccountValidationResponse responseSubAccountValidation = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).createSubAccountValidation(integratedTest.getSubAccountId(), subAccountValidation);
 		
 		assertFalse( responseSubAccountValidation.getSuccess());
 		
@@ -225,8 +227,8 @@ public class TransferTest extends TestCase{
     public void testD()
     {
 
-		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
-		Iugu.init(integratedTest.getUserToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		String accountId = integratedTest.getSubAccountId();
 
@@ -254,7 +256,7 @@ public class TransferTest extends TestCase{
 		
 		SubAccountValidation subAccountValidation = new SubAccountValidation(data, files, Boolean.FALSE);
 		
-		SubAccountValidationResponse responseSubAccountValidation = new MarketPlaceService().createSubAccountValidation(accountId, subAccountValidation);
+		SubAccountValidationResponse responseSubAccountValidation = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).createSubAccountValidation(accountId, subAccountValidation);
 		
 		assertTrue(responseSubAccountValidation.getErrors() == null);
 		
@@ -268,10 +270,10 @@ public class TransferTest extends TestCase{
 	@Test
     public void testE()
     {
-		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
-		Iugu.init(integratedTest.getUserToken());
+		IuguFactory factory = new IuguFactory();
+
 		
-		SubAccountInformationResponse responseInformation = new MarketPlaceService().find(integratedTest.getSubAccountId());
+		SubAccountInformationResponse responseInformation = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).find(integratedTest.getSubAccountId());
 		
 		assertTrue( responseInformation.getLastVerificationRequestStatus().contains("pending"));
     }
@@ -283,17 +285,15 @@ public class TransferTest extends TestCase{
     public void testF()
     {
 
-		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
-		Iugu.init(integratedTest.getUserToken());
-		
+		IuguFactory factory = new IuguFactory();
 
-		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
-		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(true, null, null);
-		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration(null,"ATTENDME PJ", null, null,null,null,null);
+		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration.Builder().build();
+		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration.Builder().active(Boolean.TRUE).build();
+		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration.Builder().softDescriptor("ATTENDCHANG").build();
 		
 		SubAccountConfiguration subAccountConfiguration = new SubAccountConfiguration(mainSettingsConfiguration, bankSlipConfiguration, creditCardConfiguration);
 		
-		SubAccountInformationResponse responseInformationResp = new MarketPlaceService().configureSubAccount(subAccountConfiguration);
+		SubAccountInformationResponse responseInformationResp = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).configureSubAccount(subAccountConfiguration);
 		
 		System.out.println("TESTANDO CONFIGURE SUB ACCOUNT");
 
@@ -307,17 +307,15 @@ public class TransferTest extends TestCase{
     public void testG()
     {
 
-
-		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
-		Iugu.init(integratedTest.getUserToken());
+		IuguFactory factory = new IuguFactory();
 		
-		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(2, null, null, null, null, null, null, null);
-		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(true, null, null);
-		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration(null,null, null, null,null,null,null);
+		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration.Builder().commission(2).build();
+		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration.Builder().active(Boolean.TRUE).build();
+		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration.Builder().build();
 		
 		SubAccountConfiguration subAccountConfiguration = new SubAccountConfiguration(mainSettingsConfiguration, bankSlipConfiguration, creditCardConfiguration);
 		
-		SubAccountInformationResponse responseInformationResp = new MarketPlaceService().configureSubAccount(subAccountConfiguration);
+		SubAccountInformationResponse responseInformationResp = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).configureSubAccount(subAccountConfiguration);
 		
 		System.out.println("TESTANDO CONFIGURE SUB ACCOUNT");
 
@@ -334,17 +332,15 @@ public class TransferTest extends TestCase{
     public void testH()
     {
 
-		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
-		
-		Iugu.init(integratedTest.getUserToken());
+		IuguFactory factory = new IuguFactory();
 
-		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, Boolean.TRUE, null, null, null, null, null, null);
-		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(true, null, null);
-		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration(null,null, null, null,null,null,null);
+		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration.Builder().autoWithdraw( Boolean.TRUE).build();
+		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration.Builder().active(Boolean.TRUE).build();
+		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration.Builder().build();
 		
 		SubAccountConfiguration subAccountConfiguration = new SubAccountConfiguration(mainSettingsConfiguration, bankSlipConfiguration, creditCardConfiguration);
 		
-		SubAccountInformationResponse responseInformationResp = new MarketPlaceService().configureSubAccount(subAccountConfiguration);
+		SubAccountInformationResponse responseInformationResp = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).configureSubAccount(subAccountConfiguration);
 		
 		System.out.println("TESTANDO CONFIGURE SUB ACCOUNT");
 
@@ -363,17 +359,15 @@ public class TransferTest extends TestCase{
     public void testI()
     {
 
-		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
-		Iugu.init(integratedTest.getUserToken());
-		
+		IuguFactory factory = new IuguFactory();
 
-		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
-		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(Boolean.TRUE, 2, 2);
-		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration(null,null, null, null,null,null,null);
+		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration.Builder().build();
+		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration.Builder().active(Boolean.TRUE).extraDue(2).reprintExtraDue(2).build();
+		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration.Builder().build();
 		
 		SubAccountConfiguration subAccountConfiguration = new SubAccountConfiguration(mainSettingsConfiguration, bankSlipConfiguration, creditCardConfiguration);
 		
-		SubAccountInformationResponse responseInformationResp = new MarketPlaceService().configureSubAccount(subAccountConfiguration);
+		SubAccountInformationResponse responseInformationResp = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).configureSubAccount(subAccountConfiguration);
 		
 		System.out.println("TESTANDO CONFIGURE SUB ACCOUNT");
 
@@ -389,16 +383,16 @@ public class TransferTest extends TestCase{
     public void testJ()
     {
 		
-		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
-		Iugu.init(integratedTest.getUserToken());
+		IuguFactory factory = new IuguFactory();
 
-		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
-		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(Boolean.FALSE, 1, 1);
-		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration(null,null, null, null,null,null,null);
+
+		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration.Builder().build();
+		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration.Builder().active(Boolean.FALSE).extraDue(1).reprintExtraDue(1).build();
+		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration.Builder().build();
 		
 		SubAccountConfiguration subAccountConfiguration = new SubAccountConfiguration(mainSettingsConfiguration, bankSlipConfiguration, creditCardConfiguration);
 		
-		SubAccountInformationResponse responseInformationResp = new MarketPlaceService().configureSubAccount(subAccountConfiguration);
+		SubAccountInformationResponse responseInformationResp = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).configureSubAccount(subAccountConfiguration);
 		
 		System.out.println("TESTANDO CONFIGURE SUB ACCOUNT");
 
@@ -414,16 +408,23 @@ public class TransferTest extends TestCase{
     public void testK()
     {
 
-		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
-		Iugu.init(integratedTest.getUserToken());
+		IuguFactory factory = new IuguFactory();
 
-		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
-		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(null, null, null);
-		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration(Boolean.TRUE,"ATTENDCHANG", Boolean.TRUE,Boolean.TRUE,10,6,Boolean.TRUE);
+
+		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration.Builder().build();
+		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration.Builder().build();
+		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration.Builder().active(Boolean.TRUE)
+																							   .softDescriptor("ATTENDCHANG")
+																							   .installments(Boolean.TRUE)
+																							   .installmentsPassInterest(Boolean.TRUE)
+																							   .maxInstallments(10)
+																							   .maxInstallmentsWithoutInterest(6)
+																							   .twoStepTransaction(Boolean.TRUE)
+																							   .build();
 		
 		SubAccountConfiguration subAccountConfiguration = new SubAccountConfiguration(mainSettingsConfiguration, bankSlipConfiguration, creditCardConfiguration);
 		
-		SubAccountInformationResponse responseInformationResp = new MarketPlaceService().configureSubAccount(subAccountConfiguration);
+		SubAccountInformationResponse responseInformationResp = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).configureSubAccount(subAccountConfiguration);
 		
 		System.out.println("TESTANDO CONFIGURE SUB ACCOUNT");
 
@@ -454,17 +455,22 @@ public class TransferTest extends TestCase{
     public void testL()
     {
 
-		//Iugu.init("e6a1bc0e23f73fa6187c77b889a5d836");
-		Iugu.init(integratedTest.getUserToken());
-		
+		IuguFactory factory = new IuguFactory();
 
-		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
-		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(null, null, null);
-		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration(Boolean.TRUE,"ATTENDCH", Boolean.FALSE,Boolean.FALSE,12,8,Boolean.FALSE);
+		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration.Builder().build();
+		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration.Builder().build();
+		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration.Builder().active(Boolean.TRUE)
+				   																			   .softDescriptor("ATTENDCH")
+				   																			   .installments(Boolean.FALSE)
+				   																			   .installmentsPassInterest(Boolean.FALSE)
+				   																			   .maxInstallments(12)
+				   																			   .maxInstallmentsWithoutInterest(8)
+				   																			   .twoStepTransaction(Boolean.FALSE)
+				   																			   .build();
 		
 		SubAccountConfiguration subAccountConfiguration = new SubAccountConfiguration(mainSettingsConfiguration, bankSlipConfiguration, creditCardConfiguration);
 		
-		SubAccountInformationResponse responseInformationResp = new MarketPlaceService().configureSubAccount(subAccountConfiguration);
+		SubAccountInformationResponse responseInformationResp = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).configureSubAccount(subAccountConfiguration);
 		
 		System.out.println("TESTANDO CONFIGURE SUB ACCOUNT");
 
@@ -491,10 +497,9 @@ public class TransferTest extends TestCase{
     public void testM()
     {
 
-		//Iugu.init("21ab6ca14384901acaea1793b91cdc98");
-		Iugu.init(integratedTest.getUserToken());
+		IuguFactory factory = new IuguFactory();
 		
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Noeli Ghisi",1));
+		SubAccountResponse responseSubAccount = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).createSubAccount(new SubAccount("Noeli Ghisi",1));
 		
 		assertTrue( responseSubAccount.getId() != null);
 		
@@ -521,10 +526,10 @@ public class TransferTest extends TestCase{
     public void testN()
     {
 	
-		//Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
-		Iugu.init(integratedTest.getUserToken());
+		IuguFactory factory = new IuguFactory();
+
 		
-		SubAccountInformationResponse responseInformation = new MarketPlaceService().find(integratedTest.getSubAccountId());
+		SubAccountInformationResponse responseInformation = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).find(integratedTest.getSubAccountId());
 		
 		System.out.println("TESTANDO FIND SUBACCOUNT");
 		System.out.print(" ID: " + responseInformation.getId() + ";");
@@ -540,8 +545,7 @@ public class TransferTest extends TestCase{
     public void testO()
     {
 
-		//Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
-		Iugu.init(integratedTest.getUserToken());
+		IuguFactory factory = new IuguFactory();
 		
 		String accountId = integratedTest.getSubAccountId();
 
@@ -556,7 +560,7 @@ public class TransferTest extends TestCase{
 		
 		SubAccountValidation subAccountValidation = new SubAccountValidation(data, null, Boolean.FALSE);
 		
-		SubAccountValidationResponse responseSubAccountValidation = new MarketPlaceService().createSubAccountValidation(accountId, subAccountValidation);
+		SubAccountValidationResponse responseSubAccountValidation = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).createSubAccountValidation(accountId, subAccountValidation);
 		
 		//assertTrue(responseSubAccountValidation.getErrors().get("cpf") != null);
 		
@@ -570,8 +574,7 @@ public class TransferTest extends TestCase{
     public void testP()
     {
 
-		Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
-		Iugu.init(integratedTest.getUserToken());
+		IuguFactory factory = new IuguFactory();
 		
 		String accountId = integratedTest.getSubAccountId();
 
@@ -586,7 +589,7 @@ public class TransferTest extends TestCase{
 		
 		SubAccountValidation subAccountValidation = new SubAccountValidation(data, null, Boolean.FALSE);
 		
-		SubAccountValidationResponse responseSubAccountValidation = new MarketPlaceService().createSubAccountValidation(accountId, subAccountValidation);
+		SubAccountValidationResponse responseSubAccountValidation = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).createSubAccountValidation(accountId, subAccountValidation);
 		
 		assertTrue(responseSubAccountValidation.getErrors() == null);
 		
@@ -600,10 +603,10 @@ public class TransferTest extends TestCase{
     public void testQ()
     {
 
-		//Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
-		Iugu.init(integratedTest.getUserToken());
+		IuguFactory factory = new IuguFactory();
+
 		
-		SubAccountInformationResponse responseInformation = new MarketPlaceService().find(integratedTest.getSubAccountId());
+		SubAccountInformationResponse responseInformation = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).find(integratedTest.getSubAccountId());
 		
 		assertTrue( responseInformation.getLastVerificationRequestStatus().contains("pending"));
     }
@@ -615,17 +618,15 @@ public class TransferTest extends TestCase{
     public void testR()
     {
 
-		//Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
-		Iugu.init(integratedTest.getUserToken());
-		
+		IuguFactory factory = new IuguFactory();
 
-		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
-		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(true, null, null);
-		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration(null,"ATTENDME PF", null, null,null,null,null);
+		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration.Builder().build();
+		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration.Builder().active(Boolean.TRUE).build();
+		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration.Builder().softDescriptor("ATTENDME PF").build();
 		
 		SubAccountConfiguration subAccountConfiguration = new SubAccountConfiguration(mainSettingsConfiguration, bankSlipConfiguration, creditCardConfiguration);
 		
-		SubAccountInformationResponse responseInformationResp = new MarketPlaceService().configureSubAccount(subAccountConfiguration);
+		SubAccountInformationResponse responseInformationResp = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).configureSubAccount(subAccountConfiguration);
 		
 		System.out.println("TESTANDO CONFIGURE SUB ACCOUNT");
 
@@ -638,8 +639,7 @@ public class TransferTest extends TestCase{
 	@Test
     public void testS()
     {
-		//Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
-		Iugu.init(integratedTest.getUserToken());
+		IuguFactory factory = new IuguFactory();
 		
 		String b64 = null; 
 		try {
@@ -650,7 +650,7 @@ public class TransferTest extends TestCase{
 		}
 		BankUpdate bankUpdate = new BankUpdate(BankNumber.CAIXA, AccountType.Corrente, "0246","12358",b64,Boolean.TRUE);
 		
-		MessageResponse responseInformationBank = new MarketPlaceService().updateBankInformation(bankUpdate);
+		MessageResponse responseInformationBank = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).updateBankInformation(bankUpdate);
 		
 		assertTrue(responseInformationBank.getErrors() == null);
     }
@@ -662,12 +662,11 @@ public class TransferTest extends TestCase{
     public void testT()
     {
 
-		//Iugu.init("06fa4a7767762feb3c0b82ebd3143944");
-		Iugu.init(integratedTest.getUserToken());
+		IuguFactory factory = new IuguFactory();
 		
 		String accountId = integratedTest.getSubAccountId();
 
-		RequestWithDrawResponse responseWithDraw = new MarketPlaceService().createWithDrawRequest(accountId, new Double(1));
+		RequestWithDrawResponse responseWithDraw = new MarketPlaceService(factory.getClientWithToken(integratedTest.getUserToken())).createWithDrawRequest(accountId, new Double(1));
 
 		assertTrue( responseWithDraw.getAmount() != null);
 		

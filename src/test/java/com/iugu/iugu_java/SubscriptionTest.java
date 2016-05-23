@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.iugu.Iugu;
+import com.iugu.IuguFactory;
 import com.iugu.model.Customer;
 import com.iugu.model.Data;
 import com.iugu.model.ItemType;
@@ -200,9 +201,10 @@ public class SubscriptionTest extends TestCase{
     public void testA()
     {
 	
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
-		ListPlanResponse planList = new PlanService().list();
+		ListPlanResponse planList = new PlanService(factory.getMarketPlaceClient()).list();
 		
 		for (PlanResponse plan : planList.getItems()) {
 			integratedTest.setPlanIdentifier(plan.getIdentifier());
@@ -218,12 +220,12 @@ public class SubscriptionTest extends TestCase{
     public void testB()
     {
 		
-		//Cria customer e Pay A
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		Customer customer = new Customer("MARCEL GHISI","marcel.ghisi@gmail.com","02479484971");
 
-		CustomerResponse responseCustomer = new CustomerService().create(customer);
+		CustomerResponse responseCustomer = new CustomerService(factory.getMarketPlaceClient()).create(customer);
     	
     	//Valida se o tokem foi criado
     	assertTrue(responseCustomer != null);
@@ -239,7 +241,7 @@ public class SubscriptionTest extends TestCase{
 		Data data = new Data("4242424242424242","123","Joao","Silva","12","2013");
 		PaymentMethodRequest pData = new PaymentMethodRequest(ItemType.CREDIT_CARD, responseCustomer.getId(), "Cartão Teste", data, Boolean.FALSE);
 		
-		PaymentMethodResponse responsePayM = new CustomerService().createPaymentMethod(pData);
+		PaymentMethodResponse responsePayM = new CustomerService(factory.getMarketPlaceClient()).createPaymentMethod(pData);
 		
 		assertTrue( responsePayM.getId() != null);
 		
@@ -247,11 +249,10 @@ public class SubscriptionTest extends TestCase{
 		
 		
 		//Cria customer e Pay B
-		Iugu.init(integratedTest.getApiToken());
 		
 		Customer customerB = new Customer("ARTHUR GHISI","marcel.ghisi@gmail.com","02479484971");
 
-		CustomerResponse responseCustomerB = new CustomerService().create(customerB);
+		CustomerResponse responseCustomerB = new CustomerService(factory.getMarketPlaceClient()).create(customerB);
     	
     	//Valida se o tokem foi criado
     	assertTrue(responseCustomerB != null);
@@ -267,7 +268,7 @@ public class SubscriptionTest extends TestCase{
 		Data dataB = new Data("4012888888881881","123","Joao","Silva","12","2013");
 		PaymentMethodRequest pDataB = new PaymentMethodRequest(ItemType.CREDIT_CARD, responseCustomerB.getId(), "Cartão Teste", dataB, Boolean.FALSE);
 		
-		PaymentMethodResponse responsePayMB = new CustomerService().createPaymentMethod(pDataB);
+		PaymentMethodResponse responsePayMB = new CustomerService(factory.getMarketPlaceClient()).createPaymentMethod(pDataB);
 		
 		assertTrue( responsePayMB.getId() != null);
     }
@@ -279,7 +280,8 @@ public class SubscriptionTest extends TestCase{
     public void testC()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		Subscription subs = new Subscription
 								.Builder()
@@ -287,7 +289,7 @@ public class SubscriptionTest extends TestCase{
 								.planIdentifier(integratedTest.getPlanIdenifier())
 								.build();
 
-		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
+		SubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).create(subs);
 		
 		assertTrue( subsResponse.getId() != null);
 		
@@ -300,7 +302,8 @@ public class SubscriptionTest extends TestCase{
     public void testD()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		//Primeira data dia 20 do mes atual
 		Calendar data = Calendar.getInstance();
@@ -314,7 +317,7 @@ public class SubscriptionTest extends TestCase{
 								.expiresAt(data.getTime())
 								.build();
 
-		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
+		SubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).create(subs);
 		
 		assertTrue( subsResponse.getId() != null);
 		
@@ -327,7 +330,7 @@ public class SubscriptionTest extends TestCase{
     public void testE()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		//Primeira data dia 20 do mes atual
 		Calendar data = Calendar.getInstance();
@@ -342,7 +345,7 @@ public class SubscriptionTest extends TestCase{
 								.initOnlyOnChargeSuccess("true")
 								.build();
 
-		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
+		SubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).create(subs);
 		
 		assertTrue( subsResponse.getId() != null);
 		
@@ -356,8 +359,8 @@ public class SubscriptionTest extends TestCase{
     public void testF()
     {
 
-		Iugu.init(integratedTest.getApiToken());
-		
+		IuguFactory factory = new IuguFactory();
+
 		//Primeira data dia 20 do mes atual
 		Calendar data = Calendar.getInstance();
         data.add(Calendar.DAY_OF_MONTH, 1);
@@ -375,7 +378,7 @@ public class SubscriptionTest extends TestCase{
 								.priceInCents(10000)
 								.build();
 
-		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
+		SubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).create(subs);
 		
 		assertTrue( subsResponse.getId() != null);
 		assertEquals(0, subsResponse.getCredits().intValue());
@@ -388,7 +391,8 @@ public class SubscriptionTest extends TestCase{
     public void testG()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		//Primeira data dia 20 do mes atual
 		Calendar data = Calendar.getInstance();
@@ -407,7 +411,7 @@ public class SubscriptionTest extends TestCase{
 								.priceInCents(10000)
 								.build();
 
-		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
+		SubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).create(subs);
 		
 		assertTrue( subsResponse.getId() != null);
 		assertEquals(4,subsResponse.getCredits().intValue());
@@ -421,7 +425,8 @@ public class SubscriptionTest extends TestCase{
     public void testH()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		//Primeira data dia 20 do mes atual
 		Calendar data = Calendar.getInstance();
@@ -445,7 +450,7 @@ public class SubscriptionTest extends TestCase{
 								.items(lista)
 								.build();
 
-		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
+		SubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).create(subs);
 		
 		assertTrue( subsResponse.getId() != null);
 		assertEquals(4,subsResponse.getCredits().intValue());
@@ -461,9 +466,10 @@ public class SubscriptionTest extends TestCase{
     public void testI()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
-		SubscriptionResponse subsResponse = new SubscriptionService().find(integratedTest.getSubscriptionCreditBasedId());
+		SubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).find(integratedTest.getSubscriptionCreditBasedId());
 		
 		assertTrue( subsResponse.getId() != null);
 
@@ -480,7 +486,8 @@ public class SubscriptionTest extends TestCase{
     public void testJ()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		Subscription subs = new Subscription
 				.Builder()
@@ -489,7 +496,7 @@ public class SubscriptionTest extends TestCase{
 				.build();
 
 
-		SubscriptionResponse subsResponseC = new SubscriptionService().change(integratedTest.getSubscriptionCreditBasedId(), subs);
+		SubscriptionResponse subsResponseC = new SubscriptionService(factory.getMarketPlaceClient()).change(integratedTest.getSubscriptionCreditBasedId(), subs);
 		
 		assertTrue( subsResponseC.getId() != null);
 		assertTrue(subsResponseC.getSuspended());
@@ -505,7 +512,8 @@ public class SubscriptionTest extends TestCase{
     public void testK()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 
 		Subscription subs = new Subscription
 				.Builder()
@@ -514,7 +522,7 @@ public class SubscriptionTest extends TestCase{
 				.build();
 
 
-		SubscriptionResponse subsResponseC = new SubscriptionService().change(integratedTest.getSubscriptionPlanBasedId(), subs);
+		SubscriptionResponse subsResponseC = new SubscriptionService(factory.getMarketPlaceClient()).change(integratedTest.getSubscriptionPlanBasedId(), subs);
 		
 		assertTrue( subsResponseC.getId() != null);
 		assertTrue(subsResponseC.getSuspended());
@@ -529,7 +537,8 @@ public class SubscriptionTest extends TestCase{
     public void testL()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		//Primeira data dia 20 do mes atual
 		Calendar data = Calendar.getInstance();
@@ -549,7 +558,7 @@ public class SubscriptionTest extends TestCase{
 								.items(lista)
 								.build();
 
-		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
+		SubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).create(subs);
 		
 		assertTrue( subsResponse.getId() != null);
 		assertTrue( subsResponse.getSubitems().size() == 1);
@@ -564,10 +573,9 @@ public class SubscriptionTest extends TestCase{
     public void testM()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 
-
-		SubscriptionResponse subsResponseC = new SubscriptionService().suspend(integratedTest.getSubscriptionPlanBasedId());
+		SubscriptionResponse subsResponseC = new SubscriptionService(factory.getMarketPlaceClient()).suspend(integratedTest.getSubscriptionPlanBasedId());
 		
 		assertTrue( subsResponseC.getId() != null);
 		assertTrue(subsResponseC.getSuspended());
@@ -582,10 +590,9 @@ public class SubscriptionTest extends TestCase{
     public void testN()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 
-
-		SubscriptionResponse subsResponseC = new SubscriptionService().activate(integratedTest.getSubscriptionPlanBasedId());
+		SubscriptionResponse subsResponseC = new SubscriptionService(factory.getMarketPlaceClient()).activate(integratedTest.getSubscriptionPlanBasedId());
 		
 		assertTrue( subsResponseC.getId() != null);
 		assertFalse(subsResponseC.getSuspended());
@@ -600,9 +607,9 @@ public class SubscriptionTest extends TestCase{
     public void testO()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 
-		SubscriptionResponse subsResponseC = new SubscriptionService().changePlan(integratedTest.getSubscriptionPlanBasedId(), "plano_basico");
+		SubscriptionResponse subsResponseC = new SubscriptionService(factory.getMarketPlaceClient()).changePlan(integratedTest.getSubscriptionPlanBasedId(), "plano_basico");
 		
 		assertTrue( subsResponseC.getId() != null);
 		assertEquals("plano_basico",subsResponseC.getPlanIdentifier());
@@ -617,13 +624,14 @@ public class SubscriptionTest extends TestCase{
     public void testP()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
-		SubscriptionResponse subsResponse = new SubscriptionService().find(integratedTest.getSubscriptionCreditBasedId());
+		SubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).find(integratedTest.getSubscriptionCreditBasedId());
 		
 		Integer cred = subsResponse.getCredits();
 		
-		SubscriptionResponse subsResponseC = new SubscriptionService().addCredits(integratedTest.getSubscriptionCreditBasedId(), 10);
+		SubscriptionResponse subsResponseC = new SubscriptionService(factory.getMarketPlaceClient()).addCredits(integratedTest.getSubscriptionCreditBasedId(), 10);
 		
 		assertTrue( subsResponseC.getId() != null);
 		assertEquals(cred+10,subsResponseC.getCredits().intValue());
@@ -637,13 +645,14 @@ public class SubscriptionTest extends TestCase{
     public void testQ()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
-		SubscriptionResponse subsResponse = new SubscriptionService().find(integratedTest.getSubscriptionCreditBasedId());
+		SubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).find(integratedTest.getSubscriptionCreditBasedId());
 		
 		Integer cred = subsResponse.getCredits();
 		
-		SubscriptionResponse subsResponseC = new SubscriptionService().removeCredits(integratedTest.getSubscriptionCreditBasedId(), 10);
+		SubscriptionResponse subsResponseC = new SubscriptionService(factory.getMarketPlaceClient()).removeCredits(integratedTest.getSubscriptionCreditBasedId(), 10);
 		
 		assertTrue( subsResponseC.getId() != null);
 		assertEquals(cred-10,subsResponseC.getCredits().intValue());
@@ -657,11 +666,12 @@ public class SubscriptionTest extends TestCase{
     public void testR()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
-		SubscriptionResponse subsResponseD = new SubscriptionService().remove(integratedTest.getSubscriptionCreditBasedId());
+		SubscriptionResponse subsResponseD = new SubscriptionService(factory.getMarketPlaceClient()).remove(integratedTest.getSubscriptionCreditBasedId());
 		
-		SubscriptionResponse subsResponse = new SubscriptionService().remove(integratedTest.getSubscriptionCreditBasedId());
+		SubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).remove(integratedTest.getSubscriptionCreditBasedId());
 		
 		
 		assertTrue( subsResponse.getErrors().get("errors").toString().contains("Subscription Not Found"));
@@ -675,10 +685,11 @@ public class SubscriptionTest extends TestCase{
     public void testS()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		ListSubscriptionCriteria crit = new ListSubscriptionCriteria.Builder().customerId(integratedTest.getCustomerId()).build();
-		ListSubscriptionResponse subsResponse = new SubscriptionService().list(crit);
+		ListSubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).list(crit);
 		
 		assertTrue( subsResponse.getItems().size() > 0);
 		
@@ -691,10 +702,11 @@ public class SubscriptionTest extends TestCase{
     public void testT()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		ListSubscriptionCriteria crit = new ListSubscriptionCriteria.Builder().customerId(integratedTest.getCustomerId()).limit(2).build();
-		ListSubscriptionResponse subsResponse = new SubscriptionService().list(crit);
+		ListSubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).list(crit);
 		
 		assertTrue( subsResponse.getItems().size() > 0);
 		
@@ -707,10 +719,11 @@ public class SubscriptionTest extends TestCase{
     public void testU()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		ListSubscriptionCriteria crit = new ListSubscriptionCriteria.Builder().limit(10).start(0).build();
-		ListSubscriptionResponse subsResponse = new SubscriptionService().list(crit);
+		ListSubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).list(crit);
 		
 		assertTrue(subsResponse.getItems().size() > 0);
 		
@@ -723,10 +736,11 @@ public class SubscriptionTest extends TestCase{
     public void testV()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		ListSubscriptionCriteria crit = new ListSubscriptionCriteria.Builder().limit(10).start(9).build();
-		ListSubscriptionResponse subsResponse = new SubscriptionService().list(crit);
+		ListSubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).list(crit);
 		
 		assertTrue(subsResponse.getItems().size() == 0);
 		
@@ -739,14 +753,15 @@ public class SubscriptionTest extends TestCase{
     public void testX()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 			
 		Calendar c = Calendar.getInstance();  
 		c.set(Calendar.MONTH, Calendar.JANUARY); 
 		c.set(Calendar.DAY_OF_MONTH, 10);
 		
 		ListSubscriptionCriteria crit = new ListSubscriptionCriteria.Builder().updatedSince(c.getTime()).build();
-		ListSubscriptionResponse subsResponse = new SubscriptionService().list(crit);
+		ListSubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).list(crit);
 		
 		assertTrue( subsResponse.getItems().size() > 0);
 		
@@ -759,19 +774,20 @@ public class SubscriptionTest extends TestCase{
     public void testZ()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 			
 		Calendar c = Calendar.getInstance();  
 		c.set(Calendar.MONTH, Calendar.DECEMBER); 
 		c.set(Calendar.YEAR, 2015);
 		
 		ListSubscriptionCriteria crit = new ListSubscriptionCriteria.Builder().updatedSince(c.getTime()).build();
-		ListSubscriptionResponse responseInvoice = new SubscriptionService().list(crit);
+		ListSubscriptionResponse responseInvoice = new SubscriptionService(factory.getMarketPlaceClient()).list(crit);
 		
 		assertTrue( responseInvoice.getItems().size() > 0);
 		
 		for (SubscriptionResponse response : responseInvoice.getItems()) {
-			SubscriptionResponse subsResponse = new SubscriptionService().remove(response.getId());
+			SubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).remove(response.getId());
 		}
     }
 	
@@ -782,14 +798,15 @@ public class SubscriptionTest extends TestCase{
     public void testZA()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 			
 		Calendar c = Calendar.getInstance();  
 		c.set(Calendar.MONTH, Calendar.DECEMBER); 
 		c.set(Calendar.YEAR, 2015);
 		
 		ListSubscriptionCriteria crit = new ListSubscriptionCriteria.Builder().updatedSince(c.getTime()).build();
-		ListSubscriptionResponse subsResponse = new SubscriptionService().list(crit);
+		ListSubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).list(crit);
 		
 		assertTrue( subsResponse.getItems().size() == 0);
 		

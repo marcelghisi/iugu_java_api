@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.iugu.Iugu;
+import com.iugu.IuguFactory;
 import com.iugu.model.Address;
 import com.iugu.model.BankSlipConfiguration;
 import com.iugu.model.CreditCardConfiguration;
@@ -171,11 +172,11 @@ public class InvoicesTest extends TestCase{
     protected void setUp() throws Exception {
     	integratedTest = new IntegratedTest();
     	
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		//Cria cliente
 		Customer customer = new Customer("ARTHUR GHISI","arthur.ghisi@gmail.com","02479484971");
-		CustomerResponse responseCustomer = new CustomerService().create(customer);
+		CustomerResponse responseCustomer = new CustomerService(factory.getMarketPlaceClient()).create(customer);
 		assertTrue( responseCustomer.getId() != null);
 		
 		integratedTest.setCustomerId(responseCustomer.getId());
@@ -183,27 +184,34 @@ public class InvoicesTest extends TestCase{
 		//Cria subscription
 		Subscription subs = new Subscription.Builder().customerId(responseCustomer.getId()).planIdentifier("plano_basico").build();
 		
-		SubscriptionResponse subsResponse = new SubscriptionService().create(subs);
+		SubscriptionResponse subsResponse = new SubscriptionService(factory.getMarketPlaceClient()).create(subs);
 		assertTrue( subsResponse.getId() != null);
 		integratedTest.setSubscriptionId(subsResponse.getId());
 
 		//Cria uma subconta para tester captura de invoice 2 tempos
-		SubAccountResponse responseSubAccount = new MarketPlaceService().createSubAccount(new SubAccount("Marcel Ghisi",1));
+		SubAccountResponse responseSubAccount = new MarketPlaceService(factory.getMarketPlaceClient()).createSubAccount(new SubAccount("Marcel Ghisi",1));
 		integratedTest.setLiveApiToken(responseSubAccount.getLiveApiToken());
 		integratedTest.setTestApiToken(responseSubAccount.getTestApiToken());
 		integratedTest.setUserToken(responseSubAccount.getUserToken());
 		integratedTest.setSubAccountId(responseSubAccount.getId());
 		
 		//Configura a subconta para criar invoices em 2 tempos
-		Iugu.init(responseSubAccount.getUserToken());
-
-		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration(null, null, null, null, null, null, null, null);
-		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration(null, null, null);
-		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration(Boolean.TRUE,"ATTENDCHANG", Boolean.TRUE,Boolean.TRUE,10,6,Boolean.TRUE);
+		MainSettingsConfiguration mainSettingsConfiguration = new MainSettingsConfiguration.Builder().build();
 		
+		BankSlipConfiguration bankSlipConfiguration = new BankSlipConfiguration.Builder().build();
+		
+		CreditCardConfiguration creditCardConfiguration = new CreditCardConfiguration.Builder().active(Boolean.TRUE)
+																							   .softDescriptor("ATTENDCHANG")
+																							   .installments(Boolean.TRUE)
+																							   .installmentsPassInterest(Boolean.TRUE)
+																							   .maxInstallments(10)
+																							   .maxInstallmentsWithoutInterest(6)
+																							   .twoStepTransaction(Boolean.TRUE)
+																							   .build();
+				
 		SubAccountConfiguration subAccountConfiguration = new SubAccountConfiguration(mainSettingsConfiguration, bankSlipConfiguration, creditCardConfiguration);
 		
-		SubAccountInformationResponse responseInformationResp = new MarketPlaceService().configureSubAccount(subAccountConfiguration);
+		SubAccountInformationResponse responseInformationResp = new MarketPlaceService(factory.getClientWithToken(responseSubAccount.getUserToken())).configureSubAccount(subAccountConfiguration);
 		
     	assertTrue(responseInformationResp != null);
     }
@@ -217,11 +225,11 @@ public class InvoicesTest extends TestCase{
     	
     	integratedTest = new IntegratedTest();
     	
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		Customer customer = new Customer("THIAGO HENRIQUE",integratedTest.getEmail(),"02479484971");
 
-		CustomerResponse responseCustomer = new CustomerService().create(customer);
+		CustomerResponse responseCustomer = new CustomerService(factory.getMarketPlaceClient()).create(customer);
     	
     	//Valida se o tokem foi criado
     	assertTrue(responseCustomer != null);
@@ -242,7 +250,7 @@ public class InvoicesTest extends TestCase{
     public void testB()
     {
 		//Funfa cria fatura e envia boleto com invoice
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		Item item2 = new Item("Cafe",1,1200);
 		List<Item> items = new ArrayList<Item>(0);
@@ -250,7 +258,7 @@ public class InvoicesTest extends TestCase{
 		
 		Invoice inv = new Invoice.Builder(integratedTest.getEmail(), new Date(), items).build();
 		
-		InvoiceResponse response = new InvoiceService().create(inv);
+		InvoiceResponse response = new InvoiceService(factory.getMarketPlaceClient()).create(inv);
         
 		assertTrue( response != null );
     }
@@ -261,7 +269,7 @@ public class InvoicesTest extends TestCase{
 	@Test
     public void testC()
     {
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		Item item2 = new Item("Cafe Perigina",1,490);
 		List<Item> items = new ArrayList<Item>(0);
@@ -272,7 +280,7 @@ public class InvoicesTest extends TestCase{
 		
 		Invoice inv = new Invoice.Builder(integratedTest.getEmail(), data.getTime(), items).build();
 		
-		InvoiceResponse response = new InvoiceService().create(inv);
+		InvoiceResponse response = new InvoiceService(factory.getMarketPlaceClient()).create(inv);
         
 		assertTrue( response != null );
     }
@@ -283,7 +291,7 @@ public class InvoicesTest extends TestCase{
 	@Test
     public void testD()
     {
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		Item item2 = new Item("Cafe Brazil Cacau",1,110);
 		List<Item> items = new ArrayList<Item>(0);
@@ -291,7 +299,7 @@ public class InvoicesTest extends TestCase{
 		
 		Invoice inv = new Invoice.Builder(integratedTest.getEmail(), new Date(), items).customerId(integratedTest.getApiToken()).build();
 		
-		InvoiceResponse response = new InvoiceService().create(inv);
+		InvoiceResponse response = new InvoiceService(factory.getMarketPlaceClient()).create(inv);
         
 		assertTrue( response != null );
     }
@@ -302,7 +310,7 @@ public class InvoicesTest extends TestCase{
 	@Test
     public void testE()
     {
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		Item item2 = new Item("Cafe Nespresso",1,220);
 		List<Item> items = new ArrayList<Item>(0);
@@ -313,7 +321,7 @@ public class InvoicesTest extends TestCase{
 		.subscriptionId(integratedTest.getSubscriptionId())
 		.build();
 		
-		InvoiceResponse response = new InvoiceService().create(inv);
+		InvoiceResponse response = new InvoiceService(factory.getMarketPlaceClient()).create(inv);
         
 		assertTrue( response != null );
 		
@@ -333,9 +341,9 @@ public class InvoicesTest extends TestCase{
     public void testF()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 
-		InvoiceResponse responseCustomer = new InvoiceService().find(integratedTest.getInvoice());
+		InvoiceResponse responseCustomer = new InvoiceService(factory.getMarketPlaceClient()).find(integratedTest.getInvoice());
 		
 		assertTrue( responseCustomer != null );
     	
@@ -366,26 +374,23 @@ public class InvoicesTest extends TestCase{
 //		
 //    }
     
-    
-
-    
     /**
      * Duplica um invoice
      */
 	@Test
     public void testG()
     {
-
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		//New Expire Date
-		Calendar c = Calendar.getInstance();  
-		c.set(Calendar.MONTH, Calendar.MARCH); 
+		Calendar c = Calendar.getInstance(); 
+		int mes = c.get(Calendar.MONTH);
+		c.set(Calendar.MONTH, mes+1); 
 		c.set(Calendar.DAY_OF_MONTH, 23);
 		
 		DuplicateInvoiceRequest duplicateRequestDate = new DuplicateInvoiceRequest(c.getTime(), Boolean.FALSE, Boolean.FALSE);
 	
-		InvoiceResponse responseInvoice = new InvoiceService().duplicate(integratedTest.getInvoice(),duplicateRequestDate);
+		InvoiceResponse responseInvoice = new InvoiceService(factory.getMarketPlaceClient()).duplicate(integratedTest.getInvoice(),duplicateRequestDate);
 		
 		assertTrue( responseInvoice.getStatusCode() == null);
 		assertTrue( responseInvoice.getId() != null);
@@ -401,13 +406,14 @@ public class InvoicesTest extends TestCase{
     public void testH()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
-		InvoiceResponse responseInvoice = new InvoiceService().find(integratedTest.getInvoice());
+		InvoiceResponse responseInvoice = new InvoiceService(factory.getMarketPlaceClient()).find(integratedTest.getInvoice());
 		
 		//New Expire Date
 		Calendar c = Calendar.getInstance();  
-		c.set(Calendar.MONTH, Calendar.MARCH); 
+		int mes = c.get(Calendar.MONTH);
+		c.set(Calendar.MONTH, mes+1);
 		c.set(Calendar.DAY_OF_MONTH, 20);
 		
 		Item item = new Item("Almoço",1,1200);
@@ -420,7 +426,7 @@ public class InvoicesTest extends TestCase{
 
 		//Leia mais em: Trabalhando com as classes Date, Calendar e SimpleDateFormat em Java http://www.devmedia.com.br/trabalhando-com-as-classes-date-calendar-e-simpledateformat-em-java/27401#ixzz3xUzipLgA
 			
-		InvoiceResponse responseInvoiceD = new InvoiceService().duplicate(responseInvoice.getId(),duplicateRequestDate);
+		InvoiceResponse responseInvoiceD = new InvoiceService(factory.getMarketPlaceClient()).duplicate(responseInvoice.getId(),duplicateRequestDate);
 		
 		assertTrue( responseInvoiceD.getId() != null);
 		
@@ -435,13 +441,14 @@ public class InvoicesTest extends TestCase{
     public void testI()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
-		InvoiceResponse responseInvoice = new InvoiceService().find(integratedTest.getInvoice());
+		InvoiceResponse responseInvoice = new InvoiceService(factory.getMarketPlaceClient()).find(integratedTest.getInvoice());
 		
 		//New Expire Date
 		Calendar c = Calendar.getInstance();  
-		c.set(Calendar.MONTH, Calendar.MARCH); 
+		int mes = c.get(Calendar.MONTH);
+		c.set(Calendar.MONTH, mes+1); 
 		c.set(Calendar.DAY_OF_MONTH, 25);
 		
 		List<Item> items = responseInvoice.getItems();
@@ -453,7 +460,7 @@ public class InvoicesTest extends TestCase{
 
 		//Leia mais em: Trabalhando com as classes Date, Calendar e SimpleDateFormat em Java http://www.devmedia.com.br/trabalhando-com-as-classes-date-calendar-e-simpledateformat-em-java/27401#ixzz3xUzipLgA
 			
-		InvoiceResponse responseInvoiceD = new InvoiceService().duplicate(responseInvoice.getId(),duplicateRequestDate);
+		InvoiceResponse responseInvoiceD = new InvoiceService(factory.getMarketPlaceClient()).duplicate(responseInvoice.getId(),duplicateRequestDate);
 		
 		assertTrue( responseInvoiceD.getId() != null);
 		
@@ -468,9 +475,9 @@ public class InvoicesTest extends TestCase{
     public void testJ()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 			
-		InvoiceResponse responseInvoice = new InvoiceService().cancel(integratedTest.getInvoice());
+		InvoiceResponse responseInvoice = new InvoiceService(factory.getMarketPlaceClient()).cancel(integratedTest.getInvoice());
 		
 		assertTrue( responseInvoice.getId() != null);
 		
@@ -484,9 +491,9 @@ public class InvoicesTest extends TestCase{
     public void testK()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 	
-		InvoiceResponse responseInvoice = new InvoiceService().remove(integratedTest.getInvoice());
+		InvoiceResponse responseInvoice = new InvoiceService(factory.getMarketPlaceClient()).remove(integratedTest.getInvoice());
 		
 		assertTrue( responseInvoice.getId() != null);
 		
@@ -500,7 +507,7 @@ public class InvoicesTest extends TestCase{
     public void testL()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 
 		//Testa a criacao de uma Token de pagamento
 		//Usa os dados de um cartao de teste
@@ -510,10 +517,8 @@ public class InvoicesTest extends TestCase{
     	PaymentToken pT = new PaymentToken(integratedTest.getMasterAccountId(), PayableWith.CREDIT_CARD,data,Boolean.FALSE);
     	
     	//Cria o tokem
-    	PaymentTokenResponse responseToken = new PaymentService().createToken(pT);
+    	PaymentTokenResponse responseToken = new PaymentService(factory.getMarketPlaceClient()).createToken(pT);
     	
-		
-		Iugu.init(integratedTest.getApiToken());
 		
 		Item item = new Item("Refeição",1,1000);
 		List<Item> items = new ArrayList<Item>(0);
@@ -525,7 +530,7 @@ public class InvoicesTest extends TestCase{
 		
 		TokenDirectCharge cP = new TokenDirectCharge.Builder(responseToken.getId(),"marcel.ghisi@gmail.com",items).payer(payer).build();
 		
-		ChargeResponse responseDirectCharge = new PaymentService().createDirectCharge(cP);
+		ChargeResponse responseDirectCharge = new PaymentService(factory.getMarketPlaceClient()).createDirectCharge(cP);
 		
 		assertTrue(responseDirectCharge  != null);
 		
@@ -538,8 +543,9 @@ public class InvoicesTest extends TestCase{
 	@Test
     public void testM()
     {
-		Iugu.init(integratedTest.getApiToken());
-		InvoiceResponse responseInvoice = new InvoiceService().capture(integratedTest.getInvoice());
+		IuguFactory factory = new IuguFactory();
+		
+		InvoiceResponse responseInvoice = new InvoiceService(factory.getMarketPlaceClient()).capture(integratedTest.getInvoice());
 		assertTrue( responseInvoice.getId() != null);	
     }
 	
@@ -550,9 +556,9 @@ public class InvoicesTest extends TestCase{
     public void testN()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 			
-		InvoiceResponse responseInvoice = new InvoiceService().refund(integratedTest.getInvoice());
+		InvoiceResponse responseInvoice = new InvoiceService(factory.getMarketPlaceClient()).refund(integratedTest.getInvoice());
 		
 		assertTrue( responseInvoice.getId() != null);
 		
@@ -565,14 +571,15 @@ public class InvoicesTest extends TestCase{
     public void testO()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 			
 		Calendar c = Calendar.getInstance();  
-		c.set(Calendar.MONTH, Calendar.MARCH); 
+		int mes = c.get(Calendar.MONTH);
+		c.set(Calendar.MONTH, mes+1); 
 		c.set(Calendar.DAY_OF_MONTH, 20);
 		
 		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().dueDate(c.getTime()).build();
-		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
+		ListInvoiceResponse responseInvoice = new InvoiceService(factory.getMarketPlaceClient()).list(crit);
 		
 		assertTrue( responseInvoice.getItems().size() >0);
 		
@@ -585,10 +592,10 @@ public class InvoicesTest extends TestCase{
     public void testP()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().customerId(integratedTest.getCustomerId()).build();
-		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
+		ListInvoiceResponse responseInvoice = new InvoiceService(factory.getMarketPlaceClient()).list(crit);
 		
 		assertTrue( responseInvoice.getItems().size() > 0);
 		
@@ -601,10 +608,10 @@ public class InvoicesTest extends TestCase{
     public void testQ()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().customerId(integratedTest.getCustomerId()).limit(2).build();
-		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
+		ListInvoiceResponse responseInvoice = new InvoiceService(factory.getMarketPlaceClient()).list(crit);
 		
 		assertTrue( responseInvoice.getItems().size() > 0);
 		
@@ -617,10 +624,10 @@ public class InvoicesTest extends TestCase{
     public void testR()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().limit(10).start(0).build();
-		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
+		ListInvoiceResponse responseInvoice = new InvoiceService(factory.getMarketPlaceClient()).list(crit);
 		
 		assertTrue(responseInvoice.getItems().size() > 0);
 		
@@ -633,10 +640,10 @@ public class InvoicesTest extends TestCase{
     public void testS()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().limit(10).start(9).build();
-		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
+		ListInvoiceResponse responseInvoice = new InvoiceService(factory.getMarketPlaceClient()).list(crit);
 		
 		assertTrue(responseInvoice.getItems().size() > 0);
 		
@@ -649,14 +656,14 @@ public class InvoicesTest extends TestCase{
     public void testT()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 			
 		Calendar c = Calendar.getInstance();  
 		c.set(Calendar.MONTH, Calendar.JANUARY); 
 		c.set(Calendar.DAY_OF_MONTH, 10);
 		
 		ListInvoiceCriteria crit = new ListInvoiceCriteria.Builder().updatedSince(c.getTime()).build();
-		ListInvoiceResponse responseInvoice = new InvoiceService().list(crit);
+		ListInvoiceResponse responseInvoice = new InvoiceService(factory.getMarketPlaceClient()).list(crit);
 		
 		assertTrue( responseInvoice.getItems().size() > 0);
 		

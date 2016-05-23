@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.iugu.Iugu;
+import com.iugu.IuguFactory;
 import com.iugu.model.Currency;
 import com.iugu.model.Feature;
 import com.iugu.model.IntervalType;
@@ -170,11 +171,12 @@ public class PlanTest extends TestCase{
     public void testA()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		Plan plan = new Plan("ATTENDME P100", integratedTest.getPlanIdenifier(), 1, IntervalType.MONTHS,Currency.BRL,1000);
 
-		PlanResponse planResponse = new PlanService().create(plan);
+		PlanResponse planResponse = new PlanService(factory.getMarketPlaceClient()).create(plan);
 		
 		assertTrue( planResponse.getId() != null);
 		
@@ -188,7 +190,8 @@ public class PlanTest extends TestCase{
     public void testB()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
 		List<Feature> lista = new ArrayList<Feature>(0);
 		lista.add(new Feature("Funcionalidade 1", "feature1", 100));
@@ -197,7 +200,7 @@ public class PlanTest extends TestCase{
 		Plan plan = new Plan("ATTENDME P500", integratedTest.getPlanIdenifier() + "_feat", 1, IntervalType.MONTHS,Currency.BRL,300,lista);
 		
 		
-		PlanResponse planResponse = new PlanService().create(plan);
+		PlanResponse planResponse = new PlanService(factory.getMarketPlaceClient()).create(plan);
 		
 		assertTrue( planResponse.getId() != null);
 		
@@ -212,9 +215,10 @@ public class PlanTest extends TestCase{
     public void testC()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 
-		PlanResponse responseCustomer = new PlanService().find(integratedTest.getPlanId());
+
+		PlanResponse responseCustomer = new PlanService(factory.getMarketPlaceClient()).find(integratedTest.getPlanId());
 		
 		assertTrue( responseCustomer.getId() != null);
 		
@@ -227,9 +231,10 @@ public class PlanTest extends TestCase{
     public void testD()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 
-		PlanResponse responseCustomer = new PlanService().findByIdentifier(integratedTest.getPlanIdenifier());
+
+		PlanResponse responseCustomer = new PlanService(factory.getMarketPlaceClient()).findByIdentifier(integratedTest.getPlanIdenifier());
 		
 		assertTrue( responseCustomer.getId() != null);
 		
@@ -242,13 +247,14 @@ public class PlanTest extends TestCase{
     public void testE()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 
-		PlanResponse responseCustomer = new PlanService().findByIdentifier(integratedTest.getPlanIdenifier());
+
+		PlanResponse responseCustomer = new PlanService(factory.getMarketPlaceClient()).findByIdentifier(integratedTest.getPlanIdenifier());
 
 		Plan plan = new Plan("ATTENDME P250", integratedTest.getPlanIdenifier(), 2, IntervalType.WEEKS,Currency.BRL,10000);
 		
-		PlanResponse responseChange = new PlanService().change(responseCustomer.getId(),plan);
+		PlanResponse responseChange = new PlanService(factory.getMarketPlaceClient()).change(responseCustomer.getId(),plan);
 		assertTrue( responseChange.getId() != null);
 		
     }
@@ -260,15 +266,38 @@ public class PlanTest extends TestCase{
     public void testF()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
+
 		
-		PlanResponse responsePlan = new PlanService().remove(integratedTest.getPlanId());
+		PlanResponse responsePlan = new PlanService(factory.getMarketPlaceClient()).remove(integratedTest.getPlanId());
 		
 		assertTrue( responsePlan.getId() != null);
 		
-		PlanResponse responseFind = new PlanService().find(integratedTest.getPlanId());
+		PlanResponse responseFind = new PlanService(factory.getMarketPlaceClient()).find(integratedTest.getPlanId());
 		
 		assertTrue(responseFind.getErrors().get("errors").toString().contains("Plan Not Found"));
+    }
+	
+    /**
+     * RemovePlan
+     */
+	@Test
+    public void testG()
+    {
+
+		IuguFactory factory = new IuguFactory();
+
+		PlanResponse responseFind = new PlanService(factory.getMarketPlaceClient()).findByIdentifier(integratedTest.getPlanIdenifier() + "_feat");
+		
+		assertTrue( responseFind.getId() != null);		
+		
+		PlanResponse responsePlan = new PlanService(factory.getMarketPlaceClient()).remove(responseFind.getId());
+		
+		assertTrue( responsePlan.getId() != null);
+		
+		PlanResponse responseFind2 = new PlanService(factory.getMarketPlaceClient()).findByIdentifier(integratedTest.getPlanIdenifier() + "_feat");
+		
+		assertTrue(responseFind2.getErrors().get("errors").toString().contains("Not Found"));
     }
     
     
@@ -276,12 +305,12 @@ public class PlanTest extends TestCase{
      * RemovePlan
      */
 	@Test
-    public void testG()
+    public void testH()
     {
     	
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 
-		ListPlanResponse responsePlanList = new PlanService().list();
+		ListPlanResponse responsePlanList = new PlanService(factory.getMarketPlaceClient()).list();
 		
 		assertTrue( responsePlanList.getItems().size() > 0);
 		

@@ -6,6 +6,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.google.gson.annotations.SerializedName;
+import com.iugu.model.BankSlipConfiguration.Builder;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CreditCardConfiguration implements Serializable {
@@ -19,28 +20,12 @@ public class CreditCardConfiguration implements Serializable {
 	public CreditCardConfiguration() {
 	}
 	
-	public CreditCardConfiguration(Boolean active,String softDescriptor, Boolean installments, Boolean installmentsPassInterest,Integer maxInstallments, Integer maxInstallmentsWithoutInterest,Boolean twoStepTransaction) {
-		this.active = active;
-		this.softDescriptor = softDescriptor;
-		//Parcelamento ativo
-		this.installments = installments;
-		//Repassar juros do parcelamento?
-		this.installmentsPassInterest = installmentsPassInterest;
-		//Maximo de parcelas aceitas
-		this.maxInstallments = maxInstallments;
-		//Numero de parcelas sem cobranca de juros
-		this.maxInstallmentsWithoutInterest = maxInstallmentsWithoutInterest;
-		//Habilita fluxo de pagamento em 2 etapas
-		//Bloqueia o valor no cartao e coloca o status da fatura em analise
-		//Utilizar o metodo captura em analise no maximo em 4 dias para receber definitivamente a grana antes do cancelamento
-		this.twoStepTransaction = twoStepTransaction;
-	}
+
 	
 	//Cartao Ativo 
 	@SerializedName("active")
 	private Boolean active;
 
-	 
 	//Descricao que aparece na fatura do cliente
 	@JsonProperty("soft_descriptor")
 	@SerializedName("soft_descriptor")
@@ -64,11 +49,78 @@ public class CreditCardConfiguration implements Serializable {
 	@SerializedName("max_installments_without_interest")
 	private Integer maxInstallmentsWithoutInterest;
 	
-	// 
+	//Habilita fluxo de pagamento em 2 etapas
+	//Bloqueia o valor no cartao e coloca o status da fatura em analise
+	//Utilizar o metodo captura em analise no maximo em 4 dias para receber definitivamente a grana antes do cancelamento
 	@JsonProperty("two_step_transaction")
 	@SerializedName("two_step_transaction")
 	private Boolean twoStepTransaction;
 
+	public static class Builder {
+		
+		private Boolean active;
+		private String 	softDescriptor;
+		private Boolean installments;
+		private Boolean installmentsPassInterest;
+		private Integer maxInstallments;
+		private Integer maxInstallmentsWithoutInterest;
+		private Boolean twoStepTransaction;
+		
+		
+		public Builder() {
+
+		}
+		
+		public Builder active(Boolean active) {
+			  this.active = active;
+			  return this;
+		}
+		
+		public Builder softDescriptor(String softDescriptor) {
+			  this.softDescriptor = softDescriptor;
+			  return this;
+		}
+		
+		public Builder installments(Boolean installments) {
+			  this.installments = installments;
+			  return this;
+		}
+
+		public Builder installmentsPassInterest(Boolean installmentsPassInterest) {
+			  this.installmentsPassInterest = installmentsPassInterest;
+			  return this;
+		}
+		
+		public Builder maxInstallments(Integer maxInstallments) {
+			  this.maxInstallments = maxInstallments;
+			  return this;
+		}
+
+		public Builder maxInstallmentsWithoutInterest(Integer maxInstallmentsWithoutInterest) {
+			  this.maxInstallmentsWithoutInterest = maxInstallmentsWithoutInterest;
+			  return this;
+		}
+		
+		public Builder twoStepTransaction(Boolean twoStepTransaction) {
+			  this.twoStepTransaction = twoStepTransaction;
+			  return this;
+		}
+		
+	    public CreditCardConfiguration build() {
+	        return new CreditCardConfiguration(this);
+	      }
+	}
+	
+	private CreditCardConfiguration(Builder builder) {
+		active = builder.active;
+		softDescriptor = builder.softDescriptor;
+		installments = builder.installments;
+		installmentsPassInterest = builder.installmentsPassInterest;
+		maxInstallments = builder.maxInstallments;
+		maxInstallmentsWithoutInterest = builder.maxInstallmentsWithoutInterest;
+		twoStepTransaction = builder.twoStepTransaction;
+	}
+	
 	public Boolean getActive() {
 		return active;
 	}

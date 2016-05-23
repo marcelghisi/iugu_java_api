@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.iugu.Iugu;
+import com.iugu.IuguFactory;
 import com.iugu.model.Customer;
 import com.iugu.responses.CustomerResponse;
 import com.iugu.services.CustomerService;
@@ -104,11 +105,12 @@ public class CustomerTest extends TestCase{
     public void testA()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		//CustomerTest.java#testA
+		IuguFactory factory = new IuguFactory();
 		
 		Customer customer = new Customer("MARCEL JOSE DA SILVA GHISI","marcel.ghisi@gmail.com","02479484971");
 
-		CustomerResponse responseCustomer = new CustomerService().create(customer);
+		CustomerResponse responseCustomer = new CustomerService(factory.getMarketPlaceClient()).create(customer);
 		
 		assertTrue( responseCustomer.getId() != null);
 		
@@ -123,9 +125,9 @@ public class CustomerTest extends TestCase{
     public void testB()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
-		CustomerResponse responseCustomer = new CustomerService().find(integratedTest.getCustomerId());
+		CustomerResponse responseCustomer = new CustomerService(factory.getMarketPlaceClient()).find(integratedTest.getCustomerId());
 		
 		assertTrue( responseCustomer.getId() != null);
 		
@@ -140,11 +142,11 @@ public class CustomerTest extends TestCase{
     public void testC()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
 		Customer customer = new Customer("MARCEL GHISI","marcel.ghisi@gmail.com","02479484971");
 
-		CustomerResponse responseCustomer = new CustomerService().change(integratedTest.getCustomerId(),customer);
+		CustomerResponse responseCustomer = new CustomerService(factory.getMarketPlaceClient()).change(integratedTest.getCustomerId(),customer);
 		
 		assertTrue( responseCustomer.getId() != null);
 		
@@ -159,13 +161,13 @@ public class CustomerTest extends TestCase{
     public void testD()
     {
 
-		Iugu.init(integratedTest.getApiToken());
+		IuguFactory factory = new IuguFactory();
 		
-		CustomerResponse responseCustomer = new CustomerService().remove(integratedTest.getCustomerId());
+		CustomerResponse responseCustomer = new CustomerService(factory.getMarketPlaceClient()).remove(integratedTest.getCustomerId());
 		
 		assertTrue( responseCustomer.getId() != null);
 		
-		CustomerResponse responseFind = new CustomerService().find(integratedTest.getCustomerId());
+		CustomerResponse responseFind = new CustomerService(factory.getMarketPlaceClient()).find(integratedTest.getCustomerId());
 		
 		assertTrue(responseFind.getErrors().get("errors").toString().contains("Customer Not Found"));
     }
