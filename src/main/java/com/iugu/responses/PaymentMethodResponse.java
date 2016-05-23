@@ -4,6 +4,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.google.gson.annotations.SerializedName;
 import com.iugu.model.Data;
+import com.iugu.model.PaymentMethodData;
 
 public class PaymentMethodResponse extends MessageResponse{
 
@@ -11,7 +12,7 @@ public class PaymentMethodResponse extends MessageResponse{
 
 	private String description;
 
-	private Data data;
+	private PaymentMethodData data;
 
 	@JsonProperty("item_type")
 	@SerializedName("item_type")
@@ -63,11 +64,11 @@ public class PaymentMethodResponse extends MessageResponse{
 	}
 
 	
-	public void setData(Data data) {
+	public void setData(PaymentMethodData data) {
 		this.data = data;
 	}
 
-	public Data getData() {
+	public PaymentMethodData getData() {
 		return data;
 	}
 
